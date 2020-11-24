@@ -44,7 +44,8 @@ def get_parser():
     :rtype: argparse.ArgumentParser
     :return: argument parser
     """
-    class HelpAction(argparse._HelpAction):  # pylint: disable=protected-access
+    # pylint: disable=protected-access,too-few-public-methods
+    class HelpAction(argparse._HelpAction):
         """Custom help on argument parser."""
 
         def __call__(self, parser, namespace, values, option_string=None):

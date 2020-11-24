@@ -21,10 +21,15 @@ The internal algorithm follows these rules:
 
 ## Dependencies
 
-Taskshed requires:
+Taskshed requires Python ≥ 3.6 and:
 
-- Python ≥ 3.6
 - [python-holidays](https://pypi.org/project/holidays/)
+
+You can install dependencies in a virtual environment with:
+
+```
+pip install -r requirements.txt
+```
 
 ## Usage
 

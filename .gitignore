@@ -1,0 +1,6 @@
+.coverage
+*.pyc
+*.pyo
+build/
+dist/
+tasksched.egg-info/

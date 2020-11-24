@@ -1,0 +1,41 @@
+{
+    "workplan": {
+        "project": {
+            "name": "The name",
+            "start": "2020-12-21",
+            "end": "2021-01-05",
+            "duration": 9,
+            "holidays": "FRA",
+            "resources_usage": 94.44444444444444
+        },
+        "resources": [
+        ],
+        "tasks": [
+            {
+                "id": "task1",
+                "title": "The first task",
+                "duration": 2
+            },
+            {
+                "id": "task2",
+                "title": "The second task (1/2)",
+                "duration": 3
+            },
+            {
+                "id": "task2",
+                "title": "The second task (2/2)",
+                "duration": 2
+            },
+            {
+                "id": "task3",
+                "title": "The third task (1/2)",
+                "duration": 5
+            },
+            {
+                "id": "task3",
+                "title": "The third task (2/2)",
+                "duration": 5
+            }
+        ]
+    }
+}

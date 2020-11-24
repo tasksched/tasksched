@@ -1,0 +1,14 @@
+{
+    "project": {
+        "name": "The name"
+    },
+    "resources": [
+    ],
+    "tasks": [
+        {
+            "id": "task1",
+            "title": "The first task",
+            "duration": 10
+        }
+    ]
+}

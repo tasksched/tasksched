@@ -28,7 +28,7 @@ from tasksched.project import Project
 from tasksched.workplan import build_workplan
 from tasksched.workplan_text import workplan_to_text
 
-__version__ = '0.1.0-dev'
+__version__ = '0.1.0'
 
 __all__ = (
     '__version__',

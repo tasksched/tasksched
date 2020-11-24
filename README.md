@@ -21,7 +21,7 @@ The internal algorithm follows these rules:
 
 ## Dependencies
 
-Taskshed requires Python ≥ 3.6 and:
+Taskshed requires Python ≥ 3.7 and:
 
 - [python-holidays](https://pypi.org/project/holidays/)
 

@@ -48,6 +48,8 @@ The command `tasksched` allows two actions:
 
 ## Examples
 
+### Standard input and multiple JSON files
+
 You can pipe content of JSON files as `tasksched` input.
 
 The following example uses:
@@ -63,6 +65,8 @@ So you can build the work plan and convert it to text for display with this comm
 ```
 $ extract-tasks | tasksched workplan project.json team.json extra_tasks.json | tasksched text
 ```
+
+### Build of work plan
 
 Example of JSON work plan:
 
@@ -132,6 +136,8 @@ $ tasksched workplan examples/project_small.json | jq
   }
 }
 ```
+
+### Work plan as text
 
 Example of work plan converted to text for display:
 

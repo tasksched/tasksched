@@ -150,7 +150,8 @@ class WorkPlan:
                         'assigned': res.assigned,
                         'assigned_tasks': res.assigned_tasks,
                         'duration': res.duration,
-                        'end': res.end_date.strftime('%Y-%m-%d'),
+                        'end': (res.end_date.strftime('%Y-%m-%d')
+                                if res.end_date else ''),
                         'usage': res.usage,
                     }
                     for res in self.project.resources

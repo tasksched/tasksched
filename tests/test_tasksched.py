@@ -29,6 +29,54 @@ import sys
 TESTS_DIR = os.path.dirname(os.path.abspath(__file__))
 
 
+def test_merge_configs():
+    """Test merge_configs function."""
+    from tasksched import merge_configs
+
+    # empty merge
+    config = {}
+    merge_configs(config, {})
+    assert config == {}
+
+    # update of dict
+    config = {}
+    merge_configs(config, {'test': {'key1': 1}})
+    assert config == {'test': {'key1': 1}}
+    merge_configs(config, {'test': {'key2': 2}})
+    assert config == {'test': {'key1': 1, 'key2': 2}}
+    merge_configs(config, {'test2': {'key3': 3}})
+    assert config == {'test': {'key1': 1, 'key2': 2}, 'test2': {'key3': 3}}
+
+    # update of list
+    config = {}
+    merge_configs(config, {'test': ['item1']})
+    assert config == {'test': ['item1']}
+    merge_configs(config, {'test': ['item2']})
+    assert config == {'test': ['item1', 'item2']}
+    merge_configs(config, {'test2': ['item3']})
+    assert config == {'test': ['item1', 'item2'], 'test2': ['item3']}
+
+    # update of string
+    config = {'test': 'value'}
+    merge_configs(config, {'test': 'new_value'})
+    assert config == {'test': 'new_value'}
+
+    # new key
+    config = {'test': 'value'}
+    merge_configs(config, {'new_test': 'new_value'})
+    assert config == {'test': 'value', 'new_test': 'new_value'}
+
+    # invalid: update of dict with a list
+    config = {'test': {'key1': 1}}
+    with pytest.raises(ValueError):
+        merge_configs(config, {'test': ['item2']})
+
+    # invalid: update of list with a dict
+    config = {'test': ['item1']}
+    with pytest.raises(ValueError):
+        merge_configs(config, {'test': {'key2': 2}})
+
+
 def test_main(monkeypatch):
     """Test main function."""
     import tasksched

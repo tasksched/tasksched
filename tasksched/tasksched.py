@@ -31,6 +31,8 @@ __version__ = '0.2.0-dev'
 
 __all__ = (
     '__version__',
+    'merge_configs',
+    'get_config',
     'main',
     'init',
 )
@@ -128,6 +130,33 @@ def get_parser():
     return parser
 
 
+def merge_configs(config, new_config):
+    """
+    Merge config2 into config: each value in config is updated with value
+    from config2: for dicts (like "project"), keys are updated, for lists
+    (like "resources" or "tasks"), items are added to the list.
+
+    :param dict config: first config to update
+    :param dict new_config: dictionary used to update the config
+    """
+    for key, value in new_config.items():
+        if key in config:
+            if isinstance(config[key], list):
+                if not isinstance(value, list):
+                    raise ValueError(f'merge config error: '
+                                     f'cannot update list "{key}"')
+                config[key].extend(value)
+            elif isinstance(config[key], dict):
+                if not isinstance(value, dict):
+                    raise ValueError(f'merge config error: '
+                                     f'cannot update dict "{key}"')
+                config[key].update(value)
+            else:
+                config[key] = value
+        else:
+            config[key] = value
+
+
 def get_config(args):
     """
     Get JSON configuration by reading stdin (if availbale) and list of input
@@ -144,7 +173,7 @@ def get_config(args):
     for filename in args.filename:
         try:
             with open(filename) as json_file:
-                config.update(json.load(json_file))
+                merge_configs(config, json.load(json_file))
         except (FileNotFoundError, json.decoder.JSONDecodeError) as exc:
             fatal(f'ERROR: unable to decode JSON file "{filename}": {exc}')
     return config

@@ -2,6 +2,7 @@
 
 ## Version 0.2.0 (under dev)
 
+- Fix merge of JSON configuration files.
 - Fix work plan build error on end date if a resource is not used at all.
 - Fix read of standard input.
 - Convert resource and task id to string.

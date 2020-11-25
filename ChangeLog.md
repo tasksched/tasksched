@@ -1,6 +1,6 @@
 # Tasksched ChangeLog
 
-## Version 0.2.0 (under dev)
+## Version 0.2.0 (2020-11-25)
 
 - Add examples directory.
 - Fix merge of JSON configuration files.

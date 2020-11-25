@@ -36,7 +36,7 @@ class Resource:  # pylint: disable=too-few-public-methods
     """A resource."""
 
     def __init__(self, res_id, name):
-        self.res_id = res_id
+        self.res_id = str(res_id)
         self.name = name
 
     def __str__(self):
@@ -47,7 +47,7 @@ class Task:  # pylint: disable=too-few-public-methods
     """A task."""
 
     def __init__(self, task_id, title, duration):
-        self.task_id = task_id
+        self.task_id = str(task_id)
         self.title = title
         self.duration = duration
 

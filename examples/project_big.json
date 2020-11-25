@@ -1,0 +1,67 @@
+{
+    "project": {
+        "name": "The big project",
+        "start": "2020-12-01",
+        "holidays": "FRA"
+    },
+    "resources": [
+        {
+            "id": "dev1",
+            "name": "Developer 1"
+        },
+        {
+            "id": "dev2",
+            "name": "Developer 2"
+        },
+        {
+            "id": "dev3",
+            "name": "Developer 3"
+        },
+        {
+            "id": "dev4",
+            "name": "Developer 4"
+        }
+    ],
+    "tasks": [
+        {
+            "id": "1",
+            "title": "Mega feature",
+            "duration": 32
+        },
+        {
+            "id": "2",
+            "title": "Very nice feature",
+            "duration": 3
+        },
+        {
+            "id": "3",
+            "title": "Another feature",
+            "duration": 32
+        },
+        {
+            "id": "4",
+            "title": "The most important feature",
+            "duration": 14
+        },
+        {
+            "id": "5",
+            "title": "Small feature",
+            "duration": 5
+        },
+        {
+            "id": "6",
+            "title": "POC for next version",
+            "duration": 2
+        },
+        {
+            "id": "7",
+            "title": "Something completely new",
+            "duration": 5
+        },
+        {
+            "id": "8",
+            "title": "Internal code refactoring",
+            "duration": 17
+        }
+    ]
+}

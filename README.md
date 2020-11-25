@@ -46,18 +46,120 @@ The command `tasksched` allows two actions:
 - `text`: convert output of `workplan` action (JSON data) to text for display
   in the terminal (colors and unicode chars are used by default but optional).
 
-See file [project_complete.json](tests/project_complete.json) for an example
-of input JSON files with all possible fields and file
-[workplan_complete.json](tests/workplan_complete.json) for an example of output
-workplan, as JSON.
+## Examples
 
-Example: use of another program `extract-tasks` to extract tasks from a ticketing
-tool and two configuration files for the project and resources, build the work plan
-and convert it to text for display:
+You can pipe content of JSON files as `tasksched` input.
+
+The following example uses:
+
+- another program called `extract-tasks` to extract tasks from a ticketing tool
+- a project configuration file (`project.json`)
+- a resources configuration file (`team.json`)
+- an extra-tasks configuration file, these tasks are added to the tasks received
+  on standard input (`extra_tasks.json`)
+
+So you can build the work plan and convert it to text for display with this command:
 
 ```
-$ extract-tasks | tasksched workplan project.json team.json | tasksched text
+$ extract-tasks | tasksched workplan project.json team.json extra_tasks.json | tasksched text
 ```
+
+Example of JSON work plan:
+
+```
+$ tasksched workplan examples/project_small.json | jq
+{
+  "workplan": {
+    "project": {
+      "name": "The big project",
+      "start": "2020-12-01",
+      "end": "2020-12-07",
+      "duration": 4,
+      "holidays": "FRA",
+      "resources_usage": 87.5
+    },
+    "resources": [
+      {
+        "id": "dev1",
+        "name": "Developer 1",
+        "assigned": [
+          "1",
+          "1",
+          "1"
+        ],
+        "assigned_tasks": [
+          "1"
+        ],
+        "duration": 3,
+        "end": "2020-12-04",
+        "usage": 75
+      },
+      {
+        "id": "dev2",
+        "name": "Developer 2",
+        "assigned": [
+          "1",
+          "1",
+          "2",
+          "2"
+        ],
+        "assigned_tasks": [
+          "1",
+          "2"
+        ],
+        "duration": 4,
+        "end": "2020-12-07",
+        "usage": 100
+      }
+    ],
+    "tasks": [
+      {
+        "id": "1",
+        "title": "The first feature (1/2)",
+        "duration": 3
+      },
+      {
+        "id": "1",
+        "title": "The first feature (2/2)",
+        "duration": 2
+      },
+      {
+        "id": "2",
+        "title": "The second feature",
+        "duration": 2
+      }
+    ]
+  }
+}
+```
+
+Example of work plan converted to text for display:
+
+```
+$ tasksched workplan examples/project_big.json | tasksched text
+Legend:
+  Task 1: Mega feature (1/2) (16d)
+  Task 1: Mega feature (2/2) (16d)
+  Task 2: Very nice feature (3d)
+  Task 3: Another feature (1/2) (16d)
+  Task 3: Another feature (2/2) (16d)
+  Task 4: The most important feature (1/2) (7d)
+  Task 4: The most important feature (2/2) (7d)
+  Task 5: Small feature (5d)
+  Task 6: POC for next version (2d)
+  Task 7: Something completely new (5d)
+  Task 8: Internal code refactoring (1/2) (9d)
+  Task 8: Internal code refactoring (2/2) (8d)
+
+Work plan: 2020-12-21 to 2021-02-01 (28d), 98.21% resources used
+
+  Developer 1 > 2021-01-29  27d  96% ███████████████▊████████▊██   1, 8, 6
+  Developer 2 > 2021-01-29  27d  96% ███████████████▊███████▊███   1, 8, 2
+  Developer 3 > 2021-02-01  28d 100% ███████████████▊██████▊█████  3, 4, 5
+  Developer 4 > 2021-02-01  28d 100% ███████████████▊██████▊█████  3, 4, 7
+```
+
+Note: if you run it in a terminal you'll see colored tasks and bars.
 
 ## Copyright
 

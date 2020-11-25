@@ -1,0 +1,29 @@
+{
+    "project": {
+        "name": "The big project",
+        "start": "2020-12-01",
+        "holidays": "FRA"
+    },
+    "resources": [
+        {
+            "id": "dev1",
+            "name": "Developer 1"
+        },
+        {
+            "id": "dev2",
+            "name": "Developer 2"
+        }
+    ],
+    "tasks": [
+        {
+            "id": "1",
+            "title": "The first feature",
+            "duration": 5
+        },
+        {
+            "id": "2",
+            "title": "The second feature",
+            "duration": 2
+        }
+    ]
+}

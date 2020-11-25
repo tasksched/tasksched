@@ -21,7 +21,6 @@
 
 import argparse
 import json
-import select
 import sys
 
 from tasksched.project import Project
@@ -137,11 +136,9 @@ def get_config(args):
     :param argparse.Namespace args: command-line arguments
     """
     config = {}
-    inr = select.select([sys.stdin], [], [], 0.1)[0]
-    if inr:
-        json_data = sys.stdin.read(200000)
+    if not sys.stdin.isatty():
         try:
-            config.update(json.loads(json_data))
+            config.update(json.load(sys.stdin))
         except json.decoder.JSONDecodeError as exc:
             fatal(f'ERROR: unable to decode JSON on stdin: {exc}')
     for filename in args.filename:

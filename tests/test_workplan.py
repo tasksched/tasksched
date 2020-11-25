@@ -100,7 +100,7 @@ def test_workplan_split_3():
 
 
 def test_build_workplan():
-    """Test build of work plan."""
+    """Test build_workplan function."""
     from tasksched import Project, build_workplan
     workplan = build_workplan(Project(get_json_file('project_complete.json')))
     assert workplan.remaining == 0

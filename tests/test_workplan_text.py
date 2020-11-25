@@ -24,7 +24,7 @@ from .utils import get_json_file
 
 
 def test_workplan_to_text():
-    """Test export of work plan to text."""
+    """Test workplan_to_text function."""
     from tasksched import workplan_to_text
     workplan = get_json_file('workplan_complete.json')
     text = workplan_to_text(workplan)

@@ -26,7 +26,7 @@ import holidays
 
 
 def test_add_business_days():
-    """Test function "add_business_days"."""
+    """Test add_business_days function."""
     from tasksched import add_business_days
 
     start = date(2020, 12, 21)  # monday

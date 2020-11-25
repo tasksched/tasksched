@@ -30,6 +30,7 @@ TESTS_DIR = os.path.dirname(os.path.abspath(__file__))
 
 
 def test_main(monkeypatch):
+    """Test main function."""
     import tasksched
 
     stdin = io.StringIO('{}')
@@ -109,6 +110,7 @@ def test_main(monkeypatch):
 
 
 def test_init(monkeypatch):
+    """Test init function."""
     import tasksched
     stdin = io.StringIO('{}')
     stdin.fileno = lambda: 0

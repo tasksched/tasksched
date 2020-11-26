@@ -62,17 +62,20 @@
             {
                 "id": "task1",
                 "title": "The first task (1/2)",
-                "duration": 5
+                "duration": 5,
+                "max_resources": 2
             },
             {
                 "id": "task1",
                 "title": "The first task (2/2)",
-                "duration": 5
+                "duration": 5,
+                "max_resources": 2
             },
             {
                 "id": "task2",
                 "title": "The second task",
-                "duration": 2
+                "duration": 2,
+                "max_resources": 2
             }
         ]
     }

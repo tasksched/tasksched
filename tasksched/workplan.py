@@ -62,7 +62,7 @@ class WorkPlan:
         new_tasks = []
         for task in self.project.tasks:
             number = tasks_to_split.get(task.task_id, None)
-            if number is not None and number > 1:
+            if number is not None and 1 < number <= task.max_resources:
                 # split duration into multiple durations which are all almost
                 # the same, and sum == duration (and remove all null values);
                 # for example if task.duration == 10 and number == 3,
@@ -74,10 +74,11 @@ class WorkPlan:
                 ]))
                 for i, duration in enumerate(durations):
                     title = f'{task.title} ({i+1}/{len(durations)})'
-                    new_tasks.append(Task(task.task_id, title, duration))
+                    new_tasks.append(Task(task.task_id, title, duration,
+                                          task.max_resources))
             else:
-                new_tasks.append(
-                    Task(task.task_id, task.title, task.duration))
+                new_tasks.append(Task(task.task_id, task.title, task.duration,
+                                      task.max_resources))
         self.project.tasks = new_tasks
 
     def find_best_resource(self):
@@ -163,6 +164,7 @@ class WorkPlan:
                         'id': task.task_id,
                         'title': task.title,
                         'duration': task.duration,
+                        'max_resources': task.max_resources,
                     }
                     for task in self.project.tasks
                 ],

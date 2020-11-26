@@ -80,8 +80,9 @@ def test_workplan_split_2():
 def test_workplan_split_3():
     """Test WorkPlan class with split of tasks into 3."""
     from tasksched import Project, WorkPlan
-    workplan = WorkPlan(Project(get_json_file('project_complete.json')),
-                        {'task2': 3})
+    project = Project(get_json_file('project_complete.json'))
+    project.tasks[1].max_resources = 3
+    workplan = WorkPlan(project, {'task2': 3})
     assert workplan.project.tasks[0].task_id == 'task1'
     assert workplan.project.tasks[0].title == 'The first task'
     assert workplan.project.tasks[0].duration == 2
@@ -129,3 +130,34 @@ def test_build_workplan():
     assert workplan.project.tasks[1].remaining == 0
     assert workplan.project.tasks[2].remaining == 0
     assert workplan.as_dict() == get_json_file('workplan_complete.json')
+
+
+def test_build_workplan_max_resources():
+    """Test build_workplan function using max_resources."""
+    from tasksched import Project, build_workplan
+    project = Project(get_json_file('project_complete.json'))
+    project.tasks[2].max_resources = 1
+    workplan = build_workplan(project)
+    assert workplan.remaining == 0
+    assert workplan.duration == 10
+    assert workplan.end_date == date(2021, 1, 6)
+    assert workplan.resources_usage == 85.0
+    assert workplan.project.resources[0].assigned == ['task3'] * 10
+    assert workplan.project.resources[0].assigned_tasks == ['task3']
+    assert workplan.project.resources[0].duration == 10
+    assert workplan.project.resources[0].end_date == date(2021, 1, 6)
+    assert workplan.project.resources[0].usage == 100.0
+    assert workplan.project.resources[1].assigned == (
+        (['task2'] * 5) + (['task1'] * 2)
+    )
+    assert workplan.project.resources[1].assigned_tasks == [
+        'task2', 'task1',
+    ]
+    assert workplan.project.resources[1].duration == 7
+    assert workplan.project.resources[1].end_date == date(2020, 12, 31)
+    assert workplan.project.resources[1].usage == 70.0
+    assert workplan.project.tasks[0].remaining == 0
+    assert workplan.project.tasks[1].remaining == 0
+    assert workplan.project.tasks[2].remaining == 0
+    assert workplan.as_dict() == \
+        get_json_file('workplan_complete_max_resources.json')

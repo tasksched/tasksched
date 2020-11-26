@@ -1,0 +1,52 @@
+{
+    "workplan": {
+        "project": {
+            "name": "The name",
+            "start": "2020-12-21",
+            "end": "2021-01-06",
+            "duration": 10,
+            "holidays": "FRA",
+            "resources_usage": 85.0
+        },
+        "resources": [
+            {
+                "id": "dev1",
+                "name": "Developer 1",
+                "assigned": ["task3", "task3", "task3", "task3", "task3", "task3", "task3", "task3", "task3", "task3"],
+                "assigned_tasks": ["task3"],
+                "duration": 10,
+                "end": "2021-01-06",
+                "usage": 100.0
+            },
+            {
+                "id": "dev2",
+                "name": "Developer 2",
+                "assigned": ["task2", "task2", "task2", "task2", "task2", "task1", "task1"],
+                "assigned_tasks": ["task2", "task1"],
+                "duration": 7,
+                "end": "2020-12-31",
+                "usage": 70.0
+            }
+        ],
+        "tasks": [
+            {
+                "id": "task1",
+                "title": "The first task",
+                "duration": 2,
+                "max_resources": 2
+            },
+            {
+                "id": "task2",
+                "title": "The second task",
+                "duration": 5,
+                "max_resources": 2
+            },
+            {
+                "id": "task3",
+                "title": "The third task",
+                "duration": 10,
+                "max_resources": 1
+            }
+        ]
+    }
+}

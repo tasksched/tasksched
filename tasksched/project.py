@@ -46,13 +46,15 @@ class Resource:  # pylint: disable=too-few-public-methods
 class Task:  # pylint: disable=too-few-public-methods
     """A task."""
 
-    def __init__(self, task_id, title, duration):
+    def __init__(self, task_id, title, duration, max_resources):
         self.task_id = str(task_id)
         self.title = title
         self.duration = duration
+        self.max_resources = max_resources
 
     def __str__(self):
-        return f'Task {self.task_id} - {self.title}: {self.duration}d'
+        return (f'Task {self.task_id} - {self.title}: {self.duration}d '
+                f'(max res: {self.max_resources})')
 
 
 class Project:
@@ -80,7 +82,8 @@ class Project:
         if not self.resources:
             raise ValueError('At least one resource is required')
         self.tasks = [
-            Task(task['id'], task['title'], task['duration'])
+            Task(task['id'], task['title'], task['duration'],
+                 task.get('max_resources', 2))
             for task in config['tasks']
         ]
         if not self.tasks:

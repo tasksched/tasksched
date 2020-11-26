@@ -120,17 +120,20 @@ $ tasksched workplan examples/project_small.json | jq
       {
         "id": "1",
         "title": "The first feature (1/2)",
-        "duration": 3
+        "duration": 3,
+        "max_resources": 2
       },
       {
         "id": "1",
         "title": "The first feature (2/2)",
-        "duration": 2
+        "duration": 2,
+        "max_resources": 2
       },
       {
         "id": "2",
         "title": "The second feature",
-        "duration": 2
+        "duration": 2,
+        "max_resources": 2
       }
     ]
   }

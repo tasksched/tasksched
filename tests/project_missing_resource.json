@@ -8,7 +8,8 @@
         {
             "id": "task1",
             "title": "The first task",
-            "duration": 10
+            "duration": 10,
+            "max_resources": 2
         }
     ]
 }

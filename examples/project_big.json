@@ -56,7 +56,8 @@
         {
             "id": "7",
             "title": "Something completely new",
-            "duration": 5
+            "duration": 5,
+            "max_resources": 1
         },
         {
             "id": "8",

@@ -18,7 +18,8 @@
         {
             "id": "1",
             "title": "The first feature",
-            "duration": 5
+            "duration": 5,
+            "max_resources": 1
         },
         {
             "id": "2",

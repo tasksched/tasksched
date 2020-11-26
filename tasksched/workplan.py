@@ -64,7 +64,9 @@ class WorkPlan:
             number = tasks_to_split.get(task.task_id, None)
             if number is not None and number > 1:
                 # split duration into multiple durations which are all almost
-                # the same, and sum == duration (and remove all null values)
+                # the same, and sum == duration (and remove all null values);
+                # for example if task.duration == 10 and number == 3,
+                # durations == [4, 3, 3]
                 durations = list(filter(None, [
                     task.duration // number + (1 if x < task.duration % number
                                                else 0)

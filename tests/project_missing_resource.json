@@ -9,6 +9,7 @@
             "id": "task1",
             "title": "The first task",
             "duration": 10,
+            "priority": 0,
             "max_resources": 2
         }
     ]

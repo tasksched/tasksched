@@ -15,30 +15,35 @@
                 "id": "task1",
                 "title": "The first task",
                 "duration": 2,
+                "priority": 0,
                 "max_resources": 2
             },
             {
                 "id": "task2",
                 "title": "The second task (1/2)",
                 "duration": 3,
+                "priority": 0,
                 "max_resources": 2
             },
             {
                 "id": "task2",
                 "title": "The second task (2/2)",
                 "duration": 2,
+                "priority": 0,
                 "max_resources": 2
             },
             {
                 "id": "task3",
                 "title": "The third task (1/2)",
                 "duration": 5,
+                "priority": 0,
                 "max_resources": 2
             },
             {
                 "id": "task3",
                 "title": "The third task (2/2)",
                 "duration": 5,
+                "priority": 0,
                 "max_resources": 2
             }
         ]

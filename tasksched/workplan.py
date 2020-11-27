@@ -75,10 +75,10 @@ class WorkPlan:
                 for i, duration in enumerate(durations):
                     title = f'{task.title} ({i+1}/{len(durations)})'
                     new_tasks.append(Task(task.task_id, title, duration,
-                                          task.max_resources))
+                                          task.priority, task.max_resources))
             else:
                 new_tasks.append(Task(task.task_id, task.title, task.duration,
-                                      task.max_resources))
+                                      task.priority, task.max_resources))
         self.project.tasks = new_tasks
 
     def find_best_resource(self):
@@ -117,7 +117,9 @@ class WorkPlan:
 
     def schedule(self):
         """Automatic resource leveling in the project."""
-        for task in self.project.tasks_by_duration():
+        sorted_tasks = self.project.sorted_tasks(['priority', 'duration'],
+                                                 reverse=True)
+        for task in sorted_tasks:
             self.assign_task(task, self.find_best_resource(), task.remaining)
         sum_usage = 0
         for res in self.project.resources:
@@ -164,6 +166,7 @@ class WorkPlan:
                         'id': task.task_id,
                         'title': task.title,
                         'duration': task.duration,
+                        'priority': task.priority,
                         'max_resources': task.max_resources,
                     }
                     for task in self.project.tasks
@@ -183,7 +186,7 @@ def build_workplan(project):
     """
     tasks_ids = [
         task.task_id
-        for task in project.tasks_by_duration()
+        for task in project.sorted_tasks(['duration'], reverse=True)
         if task.duration > 1
     ]
     best_workplan = WorkPlan(project)

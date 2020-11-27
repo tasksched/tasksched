@@ -2,7 +2,7 @@
 
 ## Version 0.3.0 (under dev)
 
-- Add task field "max_resources".
+- Add task fields `priority` and `max_resources`.
 
 ## Version 0.2.0 (2020-11-25)
 

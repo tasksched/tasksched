@@ -80,7 +80,8 @@ def workplan_to_text(workplan,  # pylint: disable=too-many-locals
         str_id = (color(task['id'], tasks_colors[task['id']])
                   if use_colors else task['id'])
         legend.append(f'  Task {str_id}: {task["title"]}{color_reset} '
-                      f'({task["duration"]}d)')
+                      f'({task["duration"]}d, prio: {task["priority"]}, '
+                      f'max res: {task["max_resources"]})')
     text = f'{project["resources_usage"]:.2f}%'
     res_usage = (color_pct(text, project['resources_usage'])
                  if use_colors else text)

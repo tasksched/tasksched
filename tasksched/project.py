@@ -46,15 +46,19 @@ class Resource:  # pylint: disable=too-few-public-methods
 class Task:  # pylint: disable=too-few-public-methods
     """A task."""
 
-    def __init__(self, task_id, title, duration, max_resources):
+    # pylint: disable=too-many-arguments
+    def __init__(self, task_id, title, duration, priority=0, max_resources=2):
         self.task_id = str(task_id)
         self.title = title
         self.duration = duration
+        self.priority = priority
         self.max_resources = max_resources
 
     def __str__(self):
-        return (f'Task {self.task_id} - {self.title}: {self.duration}d '
-                f'(max res: {self.max_resources})')
+        return (f'Task {self.task_id} - {self.title}: '
+                f'{self.duration}d, '
+                f'priority: {self.priority}, '
+                f'max resources: {self.max_resources}')
 
 
 class Project:
@@ -83,21 +87,27 @@ class Project:
             raise ValueError('At least one resource is required')
         self.tasks = [
             Task(task['id'], task['title'], task['duration'],
-                 task.get('max_resources', 2))
+                 task.get('priority', 0), task.get('max_resources', 2))
             for task in config['tasks']
         ]
         if not self.tasks:
             raise ValueError('At least one task is required')
 
-    def tasks_by_duration(self):
+    def sorted_tasks(self, key, reverse=False):
         """
-        Get list of tasks sorted duration from longest to shortest.
+        Get list of tasks sorted by priority (from higher to lower) and
+        duration (from longest to shortest).
 
+        :param tuple,list key: key(s) to sort tasks
+        :param bool reverse: reverse sort
         :rtype: list
-        :return: list of tasks with remaining days > 0, sorted by longest to
-            shortest
+        :return: sorted list of tasks
         """
-        return sorted(self.tasks, key=attrgetter('duration'), reverse=True)
+        return sorted(
+            self.tasks,
+            key=attrgetter(*key),
+            reverse=reverse,
+        )
 
     def __str__(self):
         str_res = '\n'.join([f'    {str(res)}' for res in self.resources])

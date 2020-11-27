@@ -33,8 +33,42 @@ pip install -r requirements.txt
 
 ## Usage
 
+### Input
+
 The input data is written in JSON format.
 One or more files are accepted, each one overwrites any file previously loaded.
+
+The main keys in the input are:
+
+- `project`: project description
+- `resources`: list of resources
+- `tasks`: list of tasks
+
+The project keys are:
+
+- `name` (string, required): the project name
+- `start` (string, optional): the start date, format:  `YYYY-MM-DD` (default: today)
+- `holidays` (string, optional): the country ISO code used to skip holidays in work plan
+  (for the list of valid country ISO codes, see:
+  [python-holidays](https://pypi.org/project/holidays/))
+- `resources` (list, required): the list of resources (see below)
+- `tasks` (list, resuired): the list of tasks (see below)
+
+For each resource, the keys are:
+
+- `id` (string, required): the resource id
+- `name` (string, required): the resource name
+
+For each task, the keys are:
+
+- `id` (string, required): the task id
+- `title` (string, required): the task title
+- `duration` (integer, required): the task duration in days
+- `priority` (integer, optional): the task priority (default: 0), a higher
+  priority uses the task first in the work plan, a negative number makes the
+  task less urgent than the others
+- `max_resources` (integer, optional): the max number of resources to use for
+  this task (default: 2)
 
 Content of files can be read from standard input or filenames are allowed as
 command line arguments. Both can be used at same time.
@@ -147,25 +181,26 @@ Example of work plan converted to text for display:
 ```
 $ tasksched workplan examples/project_big.json | tasksched text
 Legend:
-  Task 1: Mega feature (1/2) (16d)
-  Task 1: Mega feature (2/2) (16d)
-  Task 2: Very nice feature (3d)
-  Task 3: Another feature (1/2) (16d)
-  Task 3: Another feature (2/2) (16d)
-  Task 4: The most important feature (1/2) (7d)
-  Task 4: The most important feature (2/2) (7d)
-  Task 5: Small feature (5d)
-  Task 6: POC for next version (2d)
-  Task 7: Something completely new (5d)
-  Task 8: Internal code refactoring (1/2) (9d)
-  Task 8: Internal code refactoring (2/2) (8d)
+  Task 1: Mega feature (1/2) (16d, prio: 0, max res: 2)
+  Task 1: Mega feature (2/2) (16d, prio: 0, max res: 2)
+  Task 2: Very nice feature (3d, prio: 0, max res: 2)
+  Task 3: Another feature (1/2) (16d, prio: 0, max res: 2)
+  Task 3: Another feature (2/2) (16d, prio: 0, max res: 2)
+  Task 4: POC for next version (1/2) (7d, prio: 0, max res: 2)
+  Task 4: POC for next version (2/2) (7d, prio: 0, max res: 2)
+  Task 5: Small feature (1/2) (3d, prio: 0, max res: 2)
+  Task 5: Small feature (2/2) (2d, prio: 0, max res: 2)
+  Task 6: The most important feature (2d, prio: 100, max res: 2)
+  Task 7: Something completely new (5d, prio: 0, max res: 1)
+  Task 8: Internal code refactoring (1/2) (9d, prio: 0, max res: 2)
+  Task 8: Internal code refactoring (2/2) (8d, prio: 0, max res: 2)
 
-Work plan: 2020-12-21 to 2021-02-01 (28d), 98.21% resources used
+Work plan: 2020-12-01 to 2021-01-12 (28d), 98.21% resources used
 
-  Developer 1 > 2021-01-29  27d  96% ███████████████▊████████▊██   1, 8, 6
-  Developer 2 > 2021-01-29  27d  96% ███████████████▊███████▊███   1, 8, 2
-  Developer 3 > 2021-02-01  28d 100% ███████████████▊██████▊█████  3, 4, 5
-  Developer 4 > 2021-02-01  28d 100% ███████████████▊██████▊█████  3, 4, 7
+  Developer 1 > 2021-01-12  28d 100% █▊███████████████▊██████▊███  6, 3, 4, 5
+  Developer 2 > 2021-01-11  27d  96% ███████████████▊████████▊██   1, 8, 5
+  Developer 3 > 2021-01-11  27d  96% ███████████████▊███████▊███   1, 8, 2
+  Developer 4 > 2021-01-12  28d 100% ███████████████▊██████▊█████  3, 4, 7
 ```
 
 Note: if you run it in a terminal you'll see colored tasks and bars.

@@ -40,7 +40,7 @@
         },
         {
             "id": "4",
-            "title": "The most important feature",
+            "title": "POC for next version",
             "duration": 14
         },
         {
@@ -50,8 +50,9 @@
         },
         {
             "id": "6",
-            "title": "POC for next version",
-            "duration": 2
+            "title": "The most important feature",
+            "duration": 2,
+            "priority": 100
         },
         {
             "id": "7",

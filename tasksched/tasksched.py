@@ -190,27 +190,27 @@ def merge_configs(config, new_config):
     :param dict new_config: dictionary used to update the config
     """
     for key, value in new_config.items():
-        if key in config:
-            if isinstance(config[key], dict):
-                if not isinstance(value, dict):
-                    raise ValueError(f'merge config error: '
-                                     f'cannot update dict "{key}"')
-                config[key].update(value)
-            elif isinstance(config[key], list):
-                if not isinstance(value, list):
-                    raise ValueError(f'merge config error: '
-                                     f'cannot update list "{key}"')
-                for item in value:
-                    if isinstance(item, dict):
-                        config_item = search_item(config[key], item.get('id'))
-                        if config_item is None:
-                            config[key].append(item)
-                        else:
-                            config_item.update(item)
-                    else:
+        if key not in config:
+            config[key] = value
+            continue
+        if isinstance(config[key], dict):
+            if not isinstance(value, dict):
+                raise ValueError(f'merge config error: '
+                                 f'cannot update dict "{key}"')
+            config[key].update(value)
+        elif isinstance(config[key], list):
+            if not isinstance(value, list):
+                raise ValueError(f'merge config error: '
+                                 f'cannot update list "{key}"')
+            for item in value:
+                if isinstance(item, dict):
+                    config_item = search_item(config[key], item.get('id'))
+                    if config_item is None:
                         config[key].append(item)
-            else:
-                config[key] = value
+                    else:
+                        config_item.update(item)
+                else:
+                    config[key].append(item)
         else:
             config[key] = value
 

@@ -143,23 +143,23 @@ def get_input_files(args):
     return files
 
 
-def read_json(fp):
+def read_json(json_file):
     """
     Read JSON file.
 
-    :param object,str: file/filename
+    :param object,str json_file: file or filename
     :rtype: dict
     :return: JSON file as dict
     """
     try:
-        if isinstance(fp, str):
-            with open(fp) as json_file:
-                return json.load(json_file)
+        if isinstance(json_file, str):
+            with open(json_file) as _file:
+                return json.load(_file)
         else:
-            return json.load(fp)
+            return json.load(json_file)
     except (FileNotFoundError, json.decoder.JSONDecodeError) as exc:
-        if isinstance(fp, str):
-            fatal(f'ERROR: unable to decode JSON file "{fp}": {exc}')
+        if isinstance(json_file, str):
+            fatal(f'ERROR: unable to decode JSON file "{json_file}": {exc}')
         else:
             fatal(f'ERROR: unable to decode JSON: {exc}')
 

@@ -29,52 +29,79 @@ import sys
 TESTS_DIR = os.path.dirname(os.path.abspath(__file__))
 
 
-def test_merge_configs():
-    """Test merge_configs function."""
-    from tasksched import merge_configs
+def test_load_config():
+    """Test load_config function."""
+    from tasksched import load_config
 
     # empty merge
-    config = {}
-    merge_configs(config, {})
+    config1 = io.StringIO('{}')
+    config2 = io.StringIO('{}')
+    config = load_config([config1, config2])
     assert config == {}
 
-    # update of dict
-    config = {}
-    merge_configs(config, {'test': {'key1': 1}})
-    assert config == {'test': {'key1': 1}}
-    merge_configs(config, {'test': {'key2': 2}})
-    assert config == {'test': {'key1': 1, 'key2': 2}}
-    merge_configs(config, {'test2': {'key3': 3}})
-    assert config == {'test': {'key1': 1, 'key2': 2}, 'test2': {'key3': 3}}
-
-    # update of list
-    config = {}
-    merge_configs(config, {'test': ['item1']})
-    assert config == {'test': ['item1']}
-    merge_configs(config, {'test': ['item2']})
-    assert config == {'test': ['item1', 'item2']}
-    merge_configs(config, {'test2': ['item3']})
-    assert config == {'test': ['item1', 'item2'], 'test2': ['item3']}
-
     # update of string
-    config = {'test': 'value'}
-    merge_configs(config, {'test': 'new_value'})
+    config1 = io.StringIO('{"test": "value"}')
+    config2 = io.StringIO('{"test": "new_value"}')
+    config = load_config([config1, config2])
     assert config == {'test': 'new_value'}
 
     # new key
-    config = {'test': 'value'}
-    merge_configs(config, {'new_test': 'new_value'})
+    config1 = io.StringIO('{"test": "value"}')
+    config2 = io.StringIO('{"new_test": "new_value"}')
+    config = load_config([config1, config2])
     assert config == {'test': 'value', 'new_test': 'new_value'}
 
+    # update of dict
+    config1 = io.StringIO('{}')
+    config2 = io.StringIO('{"test": {"key1": 1}}')
+    config = load_config([config1, config2])
+    assert config == {'test': {'key1': 1}}
+
+    config1 = io.StringIO('{"test": {"key1": 1}}')
+    config2 = io.StringIO('{"test": {"key2": 2}}')
+    config = load_config([config1, config2])
+    assert config == {'test': {'key1': 1, 'key2': 2}}
+
+    config1 = io.StringIO('{"test": {"key1": 1}}')
+    config2 = io.StringIO('{"test2": {"key3": 3}}')
+    config = load_config([config1, config2])
+    assert config == {'test': {'key1': 1}, 'test2': {'key3': 3}}
+
+    # update of list of strings
+    config1 = io.StringIO('{"test": ["item1"]}')
+    config2 = io.StringIO('{"test": ["item2"]}')
+    config = load_config([config1, config2])
+    assert config == {'test': ['item1', 'item2']}
+
+    # update of list of dicts without id
+    config1 = io.StringIO('{"test": [{"name": "first"}]}')
+    config2 = io.StringIO('{"test": [{"name": "second"}]}')
+    config = load_config([config1, config2])
+    assert config == {'test': [{'name': 'first'}, {'name': 'second'}]}
+
+    # update of list of dicts with id
+    config1 = io.StringIO('{"test": [{"id": "1", "name": "first"}]}')
+    config2 = io.StringIO('{"test": [{"id": "2", "name": "second"}]}')
+    config = load_config([config1, config2])
+    assert config == {'test': [{'id': '1', 'name': 'first'},
+                               {'id': '2', 'name': 'second'}]}
+
+    config1 = io.StringIO('{"test": [{"id": "1", "name": "first"}]}')
+    config2 = io.StringIO('{"test": [{"id": "1", "name": "first again"}]}')
+    config = load_config([config1, config2])
+    assert config == {'test': [{'id': '1', 'name': 'first again'}]}
+
     # invalid: update of dict with a list
-    config = {'test': {'key1': 1}}
+    config1 = io.StringIO('{"test": {"key1": 1}}')
+    config2 = io.StringIO('{"test": ["key2"]}')
     with pytest.raises(ValueError):
-        merge_configs(config, {'test': ['item2']})
+        config = load_config([config1, config2])
 
     # invalid: update of list with a dict
-    config = {'test': ['item1']}
+    config1 = io.StringIO('{"test": ["key1"]}')
+    config2 = io.StringIO('{"test": {"key2": 2}}')
     with pytest.raises(ValueError):
-        merge_configs(config, {'test': {'key2': 2}})
+        config = load_config([config1, config2])
 
 
 def test_main(monkeypatch):
@@ -97,19 +124,19 @@ def test_main(monkeypatch):
         with mock.patch.object(sys, 'argv', args):
             tasksched.main()
 
-    # workplan, no input
+    # action: workplan, no input
     args = ['tasksched', 'workplan']
     with pytest.raises(SystemExit):
         with mock.patch.object(sys, 'argv', args):
             tasksched.main()
 
-    # workplan, file not found
+    # action: workplan, file not found
     args = ['tasksched', 'workplan', 'unknown.json']
     with pytest.raises(SystemExit):
         with mock.patch.object(sys, 'argv', args):
             tasksched.main()
 
-    # workplan OK
+    # action: workplan, OK
     stdin = io.StringIO('{}')
     stdin.fileno = lambda: 0
     monkeypatch.setattr('sys.stdin', stdin)
@@ -118,7 +145,7 @@ def test_main(monkeypatch):
     with mock.patch.object(sys, 'argv', args):
         tasksched.main()
 
-    # workplan, invalid JSON on input
+    # adtion: workplan, invalid JSON on input
     stdin = io.StringIO('{}')
     stdin.fileno = lambda: 0
     monkeypatch.setattr('sys.stdin', stdin)
@@ -127,7 +154,7 @@ def test_main(monkeypatch):
         with mock.patch.object(sys, 'argv', args):
             tasksched.main()
 
-    # workplan, invalid JSON file
+    # action: workplan, invalid JSON file
     stdin = io.StringIO('{}')
     stdin.fileno = lambda: 0
     monkeypatch.setattr('sys.stdin', stdin)
@@ -137,7 +164,14 @@ def test_main(monkeypatch):
         with mock.patch.object(sys, 'argv', args):
             tasksched.main()
 
-    # text workplan, missing resource
+    # action: text, no input
+    args = ['tasksched', 'text']
+    with pytest.raises(SystemExit):
+        with mock.patch.object(sys, 'argv', args):
+            with mock.patch.object(sys.stdin, 'isatty', lambda: True):
+                tasksched.main()
+
+    # action: text, missing resource
     stdin = io.StringIO('{}')
     stdin.fileno = lambda: 0
     monkeypatch.setattr('sys.stdin', stdin)
@@ -147,7 +181,7 @@ def test_main(monkeypatch):
         with mock.patch.object(sys, 'argv', args):
             tasksched.main()
 
-    # text workplan OK
+    # action: text, OK
     stdin = io.StringIO('{}')
     stdin.fileno = lambda: 0
     monkeypatch.setattr('sys.stdin', stdin)

@@ -31,8 +31,7 @@ __version__ = '0.3.0-dev'
 
 __all__ = (
     '__version__',
-    'merge_configs',
-    'get_config',
+    'load_config',
     'main',
     'init',
 )
@@ -130,6 +129,57 @@ def get_parser():
     return parser
 
 
+def get_input_files(args):
+    """
+    Get list of input files (optional stdin file + filenames).
+
+    :rtype: list
+    :return: list of files/filenames
+    """
+    files = []
+    if not sys.stdin.isatty():
+        files.append(sys.stdin)
+    files.extend(args.filename)
+    return files
+
+
+def read_json(fp):
+    """
+    Read JSON file.
+
+    :param object,str: file/filename
+    :rtype: dict
+    :return: JSON file as dict
+    """
+    try:
+        if isinstance(fp, str):
+            with open(fp) as json_file:
+                return json.load(json_file)
+        else:
+            return json.load(fp)
+    except (FileNotFoundError, json.decoder.JSONDecodeError) as exc:
+        if isinstance(fp, str):
+            fatal(f'ERROR: unable to decode JSON file "{fp}": {exc}')
+        else:
+            fatal(f'ERROR: unable to decode JSON: {exc}')
+
+
+def search_item(list_items, item_id):
+    """
+    Search an item by its id in a list.
+
+    :param list list_items: list of items
+    :param str item_id: item id to search in the list of items
+    :rtype: object
+    :return: the item found or None
+    """
+    if item_id:
+        for item in list_items:
+            if item['id'] == item_id:
+                return item
+    return None
+
+
 def merge_configs(config, new_config):
     """
     Merge config2 into config: each value in config is updated with value
@@ -141,41 +191,43 @@ def merge_configs(config, new_config):
     """
     for key, value in new_config.items():
         if key in config:
-            if isinstance(config[key], list):
-                if not isinstance(value, list):
-                    raise ValueError(f'merge config error: '
-                                     f'cannot update list "{key}"')
-                config[key].extend(value)
-            elif isinstance(config[key], dict):
+            if isinstance(config[key], dict):
                 if not isinstance(value, dict):
                     raise ValueError(f'merge config error: '
                                      f'cannot update dict "{key}"')
                 config[key].update(value)
+            elif isinstance(config[key], list):
+                if not isinstance(value, list):
+                    raise ValueError(f'merge config error: '
+                                     f'cannot update list "{key}"')
+                for item in value:
+                    if isinstance(item, dict):
+                        config_item = search_item(config[key], item.get('id'))
+                        if config_item is None:
+                            config[key].append(item)
+                        else:
+                            config_item.update(item)
+                    else:
+                        config[key].append(item)
             else:
                 config[key] = value
         else:
             config[key] = value
 
 
-def get_config(args):
+def load_config(files):
     """
-    Get JSON configuration by reading stdin (if availbale) and list of input
+    Load JSON configuration by reading stdin (if availbale) and list of input
     files received on command line.
 
-    :param argparse.Namespace args: command-line arguments
+    :param list files: JSON files/filenames to load
+    :rtype: dict
+    :return: configuration
     """
     config = {}
-    if not sys.stdin.isatty():
-        try:
-            config.update(json.load(sys.stdin))
-        except json.decoder.JSONDecodeError as exc:
-            fatal(f'ERROR: unable to decode JSON on stdin: {exc}')
-    for filename in args.filename:
-        try:
-            with open(filename) as json_file:
-                merge_configs(config, json.load(json_file))
-        except (FileNotFoundError, json.decoder.JSONDecodeError) as exc:
-            fatal(f'ERROR: unable to decode JSON file "{filename}": {exc}')
+    for _file in files:
+        new_config = read_json(_file)
+        merge_configs(config, new_config)
     return config
 
 
@@ -190,13 +242,14 @@ def fatal(error):
     sys.exit(1)
 
 
-def action_workplan(args, config):  # pylint: disable=unused-argument
+def action_workplan(args):
     """
     Return the work plan (as JSON) using the project configuration.
 
     :param argparse.Namespace args: command-line arguments
-    :param dict config: project configuration
     """
+    files = get_input_files(args)
+    config = load_config(files)
     try:
         project = Project(config)
     except (KeyError, ValueError) as exc:
@@ -205,13 +258,16 @@ def action_workplan(args, config):  # pylint: disable=unused-argument
     return json.dumps(workplan.as_dict())
 
 
-def action_text(args, config):
+def action_text(args):
     """
     Return the work plan as text to display in the terminal.
 
     :param argparse.Namespace args: command-line arguments
-    :param dict config: work plan
     """
+    files = get_input_files(args)
+    if not files:
+        fatal('ERROR: missing input workplan')
+    config = read_json(files[-1])
     try:
         return workplan_to_text(
             config,
@@ -226,7 +282,7 @@ def main():
     """Main function, entry point."""
     args = get_parser().parse_args()
     func = getattr(sys.modules[__name__], f'action_{args.action}')
-    result = func(args, get_config(args))
+    result = func(args)
     print(result)
 
 

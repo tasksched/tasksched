@@ -79,6 +79,13 @@ def test_project():
     assert project.name == 'The name'
     assert project.start_date == date.today()
     assert project.dict_holidays == {}
+    assert project.resources[0].res_id == 'dev1'
+    assert project.resources[0].name == 'dev1'
+    assert project.tasks[0].task_id == 'task1'
+    assert project.tasks[0].title == 'task1'
+    assert project.tasks[0].duration == 10
+    assert project.tasks[0].priority == 0
+    assert project.tasks[0].max_resources == 2
 
     # complete project
     project = Project(get_json_file('project_complete.json'))

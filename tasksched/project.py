@@ -80,14 +80,22 @@ class Project:
         else:
             self.dict_holidays = {}
         self.resources = [
-            Resource(res['id'], res['name'])
+            Resource(
+                res['id'],
+                res.get('name', res['id']),
+            )
             for res in config['resources']
         ]
         if not self.resources:
             raise ValueError('At least one resource is required')
         self.tasks = [
-            Task(task['id'], task['title'], task['duration'],
-                 task.get('priority', 0), task.get('max_resources', 2))
+            Task(
+                task['id'],
+                task.get('title', task['id']),
+                task['duration'],
+                task.get('priority', 0),
+                task.get('max_resources', 2),
+            )
             for task in config['tasks']
         ]
         if not self.tasks:

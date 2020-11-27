@@ -4,14 +4,12 @@
     },
     "resources": [
         {
-            "id": "dev1",
-            "name": "Developer 1"
+            "id": "dev1"
         }
     ],
     "tasks": [
         {
             "id": "task1",
-            "title": "The first task",
             "duration": 10
         }
     ]

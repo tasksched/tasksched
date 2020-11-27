@@ -2,6 +2,7 @@
 
 ## Version 0.3.0 (under dev)
 
+- Make resource `name` and task `title` optional fields (use `id` by default).
 - Add task fields `priority` and `max_resources`.
 
 ## Version 0.2.0 (2020-11-25)

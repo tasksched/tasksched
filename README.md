@@ -57,12 +57,14 @@ The project keys are:
 For each resource, the keys are:
 
 - `id` (string, required): the resource id
-- `name` (string, required): the resource name
+- `name` (string, optional): the resource name
+  (if omitted, the name is set to the `id` value)
 
 For each task, the keys are:
 
 - `id` (string, required): the task id
-- `title` (string, required): the task title
+- `title` (string, optional): the task title
+  (if omitted, the title is set to the `id` value)
 - `duration` (integer, required): the task duration in days
 - `priority` (integer, optional): the task priority (default: 0), a higher
   priority uses the task first in the work plan, a negative number makes the

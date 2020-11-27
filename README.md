@@ -40,37 +40,38 @@ One or more files are accepted, each one overwrites any file previously loaded.
 
 The main keys in the input are:
 
-- `project`: project description
-- `resources`: list of resources
-- `tasks`: list of tasks
+Field       | Type   | Required | Default | Description
+----------- | ------ | -------- | ------- | -----------
+`project`   | object | yes      |         | project description
+`resources` | list   | yes      |         | list of resources
+`tasks`     | list   | yes      |         | list of tasks
 
 The project keys are:
 
-- `name` (string, required): the project name
-- `start` (string, optional): the start date, format:  `YYYY-MM-DD` (default: today)
-- `holidays` (string, optional): the country ISO code used to skip holidays in work plan
-  (for the list of valid country ISO codes, see:
-  [python-holidays](https://pypi.org/project/holidays/))
-- `resources` (list, required): the list of resources (see below)
-- `tasks` (list, resuired): the list of tasks (see below)
+Field       | Type   | Required | Default | Description
+----------- | ------ | -------- | ------- | -----------
+`name`      | string | yes      |         | the project name
+`start`     | string | -        | today   | the start date, format:  `YYYY-MM-DD`
+`holidays`  | string | -        |         | the country ISO code used to skip holidays in work plan (for the list of valid country ISO codes, see: [python-holidays](https://pypi.org/project/holidays/))
+`resources` | list   | yes      |         | the list of resources (see below)
+`tasks`     | list   | yes      |         | the list of tasks (see below)
 
 For each resource, the keys are:
 
-- `id` (string, required): the resource id
-- `name` (string, optional): the resource name
-  (if omitted, the name is set to the `id` value)
+Field       | Type   | Required | Default      | Description
+----------- | ------ | -------- | ------------ | -----------
+`id`        | string | yes      |              | the resource id
+`name`      | string | -        | same as `id` | the resource name
 
 For each task, the keys are:
 
-- `id` (string, required): the task id
-- `title` (string, optional): the task title
-  (if omitted, the title is set to the `id` value)
-- `duration` (integer, required): the task duration in days
-- `priority` (integer, optional): the task priority (default: 0), a higher
-  priority uses the task first in the work plan, a negative number makes the
-  task less urgent than the others
-- `max_resources` (integer, optional): the max number of resources to use for
-  this task (default: 2)
+Field           | Type    | Required | Default      | Description
+--------------- | ------- | -------- | ------------ | -----------
+`id`            | string  | yes      |              | the task id
+`name`          | string  | -        | same as `id` | the task title
+`duration`      | integer | yes      |              | the task duration in days
+`priority`      | integer | -        | 0            | the task priority: a higher priority uses the task first in the work plan, a negative number makes the  task less urgent than the others
+`max_resources` | integer | -        | 2            | the max number of resources to use for this task
 
 Content of files can be read from standard input or filenames are allowed as
 command line arguments. Both can be used at same time.

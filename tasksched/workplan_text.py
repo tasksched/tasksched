@@ -81,11 +81,11 @@ def workplan_to_text(workplan,  # pylint: disable=too-many-locals
         legend.append(f'  Task {str_id}: {task["title"]}{color_reset} '
                       f'({task["duration"]}d, prio: {task["priority"]}, '
                       f'max res: {task["max_resources"]})')
-    text = f'{project["resources_usage"]:.2f}%'
-    res_usage = (color_pct(text, project['resources_usage'])
-                 if use_colors else text)
+    text = f'{project["resources_use"]:.2f}%'
+    res_use = (color_pct(text, project['resources_use'])
+               if use_colors else text)
     info = (f'Work plan: {project["start"]} to {project["end"]} '
-            f'({project["duration"]}d), {res_usage} resources used')
+            f'({project["duration"]}d), {res_use} resources used')
     rows = [info, '']
     max_len_res = max(len(res['name']) for res in resources) + 2
     if use_unicode:
@@ -93,8 +93,8 @@ def workplan_to_text(workplan,  # pylint: disable=too-many-locals
     else:
         char1, char2 = 'x', '|'
     for res in resources:
-        text = f'{res["usage"]:>3.0f}%'
-        usage = color_pct(text, res['usage']) if use_colors else text
+        text = f'{res["use"]:>3.0f}%'
+        use = color_pct(text, res['use']) if use_colors else text
         chars = []
         for i, task_id in enumerate(res['assigned']):
             char = (
@@ -109,7 +109,7 @@ def workplan_to_text(workplan,  # pylint: disable=too-many-locals
         filler = ' ' * (project['duration'] - res['duration'] + 2)
         rows.append(
             f'{res["name"]:>{max_len_res}} > {res["end"] or " "*10} '
-            f'{res["duration"]:>3}d {usage} '
+            f'{res["duration"]:>3}d {use} '
             f'{bar_resource}{color_reset}{filler}{tasks}'
         )
     return '\n'.join([

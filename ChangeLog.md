@@ -2,6 +2,7 @@
 
 ## Version 0.3.0 (under dev)
 
+- Fix typo "usage" -> "use".
 - Fix colors when tasks are split.
 - Merge resources and tasks from multiple JSON input files when they have the same `id`.
 - Make resource `name` and task `title` optional fields (use `id` by default).

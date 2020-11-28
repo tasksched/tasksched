@@ -117,7 +117,7 @@ $ tasksched workplan examples/project_small.json | jq
       "end": "2020-12-07",
       "duration": 4,
       "holidays": "FRA",
-      "resources_usage": 87.5
+      "resources_use": 87.5
     },
     "resources": [
       {
@@ -133,7 +133,7 @@ $ tasksched workplan examples/project_small.json | jq
         ],
         "duration": 3,
         "end": "2020-12-04",
-        "usage": 75
+        "use": 75
       },
       {
         "id": "dev2",
@@ -150,7 +150,7 @@ $ tasksched workplan examples/project_small.json | jq
         ],
         "duration": 4,
         "end": "2020-12-07",
-        "usage": 100
+        "use": 100
       }
     ],
     "tasks": [

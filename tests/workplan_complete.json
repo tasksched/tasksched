@@ -6,7 +6,7 @@
             "end": "2021-01-05",
             "duration": 9,
             "holidays": "FRA",
-            "resources_usage": 94.44444444444444
+            "resources_use": 94.44444444444444
         },
         "resources": [
             {
@@ -16,7 +16,7 @@
                 "assigned_tasks": ["task3", "task2"],
                 "duration": 8,
                 "end": "2021-01-04",
-                "usage": 88.88888888888889
+                "use": 88.88888888888889
             },
             {
                 "id": "dev2",
@@ -25,7 +25,7 @@
                 "assigned_tasks": ["task3", "task1", "task2"],
                 "duration": 9,
                 "end": "2021-01-05",
-                "usage": 100.0
+                "use": 100.0
             }
         ],
         "tasks": [

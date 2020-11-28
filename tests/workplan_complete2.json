@@ -6,7 +6,7 @@
             "end": "2020-12-29",
             "duration": 5,
             "holidays": "FRA",
-            "resources_usage": 80.0
+            "resources_use": 80.0
         },
         "resources": [
             {
@@ -24,7 +24,7 @@
                 ],
                 "duration": 5,
                 "end": "2020-12-29",
-                "usage": 100.0
+                "use": 100.0
             },
             {
                 "id": "dev2",
@@ -41,7 +41,7 @@
                 ],
                 "duration": 5,
                 "end": "2020-12-29",
-                "usage": 100.0
+                "use": 100.0
             },
             {
                 "id": "dev3",
@@ -55,7 +55,7 @@
                 ],
                 "duration": 2,
                 "end": "2020-12-23",
-                "usage": 40.0
+                "use": 40.0
             }
         ],
         "tasks": [

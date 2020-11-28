@@ -42,13 +42,13 @@ class WorkPlan:
             res.assigned_tasks = []
             res.duration = 0
             res.end_date = None
-            res.usage = 0
+            res.use = 0
         for task in self.project.tasks:
             task.remaining = task.duration
         self.remaining = sum(task.duration for task in self.project.tasks)
         self.duration = 0
         self.end_date = self.project.start_date
-        self.resources_usage = 0
+        self.resources_use = 0
         self.schedule()
 
     def split_tasks(self, tasks_to_split):
@@ -121,7 +121,7 @@ class WorkPlan:
                                                  reverse=True)
         for task in sorted_tasks:
             self.assign_task(task, self.find_best_resource(), task.remaining)
-        sum_usage = 0
+        sum_use = 0
         for res in self.project.resources:
             if res.duration > 0:
                 res.end_date = add_business_days(
@@ -131,10 +131,10 @@ class WorkPlan:
                 )
                 if res.end_date > self.end_date:
                     self.end_date = res.end_date
-            res.usage = (res.duration * 100) / self.duration
-            sum_usage += res.usage
+            res.use = (res.duration * 100) / self.duration
+            sum_use += res.use
         if self.project.resources:
-            self.resources_usage = sum_usage / len(self.project.resources)
+            self.resources_use = sum_use / len(self.project.resources)
 
     def as_dict(self):
         """Return the work plan as dict."""
@@ -146,7 +146,7 @@ class WorkPlan:
                     'end': self.end_date.strftime('%Y-%m-%d'),
                     'duration': self.duration,
                     'holidays': self.project.holidays_iso,
-                    'resources_usage': self.resources_usage,
+                    'resources_use': self.resources_use,
                 },
                 'resources': [
                     {
@@ -157,7 +157,7 @@ class WorkPlan:
                         'duration': res.duration,
                         'end': (res.end_date.strftime('%Y-%m-%d')
                                 if res.end_date else ''),
-                        'usage': res.usage,
+                        'use': res.use,
                     }
                     for res in self.project.resources
                 ],

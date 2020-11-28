@@ -72,11 +72,10 @@ def workplan_to_text(workplan,  # pylint: disable=too-many-locals
     tasks = workplan['workplan']['tasks']
     legend = ['Legend:']
     iter_color = cycle(COLORS)
-    tasks_colors = {
-        task['id']: next(iter_color)
-        for task in tasks
-    }
+    tasks_colors = {}
     for task in tasks:
+        if task['id'] not in tasks_colors:
+            tasks_colors[task['id']] = next(iter_color)
         str_id = (color(task['id'], tasks_colors[task['id']])
                   if use_colors else task['id'])
         legend.append(f'  Task {str_id}: {task["title"]}{color_reset} '

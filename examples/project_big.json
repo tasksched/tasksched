@@ -51,8 +51,7 @@
         {
             "id": "6",
             "title": "The most important feature",
-            "duration": 2,
-            "priority": 100
+            "duration": 2
         },
         {
             "id": "7",
@@ -63,7 +62,8 @@
         {
             "id": "8",
             "title": "Internal code refactoring",
-            "duration": 17
+            "duration": 17,
+            "priority": 100
         }
     ]
 }

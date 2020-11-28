@@ -181,32 +181,7 @@ $ tasksched workplan examples/project_small.json | jq
 
 Example of work plan converted to text for display:
 
-```
-$ tasksched workplan examples/project_big.json | tasksched text
-Legend:
-  Task 1: Mega feature (1/2) (16d, prio: 0, max res: 2)
-  Task 1: Mega feature (2/2) (16d, prio: 0, max res: 2)
-  Task 2: Very nice feature (3d, prio: 0, max res: 2)
-  Task 3: Another feature (1/2) (16d, prio: 0, max res: 2)
-  Task 3: Another feature (2/2) (16d, prio: 0, max res: 2)
-  Task 4: POC for next version (1/2) (7d, prio: 0, max res: 2)
-  Task 4: POC for next version (2/2) (7d, prio: 0, max res: 2)
-  Task 5: Small feature (1/2) (3d, prio: 0, max res: 2)
-  Task 5: Small feature (2/2) (2d, prio: 0, max res: 2)
-  Task 6: The most important feature (2d, prio: 100, max res: 2)
-  Task 7: Something completely new (5d, prio: 0, max res: 1)
-  Task 8: Internal code refactoring (1/2) (9d, prio: 0, max res: 2)
-  Task 8: Internal code refactoring (2/2) (8d, prio: 0, max res: 2)
-
-Work plan: 2020-12-01 to 2021-01-12 (28d), 98.21% resources used
-
-  Developer 1 > 2021-01-12  28d 100% █▊███████████████▊██████▊███  6, 3, 4, 5
-  Developer 2 > 2021-01-11  27d  96% ███████████████▊████████▊██   1, 8, 5
-  Developer 3 > 2021-01-11  27d  96% ███████████████▊███████▊███   1, 8, 2
-  Developer 4 > 2021-01-12  28d 100% ███████████████▊██████▊█████  3, 4, 7
-```
-
-Note: if you run it in a terminal you'll see colored tasks and bars.
+![Tasksched](examples/tasksched.png)
 
 ## Copyright
 

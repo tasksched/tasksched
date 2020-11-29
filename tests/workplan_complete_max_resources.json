@@ -3,7 +3,7 @@
         "project": {
             "name": "The name",
             "start": "2020-12-21",
-            "end": "2021-01-06",
+            "end": "2021-01-05",
             "duration": 10,
             "holidays": "FRA",
             "resources_use": 85.0
@@ -15,7 +15,7 @@
                 "assigned": ["task3", "task3", "task3", "task3", "task3", "task3", "task3", "task3", "task3", "task3"],
                 "assigned_tasks": ["task3"],
                 "duration": 10,
-                "end": "2021-01-06",
+                "end": "2021-01-05",
                 "use": 100.0
             },
             {
@@ -24,7 +24,7 @@
                 "assigned": ["task2", "task2", "task2", "task2", "task2", "task1", "task1"],
                 "assigned_tasks": ["task2", "task1"],
                 "duration": 7,
-                "end": "2020-12-31",
+                "end": "2020-12-30",
                 "use": 70.0
             }
         ],

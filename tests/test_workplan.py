@@ -36,19 +36,19 @@ def test_workplan():
     workplan = WorkPlan(project)
     assert workplan.remaining == 0
     assert workplan.duration == 10
-    assert workplan.end_date == date(2021, 1, 6)
+    assert workplan.end_date == date(2021, 1, 5)
     assert workplan.resources_use == 85.0
     assert workplan.project.resources[0].assigned == ['task3'] * 10
     assert workplan.project.resources[0].assigned_tasks == ['task3']
     assert workplan.project.resources[0].duration == 10
-    assert workplan.project.resources[0].end_date == date(2021, 1, 6)
+    assert workplan.project.resources[0].end_date == date(2021, 1, 5)
     assert workplan.project.resources[0].use == 100
     assert workplan.project.resources[1].assigned == (
         (['task2'] * 5) + (['task1'] * 2)
     )
     assert workplan.project.resources[1].assigned_tasks == ['task2', 'task1']
     assert workplan.project.resources[1].duration == 7
-    assert workplan.project.resources[1].end_date == date(2020, 12, 31)
+    assert workplan.project.resources[1].end_date == date(2020, 12, 30)
     assert workplan.project.resources[1].use == 70
     assert workplan.project.tasks[0].remaining == 0
     assert workplan.project.tasks[1].remaining == 0
@@ -106,7 +106,7 @@ def test_build_workplan():
     workplan = build_workplan(Project(get_json_file('project_complete.json')))
     assert workplan.remaining == 0
     assert workplan.duration == 9
-    assert workplan.end_date == date(2021, 1, 5)
+    assert workplan.end_date == date(2021, 1, 4)
     assert workplan.resources_use == 94.44444444444444
     assert workplan.project.resources[0].assigned == (
         (['task3'] * 5) + (['task2'] * 3)
@@ -115,7 +115,7 @@ def test_build_workplan():
         'task3', 'task2',
     ]
     assert workplan.project.resources[0].duration == 8
-    assert workplan.project.resources[0].end_date == date(2021, 1, 4)
+    assert workplan.project.resources[0].end_date == date(2020, 12, 31)
     assert workplan.project.resources[0].use == 88.88888888888889
     assert workplan.project.resources[1].assigned == (
         (['task3'] * 5) + (['task1'] * 2) + (['task2'] * 2)
@@ -124,7 +124,7 @@ def test_build_workplan():
         'task3', 'task1', 'task2',
     ]
     assert workplan.project.resources[1].duration == 9
-    assert workplan.project.resources[1].end_date == date(2021, 1, 5)
+    assert workplan.project.resources[1].end_date == date(2021, 1, 4)
     assert workplan.project.resources[1].use == 100.0
     assert workplan.project.tasks[0].remaining == 0
     assert workplan.project.tasks[1].remaining == 0
@@ -140,12 +140,12 @@ def test_build_workplan_max_resources():
     workplan = build_workplan(project)
     assert workplan.remaining == 0
     assert workplan.duration == 10
-    assert workplan.end_date == date(2021, 1, 6)
+    assert workplan.end_date == date(2021, 1, 5)
     assert workplan.resources_use == 85.0
     assert workplan.project.resources[0].assigned == ['task3'] * 10
     assert workplan.project.resources[0].assigned_tasks == ['task3']
     assert workplan.project.resources[0].duration == 10
-    assert workplan.project.resources[0].end_date == date(2021, 1, 6)
+    assert workplan.project.resources[0].end_date == date(2021, 1, 5)
     assert workplan.project.resources[0].use == 100.0
     assert workplan.project.resources[1].assigned == (
         (['task2'] * 5) + (['task1'] * 2)
@@ -154,7 +154,7 @@ def test_build_workplan_max_resources():
         'task2', 'task1',
     ]
     assert workplan.project.resources[1].duration == 7
-    assert workplan.project.resources[1].end_date == date(2020, 12, 31)
+    assert workplan.project.resources[1].end_date == date(2020, 12, 30)
     assert workplan.project.resources[1].use == 70.0
     assert workplan.project.tasks[0].remaining == 0
     assert workplan.project.tasks[1].remaining == 0

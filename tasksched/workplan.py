@@ -126,7 +126,7 @@ class WorkPlan:
             if res.duration > 0:
                 res.end_date = add_business_days(
                     self.project.start_date,
-                    res.duration,
+                    res.duration - 1,
                     self.project.hdays,
                 )
                 if res.end_date > self.end_date:

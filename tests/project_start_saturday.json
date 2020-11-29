@@ -1,0 +1,17 @@
+{
+    "project": {
+        "name": "The name",
+        "start": "2020-11-28"
+    },
+    "resources": [
+        {
+            "id": "dev1"
+        }
+    ],
+    "tasks": [
+        {
+            "id": "task1",
+            "duration": 10
+        }
+    ]
+}

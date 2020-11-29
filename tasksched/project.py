@@ -25,6 +25,11 @@ import datetime
 
 import holidays
 
+from tasksched.utils import (
+    is_business_day,
+    add_business_days,
+)
+
 __all__ = (
     'Resource',
     'Task',
@@ -79,6 +84,9 @@ class Project:
             )
         else:
             self.hdays = {}
+        # adjust the start date to the next business if needed
+        if not is_business_day(self.start_date, self.hdays):
+            self.start_date = add_business_days(self.start_date, 1, self.hdays)
         self.resources = [
             Resource(
                 res['id'],

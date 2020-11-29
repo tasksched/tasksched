@@ -2,6 +2,7 @@
 
 ## Version 0.3.0 (under dev)
 
+- Adjust the project start date to the next business day if it's a week-end or a public holiday.
 - Fix work plan end date.
 - Fix typo "usage" -> "use".
 - Fix colors when tasks are split.

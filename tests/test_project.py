@@ -77,7 +77,6 @@ def test_project():
     # minimal project
     project = Project(get_json_file('project_minimal.json'))
     assert project.name == 'The name'
-    assert project.start_date == date.today()
     assert project.hdays == {}
     assert project.resources[0].res_id == 'dev1'
     assert project.resources[0].name == 'dev1'
@@ -86,6 +85,10 @@ def test_project():
     assert project.tasks[0].duration == 10
     assert project.tasks[0].priority == 0
     assert project.tasks[0].max_resources == 2
+
+    # project starting saturday
+    project = Project(get_json_file('project_start_saturday.json'))
+    assert project.start_date == date(2020, 11, 30)
 
     # complete project
     project = Project(get_json_file('project_complete.json'))

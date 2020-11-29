@@ -21,24 +21,41 @@
 
 import datetime
 
+__all__ = (
+    'is_business_day',
+    'add_business_days',
+)
 
-def add_business_days(from_date, count, dict_holidays=None):
+
+def is_business_day(date, hdays=None):
+    """
+    Check if the date is a business day.
+
+    :param datetime.date date: date to check
+    :param dict hdays: list of dates with holidays
+    :rtype: bool
+    :return: True if the date is a business day, False otherwise (that means
+        the date is either saturday/sunday or a public holiday)
+    """
+    return date.weekday() < 5 and date not in (hdays or {})
+
+
+def add_business_days(from_date, count, hdays=None):
     """
     Add "count" business days to a date, skipping week-end days and public
     holidays.
 
     :param datetime.date from_date: start date
     :param int count: number of business days to add (≥ 0)
-    :param dict dict_holidays: list of dates with holidays (these days are
-         skipped)
+    :param dict hdays: list of dates with holidays
+    :rtype: datetime.date
+    :return: date with "count" business days added
     """
-    hdays = dict_holidays or {}
     to_add = count
     current_date = from_date
     while to_add > 0:
         current_date += datetime.timedelta(days=1)
-        weekday = current_date.weekday()
-        if weekday >= 5 or current_date in hdays:
+        if not is_business_day(current_date, hdays):
             continue
         to_add -= 1
     return current_date

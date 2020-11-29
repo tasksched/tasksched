@@ -78,7 +78,7 @@ def test_project():
     project = Project(get_json_file('project_minimal.json'))
     assert project.name == 'The name'
     assert project.start_date == date.today()
-    assert project.dict_holidays == {}
+    assert project.hdays == {}
     assert project.resources[0].res_id == 'dev1'
     assert project.resources[0].name == 'dev1'
     assert project.tasks[0].task_id == 'task1'
@@ -92,9 +92,9 @@ def test_project():
     assert project.name == 'The name'
     assert project.start_date == date(2020, 12, 21)
     assert project.holidays_iso == 'FRA'
-    assert isinstance(project.dict_holidays, dict)
-    assert project.dict_holidays.years == set(range(2020, 2030))
-    assert project.dict_holidays
+    assert isinstance(project.hdays, dict)
+    assert project.hdays
+    assert project.hdays.years == set(range(2020, 2030))
     assert len(project.resources) == 2
     assert project.resources[0].res_id == 'dev1'
     assert project.resources[0].name == 'Developer 1'

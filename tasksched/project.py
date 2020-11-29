@@ -72,13 +72,13 @@ class Project:
         )
         self.holidays_iso = project.get('holidays')
         if self.holidays_iso:
-            self.dict_holidays = holidays.CountryHoliday(
+            self.hdays = holidays.CountryHoliday(
                 self.holidays_iso,
                 years=range(self.start_date.year,
                             self.start_date.year + 10),
             )
         else:
-            self.dict_holidays = {}
+            self.hdays = {}
         self.resources = [
             Resource(
                 res['id'],

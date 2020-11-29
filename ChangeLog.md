@@ -1,6 +1,6 @@
 # Tasksched ChangeLog
 
-## Version 0.3.0 (under dev)
+## Version 0.3.0 (2020-11-29)
 
 - Adjust the project start date to the next business day if it's a week-end or a public holiday.
 - Fix work plan end date.

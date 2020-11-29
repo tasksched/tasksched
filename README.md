@@ -51,7 +51,7 @@ The project keys are:
 Field       | Type   | Required | Default | Description
 ----------- | ------ | -------- | ------- | -----------
 `name`      | string | yes      |         | the project name
-`start`     | string | -        | today   | the start date, format:  `YYYY-MM-DD`
+`start`     | string | -        | today   | the start date (format: `YYYY-MM-DD`), auto-adjusted to the next business day if needed
 `holidays`  | string | -        |         | the country ISO code used to skip holidays in work plan (for the list of valid country ISO codes, see: [python-holidays](https://pypi.org/project/holidays/))
 `resources` | list   | yes      |         | the list of resources (see below)
 `tasks`     | list   | yes      |         | the list of tasks (see below)

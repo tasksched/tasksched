@@ -51,7 +51,12 @@ setup(
         'Topic :: Office/Business :: Scheduling',
     ],
     packages=find_packages(),
-    tests_require=['pytest'],
+    install_requires=[
+        'holidays',
+    ],
+    tests_require=[
+        'pytest',
+    ],
     entry_points={
         'console_scripts': ['tasksched=tasksched:main'],
     }

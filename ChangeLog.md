@@ -1,5 +1,9 @@
 # Tasksched ChangeLog
 
+## Version 0.4.0 (under dev)
+
+- Add missing dependency on `holidays` in setup.py.
+
 ## Version 0.3.0 (2020-11-29)
 
 - Adjust the project start date to the next business day if it's a week-end or a public holiday.

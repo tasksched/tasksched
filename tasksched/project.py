@@ -105,6 +105,7 @@ class Project:
                 task.get('max_resources', 2),
             )
             for task in config['tasks']
+            if task['duration'] > 0
         ]
         if not self.tasks:
             raise ValueError('At least one task is required')

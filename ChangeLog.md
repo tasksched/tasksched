@@ -2,6 +2,7 @@
 
 ## Version 0.4.0 (under dev)
 
+- Ignore tasks with null or negative duration.
 - Add missing dependency on `holidays` in setup.py.
 
 ## Version 0.3.0 (2020-11-29)

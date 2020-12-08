@@ -39,6 +39,13 @@
             "duration": 10,
             "priority": 0,
             "max_resources": 2
+        },
+        {
+            "id": "task4",
+            "title": "This task has duration 0 and is ignored",
+            "duration": 0,
+            "priority": 0,
+            "max_resources": 2
         }
     ]
 }

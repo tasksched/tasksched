@@ -69,7 +69,7 @@ Field           | Type    | Required | Default      | Description
 --------------- | ------- | -------- | ------------ | -----------
 `id`            | string  | yes      |              | the task id
 `name`          | string  | -        | same as `id` | the task title
-`duration`      | integer | yes      |              | the task duration in days
+`duration`      | integer | yes      |              | the task duration in days (if ≤ 0, the task is ignored)
 `priority`      | integer | -        | 0            | the task priority: a higher priority uses the task first in the work plan, a negative number makes the  task less urgent than the others
 `max_resources` | integer | -        | 2            | the max number of resources to use for this task
 

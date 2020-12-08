@@ -36,7 +36,7 @@
         {
             "id": "task3",
             "title": "The third task",
-            "duration": 10,
+            "duration": 10.5,
             "priority": 0,
             "max_resources": 2
         },

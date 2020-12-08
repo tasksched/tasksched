@@ -2,6 +2,7 @@
 
 ## Version 0.4.0 (under dev)
 
+- Accept task duration as float in input, round it to the next largest integer.
 - Ignore tasks with null or negative duration.
 - Add missing dependency on `holidays` in setup.py.
 

@@ -129,13 +129,27 @@ Project: The name
     Task task2 - The second task: 5d, priority: 0, max resources: 2
     Task task3 - The third task: 10d, priority: 0, max resources: 2
 """
-    # complete project with a task duration 0 (should be ignored)
+    # another complete project
     project = Project(get_json_file('project_complete2.json'))
     assert project.name == 'The name'
+    # only 3 tasks (the task 4 has duration 0 and is ignored)
     assert len(project.tasks) == 3
     assert project.tasks[0].task_id == 'task1'
+    assert project.tasks[0].title == 'The first task'
+    assert project.tasks[0].duration == 2
+    assert project.tasks[0].priority == 0
+    assert project.tasks[0].max_resources == 2
     assert project.tasks[1].task_id == 'task2'
+    assert project.tasks[1].title == 'The second task'
+    assert project.tasks[1].duration == 5
+    assert project.tasks[1].priority == 100
+    assert project.tasks[1].max_resources == 2
     assert project.tasks[2].task_id == 'task3'
+    assert project.tasks[2].title == 'The third task'
+    # 10.5 rounded to 11 days
+    assert project.tasks[2].duration == 11
+    assert project.tasks[2].priority == 0
+    assert project.tasks[2].max_resources == 2
 
 
 def test_project_sort_tasks():

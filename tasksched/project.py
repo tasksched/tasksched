@@ -19,6 +19,7 @@
 
 """Task scheduler project."""
 
+from math import ceil
 from operator import attrgetter
 
 import datetime
@@ -55,7 +56,7 @@ class Task:  # pylint: disable=too-few-public-methods
     def __init__(self, task_id, title, duration, priority=0, max_resources=2):
         self.task_id = str(task_id)
         self.title = title
-        self.duration = duration
+        self.duration = ceil(duration)
         self.priority = priority
         self.max_resources = max_resources
 

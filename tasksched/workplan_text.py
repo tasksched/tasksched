@@ -17,7 +17,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Tasksched.  If not, see <https://www.gnu.org/licenses/>.
 
-"""Export of work plan as text."""
+"""Export work plan to text."""
 
 from itertools import cycle
 
@@ -59,7 +59,7 @@ def workplan_to_text(workplan,  # pylint: disable=too-many-locals
                      use_colors=True,
                      use_unicode=True):
     """
-    Get work plan as text.
+    Export work plan to text.
 
     :param dict workplan: work plan
     :param bool use_colors: use ANSI colors in output
@@ -87,25 +87,25 @@ def workplan_to_text(workplan,  # pylint: disable=too-many-locals
     info = (f'Work plan: {project["start"]} to {project["end"]} '
             f'({project["duration"]}d), {res_use} resources used')
     rows = [info, '']
-    max_len_res = max(len(res['name']) for res in resources) + 2
+    max_len_res = (max(len(res['name']) for res in resources) + 2
+                   if resources else 0)
     if use_unicode:
-        char1, char2 = '█', '▊'
+        bar_chars = ['█', '█', '▊']
     else:
-        char1, char2 = 'x', '|'
+        bar_chars = ['[', 'x', ']']
     for res in resources:
         text = f'{res["use"]:>3.0f}%'
         use = color_pct(text, res['use']) if use_colors else text
         chars = []
-        for i, task_id in enumerate(res['assigned']):
-            char = (
-                char2 if i < res['duration'] - 1
-                and res['assigned'][i + 1] != res['assigned'][i]
-                else char1
-            )
-            chars.append(color(char, tasks_colors[task_id])
-                         if use_colors else char)
+        for task in res['assigned']:
+            chars_task = [bar_chars[1]] * task['duration']
+            chars_task[0] = bar_chars[0]
+            chars_task[-1] = bar_chars[2]
+            str_task = ''.join(chars_task)
+            chars.append(color(str_task, tasks_colors[task['task']])
+                         if use_colors else str_task)
         bar_resource = ''.join(chars)
-        tasks = ', '.join(res['assigned_tasks'])
+        tasks = ', '.join([task['id'] for task in res['assigned_tasks']])
         filler = ' ' * (project['duration'] - res['duration'] + 2)
         rows.append(
             f'{res["name"]:>{max_len_res}} > {res["end"] or " "*10} '

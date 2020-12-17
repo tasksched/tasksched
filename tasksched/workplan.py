@@ -20,6 +20,7 @@
 """Task scheduler work plan."""
 
 import copy
+import datetime
 
 from tasksched.project import Task
 from tasksched.utils import add_business_days
@@ -88,14 +89,13 @@ class WorkPlan:
         :rtype: Resource
         :return: resource found
         """
-        lowest_assigned = 999999999
+        lowest_duration = 999999999
         best_res = None
         for res in self.project.resources:
-            assigned_days = len(res.assigned)
-            if assigned_days == 0:
+            if res.duration == 0:
                 return res
-            if assigned_days < lowest_assigned:
-                lowest_assigned = assigned_days
+            if res.duration < lowest_duration:
+                lowest_duration = res.duration
                 best_res = res
         return best_res or self.project.resources[0]
 
@@ -107,9 +107,15 @@ class WorkPlan:
         :param Resource resource: resource
         :param int days: number of days in task to assign
         """
-        resource.assigned.extend([task.task_id] * days)
-        resource.assigned_tasks.append(task.task_id)
-        resource.duration = len(resource.assigned)
+        resource.assigned.append({
+            'task': task.task_id,
+            'duration': days,
+        })
+        resource.assigned_tasks.append({
+            'id': task.task_id,
+            'title': task.title,
+        })
+        resource.duration += days
         if resource.duration > self.duration:
             self.duration = resource.duration
         task.remaining -= days
@@ -138,6 +144,8 @@ class WorkPlan:
 
     def as_dict(self):
         """Return the work plan as dict."""
+        after_end = self.end_date + datetime.timedelta(days=1)
+        holidays = self.project.hdays[self.project.start_date:after_end]
         return {
             'workplan': {
                 'project': {
@@ -145,7 +153,11 @@ class WorkPlan:
                     'start': self.project.start_date.strftime('%Y-%m-%d'),
                     'end': self.end_date.strftime('%Y-%m-%d'),
                     'duration': self.duration,
-                    'holidays': self.project.holidays_iso,
+                    'holidays_iso': self.project.holidays_iso,
+                    'holidays': [
+                        hday.strftime('%Y-%m-%d')
+                        for hday in holidays
+                    ],
                     'resources_use': self.resources_use,
                 },
                 'resources': [

@@ -1,0 +1,94 @@
+<!doctype html>
+
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="author" content="Tasksched">
+    <meta name="url" content="https://github.com/tasksched/tasksched">
+    <meta name="description" content="Tasks scheduled for project {{ project.name }}">
+    <meta name="keywords" content="tasksched, task, scheduler, automatic, resource, leveling">
+    <meta name="robots" content="all">
+    <title>{{ project.name }} - Tasksched</title>
+    <style>
+{{ css }}
+    </style>
+  </head>
+
+  <body>
+    <h1>{{ project.name }}</h1>
+
+    <div class="info">
+      <div class="project">
+        <table>
+          <tr>
+            <th>Start:</th>
+            <td>{{ project.start }}</td>
+          </tr>
+          <tr>
+            <th>End:</th>
+            <td>{{ project.end }}</td>
+          </tr>
+          <tr>
+            <th>Duration:</th>
+            <td>{{ project.duration }} days</td>
+          </tr>
+          <tr>
+            <th>Holidays:</th>
+            <td>{{ project.holidays_iso }}{% if project.holidays %}: {{ project.holidays|join(', ') }}{% endif %}</td>
+          </tr>
+          <tr>
+            <th>Resources use:</th>
+            <td class="use-{{ project.resources_use_rating }}">{{ "%.2f" % project.resources_use }}%</td>
+          </tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="plan">
+
+      <div></div>
+      <div></div>
+      {% for month, num_days in view_months %}
+      <div class="item-month month{{ loop.index }}">{{ month }}</div>
+      {% endfor %}
+
+      <div></div>
+      <div></div>
+      {% for date, value in view_days.items() %}
+      <div class="item-day-name{% if not value["business_day"] %} item-day-number-holiday{% endif %}">{{ value["weekday"][0] }}</div>
+      {% endfor %}
+
+      <div class="item-title">Resource</div>
+      <div class="item-title">Use</div>
+      {% for date, value in view_days.items() %}
+      <div class="item-day-number{% if not value["business_day"] %} item-day-number-holiday{% endif %}">{{ date.day }}</div>
+      {% endfor %}
+
+      {% for resource in resources %}
+      <div class="item-resource">{{ resource.name }}</div>
+      <div class="item-resource-use use-{{ resource.use_rating }}">{{ "%.2f" % resource.use }}%</div>
+      {% for date, assigned in resource.view_assigned.items() %}
+      {% if assigned %}
+      <div class="item-day{% if assigned["last_day"] %} item-last-day{% endif %}"><div class="task_color_{{ assigned["task"]["color"] }}{% if not view_days[date]["business_day"] %} item-day-holiday{% endif %}" title="{{ assigned["task"]["id"]|e }}: {{ assigned["task"]["title"]|e }}">&nbsp;</div></div>
+      {% else %}
+      <div class="item-day">&nbsp;</div>
+      {% endif %}
+      {% endfor %}
+      {% endfor %}
+
+    </div>
+
+    <div class="tasks">
+      {% for task in tasks %}
+      <div class="task">
+        <span class="task_color_{{ task.color }}">&nbsp;&nbsp;</span>
+        {{ task["id"] }}: {{ task["title"] }}
+      </div>
+      {% endfor %}
+    </div>
+
+  </body>
+
+</html>

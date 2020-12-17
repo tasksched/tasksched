@@ -51,8 +51,15 @@ setup(
         'Topic :: Office/Business :: Scheduling',
     ],
     packages=find_packages(),
+    package_data={
+        'tasksched': [
+            'data/html/*.html',
+            'data/css/*.css',
+        ],
+    },
     install_requires=[
         'holidays',
+        'jinja2',
     ],
     tests_require=[
         'pytest',

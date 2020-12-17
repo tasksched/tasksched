@@ -19,11 +19,14 @@
 
 """Utility functions for Tasksched."""
 
+import calendar
 import datetime
 
 __all__ = (
     'is_business_day',
     'add_business_days',
+    'get_days',
+    'get_months',
 )
 
 
@@ -59,3 +62,47 @@ def add_business_days(from_date, count, hdays=None):
             continue
         to_add -= 1
     return current_date
+
+
+def get_days(from_date, to_date, hdays=None):
+    """
+    Return days between two dates, for each day the value is True for a
+    business day, False for the other days.
+
+    :param datetime.date from_date: start date
+    :param datetime.date to_date: end date
+    :param dict hdays: list of dates with holidays
+    :rtype: dict
+    :return: dictionary with days, keys are dates, values are dictionaries with
+        keys: "weekday" (str) and "business_day" (bool)
+    """
+    days = {}
+    current_date = from_date
+    while current_date <= to_date:
+        days[current_date] = {
+            'weekday': current_date.strftime('%A'),
+            'business_day': is_business_day(current_date, hdays),
+        }
+        current_date += datetime.timedelta(days=1)
+    return days
+
+
+def get_months(days):
+    """
+    Return a dictionary with month as key and the number of days in each
+    months, for a list of days.
+
+    :param dict days: dictionary with days: key is a datetime.date and value
+        is True if it's a business day, False otherwise
+    :rtype: dict
+    :return: dictionary with key
+    """
+    months = []
+    prev_month = -1
+    for day in days:
+        if day.month != prev_month:
+            name = f'{calendar.month_name[day.month]} {day.year}'
+            days_in_month = calendar.monthrange(day.year, day.month)[1]
+            months.append((name, days_in_month))
+        prev_month = day.month
+    return months

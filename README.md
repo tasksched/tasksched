@@ -19,11 +19,14 @@ The internal algorithm follows these rules:
 - efficient use of resources, if possible 100%, with no overload at all
 - long tasks may be carried out in parallel by several people.
 
+The work plan can be converted to text or HTML (see examples below).
+
 ## Dependencies
 
 Taskshed requires Python ≥ 3.7 and:
 
 - [python-holidays](https://pypi.org/project/holidays/)
+- [jinja2](https://pypi.org/project/Jinja2/)
 
 You can install dependencies in a virtual environment with:
 
@@ -76,12 +79,14 @@ Field           | Type    | Required | Default      | Description
 Content of files can be read from standard input or filenames are allowed as
 command line arguments. Both can be used at same time.
 
-The command `tasksched` allows two actions:
+The command `tasksched` allows three actions:
 
 - `workplan`: build an optimized work plan using project/resources/tasks info
   in input; the output is JSON data
 - `text`: convert output of `workplan` action (JSON data) to text for display
   in the terminal (colors and unicode chars are used by default but optional).
+- `html`: convert output of `workplan` action (JSON data) to HTML for display
+  in a web browser (template and CSS can be customized).
 
 ## Examples
 
@@ -112,64 +117,67 @@ $ tasksched workplan examples/project_small.json | jq
 {
   "workplan": {
     "project": {
-      "name": "The big project",
-      "start": "2020-12-01",
-      "end": "2020-12-07",
-      "duration": 4,
-      "holidays": "FRA",
-      "resources_use": 87.5
+      "name": "The small project",
+      "start": "2020-12-03",
+      "end": "2020-12-09",
+      "duration": 5,
+      "holidays_iso": "FRA",
+      "holidays": [],
+      "resources_use": 70
     },
     "resources": [
       {
         "id": "dev1",
         "name": "Developer 1",
         "assigned": [
-          "1",
-          "1",
-          "1"
+          {
+            "task": "1",
+            "duration": 5
+          }
         ],
         "assigned_tasks": [
-          "1"
+          {
+            "id": "1",
+            "title": "The first feature"
+          }
         ],
-        "duration": 3,
-        "end": "2020-12-04",
-        "use": 75
+        "duration": 5,
+        "end": "2020-12-09",
+        "use": 100
       },
       {
         "id": "dev2",
         "name": "Developer 2",
         "assigned": [
-          "1",
-          "1",
-          "2",
-          "2"
+          {
+            "task": "2",
+            "duration": 2
+          }
         ],
         "assigned_tasks": [
-          "1",
-          "2"
+          {
+            "id": "2",
+            "title": "The second feature"
+          }
         ],
-        "duration": 4,
-        "end": "2020-12-07",
-        "use": 100
+        "duration": 2,
+        "end": "2020-12-04",
+        "use": 40
       }
     ],
     "tasks": [
       {
         "id": "1",
-        "title": "The first feature (1/2)",
-        "duration": 3,
-        "max_resources": 2
-      },
-      {
-        "id": "1",
-        "title": "The first feature (2/2)",
-        "duration": 2,
-        "max_resources": 2
+        "title": "The first feature",
+        "duration": 5,
+        "priority": 0,
+        "max_resources": 1
       },
       {
         "id": "2",
         "title": "The second feature",
         "duration": 2,
+        "priority": 0,
         "max_resources": 2
       }
     ]

@@ -171,11 +171,11 @@ def test_main(monkeypatch):
             with mock.patch.object(sys.stdin, 'isatty', lambda: True):
                 tasksched.main()
 
-    # action: text, missing resource
+    # action: text, missing tasks
     stdin = io.StringIO('{}')
     stdin.fileno = lambda: 0
     monkeypatch.setattr('sys.stdin', stdin)
-    filename = os.path.join(TESTS_DIR, 'workplan_missing_resource.json')
+    filename = os.path.join(TESTS_DIR, 'workplan_missing_tasks.json')
     args = ['tasksched', 'text', filename]
     with pytest.raises(SystemExit):
         with mock.patch.object(sys, 'argv', args):
@@ -187,6 +187,32 @@ def test_main(monkeypatch):
     monkeypatch.setattr('sys.stdin', stdin)
     filename = os.path.join(TESTS_DIR, 'workplan_complete.json')
     args = ['tasksched', 'text', filename]
+    with mock.patch.object(sys, 'argv', args):
+        tasksched.main()
+
+    # action: html, no input
+    args = ['tasksched', 'html']
+    with pytest.raises(SystemExit):
+        with mock.patch.object(sys, 'argv', args):
+            with mock.patch.object(sys.stdin, 'isatty', lambda: True):
+                tasksched.main()
+
+    # action: html, missing tasks
+    stdin = io.StringIO('{}')
+    stdin.fileno = lambda: 0
+    monkeypatch.setattr('sys.stdin', stdin)
+    filename = os.path.join(TESTS_DIR, 'workplan_missing_tasks.json')
+    args = ['tasksched', 'html', filename]
+    with pytest.raises(SystemExit):
+        with mock.patch.object(sys, 'argv', args):
+            tasksched.main()
+
+    # action: html, OK
+    stdin = io.StringIO('{}')
+    stdin.fileno = lambda: 0
+    monkeypatch.setattr('sys.stdin', stdin)
+    filename = os.path.join(TESTS_DIR, 'workplan_complete.json')
+    args = ['tasksched', 'html', filename]
     with mock.patch.object(sys, 'argv', args):
         tasksched.main()
 

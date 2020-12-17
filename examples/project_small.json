@@ -1,7 +1,7 @@
 {
     "project": {
-        "name": "The big project",
-        "start": "2020-12-01",
+        "name": "The small project",
+        "start": "2020-12-03",
         "holidays": "FRA"
     },
     "resources": [

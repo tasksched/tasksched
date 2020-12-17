@@ -66,13 +66,13 @@ def test_project():
     with pytest.raises(KeyError):
         project = Project({'abc': 'def'})
 
-    # missing resource
+    # missing resources
     with pytest.raises(ValueError):
-        project = Project(get_json_file('project_missing_resource.json'))
+        project = Project(get_json_file('project_missing_resources.json'))
 
-    # missing task
+    # missing tasks
     with pytest.raises(ValueError):
-        project = Project(get_json_file('project_missing_task.json'))
+        project = Project(get_json_file('project_missing_tasks.json'))
 
     # minimal project
     project = Project(get_json_file('project_minimal.json'))

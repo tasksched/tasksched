@@ -18,12 +18,18 @@
 # along with Tasksched.  If not, see <https://www.gnu.org/licenses/>.
 #
 
-"""Task scheduler with automatic resource leveling."""
+"""Tests on export of work plan to HTML."""
 
-from tasksched.tasksched import *  # noqa
-from tasksched.parser import *  # noqa
-from tasksched.project import *  # noqa
-from tasksched.workplan import *  # noqa
-from tasksched.workplan_text import *  # noqa
-from tasksched.workplan_html import *  # noqa
-from tasksched.utils import *  # noqa
+from .utils import get_json_file
+
+
+def test_workplan_to_html():
+    """Test workplan_to_html function."""
+    from tasksched import workplan_to_html
+    workplan = get_json_file('workplan_complete.json')
+    html = workplan_to_html(workplan)
+    assert html.startswith('<!doctype html>')
+
+    workplan = get_json_file('workplan_complete2.json')
+    html = workplan_to_html(workplan)
+    assert html.startswith('<!doctype html>')

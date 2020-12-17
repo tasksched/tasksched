@@ -5,7 +5,11 @@
             "start": "2020-12-21",
             "end": "2021-01-05",
             "duration": 9,
-            "holidays": "FRA",
+            "holidays_iso": "FRA",
+            "holidays": [
+                "2020-12-25",
+                "2021-01-01"
+            ],
             "resources_use": 94.44444444444444
         },
         "resources": [

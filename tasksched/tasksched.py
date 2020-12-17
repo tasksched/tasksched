@@ -19,13 +19,14 @@
 
 """Task scheduler with automatic resource leveling."""
 
-import argparse
 import json
 import sys
 
+from tasksched.parser import get_parser
 from tasksched.project import Project
 from tasksched.workplan import build_workplan
 from tasksched.workplan_text import workplan_to_text
+from tasksched.workplan_html import workplan_to_html
 
 __version__ = '0.4.0-dev'
 
@@ -35,98 +36,6 @@ __all__ = (
     'main',
     'init',
 )
-
-
-def get_parser():
-    """
-    Return the parser for command line options.
-
-    :rtype: argparse.ArgumentParser
-    :return: argument parser
-    """
-    # pylint: disable=protected-access,too-few-public-methods
-    class HelpAction(argparse._HelpAction):
-        """Custom help on argument parser."""
-
-        def __call__(self, parser, namespace, values, option_string=None):
-            parser.print_help()
-            print()
-            print('Sub-actions:')
-            print()
-            subparsers_actions = [
-                action for action in parser._actions
-                if isinstance(action, argparse._SubParsersAction)
-            ]
-            for subparsers_action in subparsers_actions:
-                for choice, subparser in subparsers_action.choices.items():
-                    print(f'  ----- tasksched {choice} -----')
-                    print('  |')
-                    print('\n'.join([
-                        '  |  %s' % line
-                        for line in subparser.format_help().split('\n')
-                    ]))
-            parser.exit()
-
-    # main parser
-    parser = argparse.ArgumentParser(
-        description='Task scheduler with automatic resource leveling.',
-        add_help=False,
-    )
-    parser.add_argument('-h', '--help',
-                        action=HelpAction,
-                        help='show help message and exit')
-    parser.add_argument(
-        '-v', '--version',
-        action='version',
-        version=__version__,
-    )
-
-    help_filename = (
-        'JSON configuration filename; if multiple files are given, '
-        'they are loaded in order the each file content is added to '
-        'the previous ones; if available, the standard input content '
-        'is loaded before these files'
-    )
-
-    subparsers = parser.add_subparsers(dest='action')
-    subparsers.required = True
-
-    # action: "workplan"
-    parser_workplan = subparsers.add_parser(
-        'workplan',
-        add_help=False,
-        help='build the work plan with the project',
-    )
-    parser_workplan.add_argument(
-        'filename',
-        nargs='*',
-        help=help_filename,
-    )
-    parser_workplan.set_defaults(action='workplan')
-
-    # action: "text"
-    parser_text = subparsers.add_parser(
-        'text',
-        add_help=False,
-        help='display the work plan as text',
-    )
-    parser_text.add_argument(
-        '-c', '--no-colors',
-        action='store_true',
-        help='do not use colors in output',
-    )
-    parser_text.add_argument(
-        '-u', '--no-unicode',
-        action='store_true',
-        help='do not use unicode chars in output',
-    )
-    parser_text.add_argument(
-        'filename',
-        nargs='*',
-        help=help_filename,
-    )
-    parser_text.set_defaults(action='text')
-    return parser
 
 
 def get_input_files(args):
@@ -253,9 +162,23 @@ def action_workplan(args):
     try:
         project = Project(config)
     except (KeyError, ValueError) as exc:
-        fatal(f'ERROR: invalid project, missing data: "{exc.args[0]}"')
+        fatal(f'ERROR: invalid project: "{exc.args[0]}"')
     workplan = build_workplan(project)
     return json.dumps(workplan.as_dict())
+
+
+def read_workplan(args):
+    """
+    Read work plan.
+
+    :param argparse.Namespace args: command-line arguments
+    :rtype: dict
+    :return: work plan as dict
+    """
+    files = get_input_files(args)
+    if not files:
+        fatal('ERROR: missing input workplan')
+    return read_json(files[-1])
 
 
 def action_text(args):
@@ -264,10 +187,7 @@ def action_text(args):
 
     :param argparse.Namespace args: command-line arguments
     """
-    files = get_input_files(args)
-    if not files:
-        fatal('ERROR: missing input workplan')
-    config = read_json(files[-1])
+    config = read_workplan(args)
     try:
         return workplan_to_text(
             config,
@@ -275,12 +195,29 @@ def action_text(args):
             use_unicode=not args.no_unicode,
         )
     except (KeyError, ValueError) as exc:
-        fatal(f'ERROR: invalid work plan, missing data: "{exc}"')
+        fatal(f'ERROR: invalid work plan: "{exc}"')
+
+
+def action_html(args):
+    """
+    Return the work plan as HTML.
+
+    :param argparse.Namespace args: command-line arguments
+    """
+    config = read_workplan(args)
+    try:
+        return workplan_to_html(
+            config,
+            template_file=args.template,
+            css_file=args.css,
+        )
+    except (KeyError, ValueError) as exc:
+        fatal(f'ERROR: invalid work plan: "{exc}"')
 
 
 def main():
     """Main function, entry point."""
-    args = get_parser().parse_args()
+    args = get_parser(__version__).parse_args()
     func = getattr(sys.modules[__name__], f'action_{args.action}')
     result = func(args)
     print(result)

@@ -2,8 +2,8 @@
     "workplan": {
         "project": {
             "name": "The name",
-            "start": "2020-12-25",
-            "end": "2021-01-04",
+            "start": "2020-12-21",
+            "end": "2020-12-30",
             "duration": 7,
             "holidays_iso": "FRA",
             "holidays": [
@@ -80,34 +80,6 @@
             }
         ],
         "tasks": [
-            {
-                "id": "task1",
-                "title": "The first task",
-                "duration": 2,
-                "priority": 0,
-                "max_resources": 2
-            },
-            {
-                "id": "task2",
-                "title": "The second task",
-                "duration": 5,
-                "priority": 100,
-                "max_resources": 2
-            },
-            {
-                "id": "task3",
-                "title": "The third task (1/2)",
-                "duration": 5,
-                "priority": 0,
-                "max_resources": 2
-            },
-            {
-                "id": "task3",
-                "title": "The third task (2/2)",
-                "duration": 5,
-                "priority": 0,
-                "max_resources": 2
-            }
         ]
     }
 }

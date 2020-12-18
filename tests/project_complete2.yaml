@@ -1,0 +1,32 @@
+project:
+  name: The name
+  start: 2020-12-21
+  holidays: FRA
+resources:
+- id: dev1
+  name: Developer 1
+- id: dev2
+  name: Developer 2
+- id: dev3
+  name: Developer 3
+tasks:
+- id: task1
+  title: The first task
+  duration: 2
+  priority: 0
+  max_resources: 2
+- id: task2
+  title: The second task
+  duration: 5
+  priority: 100
+  max_resources: 2
+- id: task3
+  title: The third task
+  duration: 10.5
+  priority: 0
+  max_resources: 2
+- id: task4
+  title: This task has duration 0 and is ignored
+  duration: 0
+  priority: 0
+  max_resources: 2

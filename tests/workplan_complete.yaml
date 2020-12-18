@@ -1,0 +1,72 @@
+workplan:
+  project:
+    name: The name
+    start: 2020-12-21
+    end: 2021-01-04
+    duration: 9
+    holidays_iso: FRA
+    holidays:
+    - 2020-12-25
+    - 2021-01-01
+    resources_use: 94.44444444444444
+  resources:
+  - id: dev1
+    name: Developer 1
+    assigned:
+    - task: task3
+      duration: 5
+    - task: task2
+      duration: 3
+    assigned_tasks:
+    - id: task3
+      title: The third task (1/2)
+    - id: task2
+      title: The second task (1/2)
+    duration: 8
+    end: 2020-12-31
+    use: 88.88888888888889
+  - id: dev2
+    name: Developer 2
+    assigned:
+    - task: task3
+      duration: 5
+    - task: task1
+      duration: 2
+    - task: task2
+      duration: 2
+    assigned_tasks:
+    - id: task3
+      title: The third task (2/2)
+    - id: task1
+      title: The first task
+    - id: task2
+      title: The second task (2/2)
+    duration: 9
+    end: 2021-01-04
+    use: 100.0
+  tasks:
+  - id: task1
+    title: The first task
+    duration: 2
+    priority: 0
+    max_resources: 2
+  - id: task2
+    title: The second task (1/2)
+    duration: 3
+    priority: 0
+    max_resources: 2
+  - id: task2
+    title: The second task (2/2)
+    duration: 2
+    priority: 0
+    max_resources: 2
+  - id: task3
+    title: The third task (1/2)
+    duration: 5
+    priority: 0
+    max_resources: 2
+  - id: task3
+    title: The third task (2/2)
+    duration: 5
+    priority: 0
+    max_resources: 2

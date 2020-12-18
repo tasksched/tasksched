@@ -1,0 +1,6 @@
+project:
+  name: The name
+resources:
+- id: dev1
+  name: Developer 1
+tasks: []

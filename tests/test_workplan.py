@@ -24,7 +24,7 @@ from datetime import date
 
 import pytest
 
-from .utils import get_json_file
+from .utils import get_input_file
 
 
 def test_workplan():
@@ -32,7 +32,7 @@ def test_workplan():
     from tasksched import Project, WorkPlan
     with pytest.raises(TypeError):
         WorkPlan()
-    project = Project(get_json_file('project_complete.json'))
+    project = Project(get_input_file('project_complete.yaml'))
     workplan = WorkPlan(project)
     assert workplan.remaining == 0
     assert workplan.duration == 10
@@ -84,7 +84,7 @@ def test_workplan():
 def test_workplan_split_2():
     """Test WorkPlan class with split of tasks into 2."""
     from tasksched import Project, WorkPlan
-    workplan = WorkPlan(Project(get_json_file('project_complete.json')),
+    workplan = WorkPlan(Project(get_input_file('project_complete.yaml')),
                         {'task3': 2, 'task2': 2})
     assert workplan.project.tasks[0].task_id == 'task1'
     assert workplan.project.tasks[0].title == 'The first task'
@@ -106,7 +106,7 @@ def test_workplan_split_2():
 def test_workplan_split_3():
     """Test WorkPlan class with split of tasks into 3."""
     from tasksched import Project, WorkPlan
-    project = Project(get_json_file('project_complete.json'))
+    project = Project(get_input_file('project_complete.yaml'))
     project.tasks[1].max_resources = 3
     workplan = WorkPlan(project, {'task2': 3})
     assert workplan.project.tasks[0].task_id == 'task1'
@@ -128,8 +128,8 @@ def test_workplan_split_3():
 
 def test_build_workplan():
     """Test build_workplan function."""
-    from tasksched import Project, build_workplan
-    workplan = build_workplan(Project(get_json_file('project_complete.json')))
+    from tasksched import Project, build_workplan, yaml_dump
+    workplan = build_workplan(Project(get_input_file('project_complete.yaml')))
     assert workplan.remaining == 0
     assert workplan.duration == 9
     assert workplan.end_date == date(2021, 1, 4)
@@ -191,13 +191,16 @@ def test_build_workplan():
     assert workplan.project.tasks[0].remaining == 0
     assert workplan.project.tasks[1].remaining == 0
     assert workplan.project.tasks[2].remaining == 0
-    assert workplan.as_dict() == get_json_file('workplan_complete.json')
+    workplan_dict = workplan.as_dict()
+    assert workplan_dict == get_input_file('workplan_complete.yaml')
+    str_workplan = yaml_dump(workplan_dict)
+    assert str_workplan == get_input_file('workplan_complete.yaml', raw=True)
 
 
 def test_build_workplan_max_resources():
     """Test build_workplan function using max_resources."""
-    from tasksched import Project, build_workplan
-    project = Project(get_json_file('project_complete.json'))
+    from tasksched import Project, build_workplan, yaml_dump
+    project = Project(get_input_file('project_complete.yaml'))
     project.tasks[2].max_resources = 1
     workplan = build_workplan(project)
     assert workplan.remaining == 0
@@ -245,5 +248,9 @@ def test_build_workplan_max_resources():
     assert workplan.project.tasks[0].remaining == 0
     assert workplan.project.tasks[1].remaining == 0
     assert workplan.project.tasks[2].remaining == 0
-    assert workplan.as_dict() == \
-        get_json_file('workplan_complete_max_resources.json')
+    workplan_dict = workplan.as_dict()
+    assert workplan_dict == \
+        get_input_file('workplan_complete_max_resources.yaml')
+    str_workplan = yaml_dump(workplan_dict)
+    assert str_workplan == \
+        get_input_file('workplan_complete_max_resources.yaml', raw=True)

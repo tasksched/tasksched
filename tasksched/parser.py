@@ -72,7 +72,7 @@ def get_parser(tasksched_version):
     )
 
     help_filename = (
-        'JSON configuration filename; if multiple files are given, '
+        'YAML/JSON configuration filename; if multiple files are given, '
         'they are loaded in order the each file content is added to '
         'the previous ones; if available, the standard input content '
         'is loaded before these files'
@@ -86,6 +86,11 @@ def get_parser(tasksched_version):
         'workplan',
         add_help=False,
         help='build the work plan with the project',
+    )
+    parser_workplan.add_argument(
+        '-j', '--json',
+        action='store_true',
+        help='return JSON instead of YAML',
     )
     parser_workplan.add_argument(
         'filename',

@@ -60,6 +60,7 @@ setup(
     install_requires=[
         'holidays',
         'jinja2',
+        'pyyaml',
     ],
     tests_require=[
         'pytest',

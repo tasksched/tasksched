@@ -22,11 +22,14 @@
 import json
 import sys
 
+import yaml
+
 from tasksched.parser import get_parser
 from tasksched.project import Project
 from tasksched.workplan import build_workplan
 from tasksched.workplan_text import workplan_to_text
 from tasksched.workplan_html import workplan_to_html
+from tasksched.utils import yaml_dump
 
 __version__ = '0.4.0-dev'
 
@@ -36,6 +39,17 @@ __all__ = (
     'main',
     'init',
 )
+
+
+def fatal(error):
+    """
+    Display a fatal error and exit with return code 1.
+
+    :param str error: error to display
+    """
+    print(error, file=sys.stderr)
+    print('Try with --help to get help on tasksched', file=sys.stderr)
+    sys.exit(1)
 
 
 def get_input_files(args):
@@ -52,25 +66,25 @@ def get_input_files(args):
     return files
 
 
-def read_json(json_file):
+def read_file(input_file):
     """
-    Read JSON file.
+    Read input file (YAML or JSON).
 
-    :param object,str json_file: file or filename
+    :param object,str input_file: input file
     :rtype: dict
-    :return: JSON file as dict
+    :return: input file as dict
     """
     try:
-        if isinstance(json_file, str):
-            with open(json_file) as _file:
-                return json.load(_file)
+        if isinstance(input_file, str):
+            with open(input_file) as _file:
+                return yaml.safe_load(_file)
         else:
-            return json.load(json_file)
-    except (FileNotFoundError, json.decoder.JSONDecodeError) as exc:
-        if isinstance(json_file, str):
-            fatal(f'ERROR: unable to decode JSON file "{json_file}": {exc}')
+            return yaml.safe_load(input_file)
+    except (FileNotFoundError, yaml.parser.ParserError) as exc:
+        if isinstance(input_file, str):
+            fatal(f'ERROR: unable to decode input file "{input_file}": {exc}')
         else:
-            fatal(f'ERROR: unable to decode JSON: {exc}')
+            fatal(f'ERROR: unable to decode input data: {exc}')
 
 
 def search_item(list_items, item_id):
@@ -126,34 +140,24 @@ def merge_configs(config, new_config):
 
 def load_config(files):
     """
-    Load JSON configuration by reading stdin (if availbale) and list of input
-    files received on command line.
+    Load YAML/JSON configuration by reading stdin (if availbale) and list of
+    input files received on command line.
 
-    :param list files: JSON files/filenames to load
+    :param list files: files/filenames to load
     :rtype: dict
     :return: configuration
     """
     config = {}
     for _file in files:
-        new_config = read_json(_file)
-        merge_configs(config, new_config)
+        new_config = read_file(_file)
+        if new_config:
+            merge_configs(config, new_config)
     return config
-
-
-def fatal(error):
-    """
-    Display a fatal error and exit with return code 1.
-
-    :param str error: error to display
-    """
-    print(error, file=sys.stderr)
-    print('Try with --help to get help on tasksched', file=sys.stderr)
-    sys.exit(1)
 
 
 def action_workplan(args):
     """
-    Return the work plan (as JSON) using the project configuration.
+    Return the work plan using the project configuration.
 
     :param argparse.Namespace args: command-line arguments
     """
@@ -164,7 +168,9 @@ def action_workplan(args):
     except (KeyError, ValueError) as exc:
         fatal(f'ERROR: invalid project: "{exc.args[0]}"')
     workplan = build_workplan(project)
-    return json.dumps(workplan.as_dict())
+    if args.json:
+        return json.dumps(workplan.as_dict(), default=str)
+    return yaml_dump(workplan.as_dict())
 
 
 def read_workplan(args):
@@ -178,7 +184,7 @@ def read_workplan(args):
     files = get_input_files(args)
     if not files:
         fatal('ERROR: missing input workplan')
-    return read_json(files[-1])
+    return read_file(files[-1])
 
 
 def action_text(args):

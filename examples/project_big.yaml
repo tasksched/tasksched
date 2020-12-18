@@ -1,0 +1,40 @@
+project:
+  holidays: FRA
+  name: The big project
+  start: '2020-12-01'
+resources:
+- id: dev1
+  name: Developer 1
+- id: dev2
+  name: Developer 2
+- id: dev3
+  name: Developer 3
+- id: dev4
+  name: Developer 4
+tasks:
+- duration: 32
+  id: '1'
+  title: Mega feature
+- duration: 3
+  id: '2'
+  title: Very nice feature
+- duration: 32
+  id: '3'
+  title: Another feature
+- duration: 14
+  id: '4'
+  title: POC for next version
+- duration: 5
+  id: '5'
+  title: Small feature
+- duration: 2
+  id: '6'
+  title: The most important feature
+- duration: 5
+  id: '7'
+  max_resources: 1
+  title: Something completely new
+- duration: 17
+  id: '8'
+  priority: 100
+  title: Internal code refactoring

@@ -21,10 +21,11 @@
 """Tasksched tests."""
 
 import io
-import mock
 import os
-import pytest
 import sys
+
+import mock
+import pytest
 
 TESTS_DIR = os.path.dirname(os.path.abspath(__file__))
 
@@ -33,7 +34,13 @@ def test_load_config():
     """Test load_config function."""
     from tasksched import load_config
 
-    # empty merge
+    # empty merge (no data)
+    config1 = io.StringIO('')
+    config2 = io.StringIO('')
+    config = load_config([config1, config2])
+    assert config == {}
+
+    # empty merge (empty JSON)
     config1 = io.StringIO('{}')
     config2 = io.StringIO('{}')
     config = load_config([config1, config2])
@@ -108,7 +115,7 @@ def test_main(monkeypatch):
     """Test main function."""
     import tasksched
 
-    stdin = io.StringIO('{}')
+    stdin = io.StringIO('')
     stdin.fileno = lambda: 0
     monkeypatch.setattr('sys.stdin', stdin)
 
@@ -131,22 +138,31 @@ def test_main(monkeypatch):
             tasksched.main()
 
     # action: workplan, file not found
-    args = ['tasksched', 'workplan', 'unknown.json']
+    args = ['tasksched', 'workplan', 'unknown.yaml']
     with pytest.raises(SystemExit):
         with mock.patch.object(sys, 'argv', args):
             tasksched.main()
 
     # action: workplan, OK
-    stdin = io.StringIO('{}')
+    stdin = io.StringIO('')
     stdin.fileno = lambda: 0
     monkeypatch.setattr('sys.stdin', stdin)
-    filename = os.path.join(TESTS_DIR, 'project_complete.json')
+    filename = os.path.join(TESTS_DIR, 'project_complete.yaml')
     args = ['tasksched', 'workplan', filename]
     with mock.patch.object(sys, 'argv', args):
         tasksched.main()
 
-    # adtion: workplan, invalid JSON on input
-    stdin = io.StringIO('{}')
+    # action: workplan as JSON, OK
+    stdin = io.StringIO('')
+    stdin.fileno = lambda: 0
+    monkeypatch.setattr('sys.stdin', stdin)
+    filename = os.path.join(TESTS_DIR, 'project_complete.yaml')
+    args = ['tasksched', 'workplan', '--json', filename]
+    with mock.patch.object(sys, 'argv', args):
+        tasksched.main()
+
+    # adtion: workplan, invalid YAML on input
+    stdin = io.StringIO('{')
     stdin.fileno = lambda: 0
     monkeypatch.setattr('sys.stdin', stdin)
     args = ['tasksched', 'workplan']
@@ -154,11 +170,11 @@ def test_main(monkeypatch):
         with mock.patch.object(sys, 'argv', args):
             tasksched.main()
 
-    # action: workplan, invalid JSON file
-    stdin = io.StringIO('{}')
+    # action: workplan, invalid YAML file
+    stdin = io.StringIO('')
     stdin.fileno = lambda: 0
     monkeypatch.setattr('sys.stdin', stdin)
-    filename = os.path.join(TESTS_DIR, 'project_invalid.json')
+    filename = os.path.join(TESTS_DIR, 'project_invalid.yaml')
     args = ['tasksched', 'workplan', filename]
     with pytest.raises(SystemExit):
         with mock.patch.object(sys, 'argv', args):
@@ -172,20 +188,20 @@ def test_main(monkeypatch):
                 tasksched.main()
 
     # action: text, missing tasks
-    stdin = io.StringIO('{}')
+    stdin = io.StringIO('')
     stdin.fileno = lambda: 0
     monkeypatch.setattr('sys.stdin', stdin)
-    filename = os.path.join(TESTS_DIR, 'workplan_missing_tasks.json')
+    filename = os.path.join(TESTS_DIR, 'workplan_missing_tasks.yaml')
     args = ['tasksched', 'text', filename]
     with pytest.raises(SystemExit):
         with mock.patch.object(sys, 'argv', args):
             tasksched.main()
 
     # action: text, OK
-    stdin = io.StringIO('{}')
+    stdin = io.StringIO('')
     stdin.fileno = lambda: 0
     monkeypatch.setattr('sys.stdin', stdin)
-    filename = os.path.join(TESTS_DIR, 'workplan_complete.json')
+    filename = os.path.join(TESTS_DIR, 'workplan_complete.yaml')
     args = ['tasksched', 'text', filename]
     with mock.patch.object(sys, 'argv', args):
         tasksched.main()
@@ -198,20 +214,20 @@ def test_main(monkeypatch):
                 tasksched.main()
 
     # action: html, missing tasks
-    stdin = io.StringIO('{}')
+    stdin = io.StringIO('')
     stdin.fileno = lambda: 0
     monkeypatch.setattr('sys.stdin', stdin)
-    filename = os.path.join(TESTS_DIR, 'workplan_missing_tasks.json')
+    filename = os.path.join(TESTS_DIR, 'workplan_missing_tasks.yaml')
     args = ['tasksched', 'html', filename]
     with pytest.raises(SystemExit):
         with mock.patch.object(sys, 'argv', args):
             tasksched.main()
 
     # action: html, OK
-    stdin = io.StringIO('{}')
+    stdin = io.StringIO('')
     stdin.fileno = lambda: 0
     monkeypatch.setattr('sys.stdin', stdin)
-    filename = os.path.join(TESTS_DIR, 'workplan_complete.json')
+    filename = os.path.join(TESTS_DIR, 'workplan_complete.yaml')
     args = ['tasksched', 'html', filename]
     with mock.patch.object(sys, 'argv', args):
         tasksched.main()
@@ -220,10 +236,10 @@ def test_main(monkeypatch):
 def test_init(monkeypatch):
     """Test init function."""
     import tasksched
-    stdin = io.StringIO('{}')
+    stdin = io.StringIO('')
     stdin.fileno = lambda: 0
     monkeypatch.setattr('sys.stdin', stdin)
-    filename = os.path.join(TESTS_DIR, 'project_complete.json')
+    filename = os.path.join(TESTS_DIR, 'project_complete.yaml')
     args = ['tasksched', 'workplan', filename]
     with mock.patch.object(tasksched, 'main', return_value=0):
         with mock.patch.object(tasksched, '__name__', '__main__'):

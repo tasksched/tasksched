@@ -20,13 +20,13 @@
 
 """Tests on export of work plan to text."""
 
-from .utils import get_json_file
+from .utils import get_input_file
 
 
 def test_workplan_to_text():
     """Test workplan_to_text function."""
     from tasksched import workplan_to_text
-    workplan = get_json_file('workplan_complete.json')
+    workplan = get_input_file('workplan_complete.yaml')
     text = workplan_to_text(workplan)
     assert '\x1b[0m' in text
     text = workplan_to_text(workplan, use_colors=False)
@@ -40,7 +40,7 @@ def test_workplan_to_text():
     assert ('Developer 2 > 2021-01-04   9d 100% [xxx][][]  '
             'task3, task1, task2') in text
 
-    workplan = get_json_file('workplan_complete2.json')
+    workplan = get_input_file('workplan_complete2.yaml')
     text = workplan_to_text(workplan)
     assert '\x1b[0m' in text
     text = workplan_to_text(workplan, use_colors=False)

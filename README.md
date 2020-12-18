@@ -3,14 +3,15 @@
 [![PyPI](https://img.shields.io/pypi/v/tasksched.svg)](https://pypi.org/project/tasksched/)
 [![Build Status](https://github.com/tasksched/tasksched/workflows/CI/badge.svg)](https://github.com/tasksched/tasksched/actions?query=workflow%3A%22CI%22)
 
-The task scheduler reads one or more JSON configuration files, that includes:
+The task scheduler reads one or more [YAML](https://yaml.org/spec/) or [JSON](https://tools.ietf.org/html/rfc8259)
+configuration files, that includes:
 
 - project general information
 - list of resources
 - list of tasks.
 
 The output is a work plan, with the tasks automatically assigned to resources
-("resource leveling"), as JSON format.
+("resource leveling"), as YAML format (or JSON).
 
 The goal is to find the best possible end date (as soon as possible).
 
@@ -25,8 +26,9 @@ The work plan can be converted to text or HTML (see examples below).
 
 Taskshed requires Python ≥ 3.7 and:
 
-- [python-holidays](https://pypi.org/project/holidays/)
 - [jinja2](https://pypi.org/project/Jinja2/)
+- [python-holidays](https://pypi.org/project/holidays/)
+- [pyyaml](https://pypi.org/project/PyYAML/)
 
 You can install dependencies in a virtual environment with:
 
@@ -38,7 +40,7 @@ pip install -r requirements.txt
 
 ### Input
 
-The input data is written in JSON format.
+The input data is written in YAML or JSON format.
 One or more files are accepted, each one overwrites any file previously loaded.
 
 The main keys in the input are:
@@ -54,7 +56,7 @@ The project keys are:
 Field       | Type   | Required | Default | Description
 ----------- | ------ | -------- | ------- | -----------
 `name`      | string | yes      |         | the project name
-`start`     | string | -        | today   | the start date (format: `YYYY-MM-DD`), auto-adjusted to the next business day if needed
+`start`     | date   | -        | today   | the start date, auto-adjusted to the next business day if needed (for a JSON file, it must be a string with format `YYYY-MM-DD`)
 `holidays`  | string | -        |         | the country ISO code used to skip holidays in work plan (for the list of valid country ISO codes, see: [python-holidays](https://pypi.org/project/holidays/))
 `resources` | list   | yes      |         | the list of resources (see below)
 `tasks`     | list   | yes      |         | the list of tasks (see below)
@@ -82,107 +84,81 @@ command line arguments. Both can be used at same time.
 The command `tasksched` allows three actions:
 
 - `workplan`: build an optimized work plan using project/resources/tasks info
-  in input; the output is JSON data
-- `text`: convert output of `workplan` action (JSON data) to text for display
-  in the terminal (colors and unicode chars are used by default but optional).
-- `html`: convert output of `workplan` action (JSON data) to HTML for display
-  in a web browser (template and CSS can be customized).
+  in input; the output is YAML data (or JSON)
+- `text`: convert output of `workplan` action to text for display in the terminal
+  (colors and unicode chars are used by default but optional).
+- `html`: convert output of `workplan` action to HTML for display in a web browser
+  (template and CSS can be customized).
 
 ## Examples
 
-### Standard input and multiple JSON files
+### Standard input and multiple YAML files
 
-You can pipe content of JSON files as `tasksched` input.
+You can pipe content of YAML/JSON files as `tasksched` input.
 
 The following example uses:
 
 - another program called `extract-tasks` to extract tasks from a ticketing tool
-- a project configuration file (`project.json`)
-- a resources configuration file (`team.json`)
+- a project configuration file (`project.yaml`)
+- a resources configuration file (`team.yaml`)
 - an extra-tasks configuration file, these tasks are added to the tasks received
-  on standard input (`extra_tasks.json`)
+  on standard input (`extra_tasks.yaml`)
 
 So you can build the work plan and convert it to text for display with this command:
 
 ```
-$ extract-tasks | tasksched workplan project.json team.json extra_tasks.json | tasksched text
+$ extract-tasks | tasksched workplan project.yaml team.yaml extra_tasks.yaml | tasksched text
 ```
 
 ### Build of work plan
 
-Example of JSON work plan:
+Example of YAML work plan:
 
 ```
-$ tasksched workplan examples/project_small.json | jq
-{
-  "workplan": {
-    "project": {
-      "name": "The small project",
-      "start": "2020-12-03",
-      "end": "2020-12-09",
-      "duration": 5,
-      "holidays_iso": "FRA",
-      "holidays": [],
-      "resources_use": 70
-    },
-    "resources": [
-      {
-        "id": "dev1",
-        "name": "Developer 1",
-        "assigned": [
-          {
-            "task": "1",
-            "duration": 5
-          }
-        ],
-        "assigned_tasks": [
-          {
-            "id": "1",
-            "title": "The first feature"
-          }
-        ],
-        "duration": 5,
-        "end": "2020-12-09",
-        "use": 100
-      },
-      {
-        "id": "dev2",
-        "name": "Developer 2",
-        "assigned": [
-          {
-            "task": "2",
-            "duration": 2
-          }
-        ],
-        "assigned_tasks": [
-          {
-            "id": "2",
-            "title": "The second feature"
-          }
-        ],
-        "duration": 2,
-        "end": "2020-12-04",
-        "use": 40
-      }
-    ],
-    "tasks": [
-      {
-        "id": "1",
-        "title": "The first feature",
-        "duration": 5,
-        "priority": 0,
-        "max_resources": 1
-      },
-      {
-        "id": "2",
-        "title": "The second feature",
-        "duration": 2,
-        "priority": 0,
-        "max_resources": 2
-      }
-    ]
-  }
-}
+$ tasksched workplan examples/project_small.yaml
+workplan:
+  project:
+    name: The small project
+    start: 2020-12-03
+    end: 2020-12-09
+    duration: 5
+    holidays_iso: FRA
+    holidays: []
+    resources_use: 70.0
+  resources:
+  - id: dev1
+    name: Developer 1
+    assigned:
+    - task: '1'
+      duration: 5
+    assigned_tasks:
+    - id: '1'
+      title: The first feature
+    duration: 5
+    end: 2020-12-09
+    use: 100.0
+  - id: dev2
+    name: Developer 2
+    assigned:
+    - task: '2'
+      duration: 2
+    assigned_tasks:
+    - id: '2'
+      title: The second feature
+    duration: 2
+    end: 2020-12-04
+    use: 40.0
+  tasks:
+  - id: '1'
+    title: The first feature
+    duration: 5
+    priority: 0
+    max_resources: 1
+  - id: '2'
+    title: The second feature
+    duration: 2
+    priority: 0
+    max_resources: 2
 ```
 
 ### Work plan as text

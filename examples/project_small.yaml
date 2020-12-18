@@ -1,0 +1,17 @@
+project:
+  name: The small project
+  start: '2020-12-03'
+  holidays: FRA
+resources:
+- id: dev1
+  name: Developer 1
+- id: dev2
+  name: Developer 2
+tasks:
+- id: '1'
+  title: The first feature
+  duration: 5
+  max_resources: 1
+- id: '2'
+  title: The second feature
+  duration: 2

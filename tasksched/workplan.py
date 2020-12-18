@@ -150,14 +150,11 @@ class WorkPlan:
             'workplan': {
                 'project': {
                     'name': self.project.name,
-                    'start': self.project.start_date.strftime('%Y-%m-%d'),
-                    'end': self.end_date.strftime('%Y-%m-%d'),
+                    'start': self.project.start_date,
+                    'end': self.end_date,
                     'duration': self.duration,
                     'holidays_iso': self.project.holidays_iso,
-                    'holidays': [
-                        hday.strftime('%Y-%m-%d')
-                        for hday in holidays
-                    ],
+                    'holidays': holidays,
                     'resources_use': self.resources_use,
                 },
                 'resources': [
@@ -167,8 +164,7 @@ class WorkPlan:
                         'assigned': res.assigned,
                         'assigned_tasks': res.assigned_tasks,
                         'duration': res.duration,
-                        'end': (res.end_date.strftime('%Y-%m-%d')
-                                if res.end_date else ''),
+                        'end': res.end_date or None,
                         'use': res.use,
                     }
                     for res in self.project.resources

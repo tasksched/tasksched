@@ -1,0 +1,7 @@
+project:
+  name: The name
+resources:
+- id: dev1
+tasks:
+- id: task1
+  duration: 10

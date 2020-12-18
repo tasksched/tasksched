@@ -20,20 +20,24 @@
 
 """Tasksched utility functions for tests."""
 
-import json
 import os
+
+import yaml
 
 TESTS_DIR = os.path.dirname(os.path.abspath(__file__))
 
 
-def get_json_file(filename):
+def get_input_file(filename, raw=False):
     """
-    Reads a JSON file.
+    Read a YAML/JSON file.
 
-    :param str filename: JSON filename
+    :param str filename: filename
+    :param bool raw: if True, return the file as string
     :rtype: dict
-    :return: JSON data
+    :return: input file as dict (or as string if raw == True)
     """
     path = os.path.join(TESTS_DIR, filename)
-    with open(path) as json_file:
-        return json.load(json_file)
+    with open(path) as _file:
+        if raw:
+            return _file.read()
+        return yaml.safe_load(_file)

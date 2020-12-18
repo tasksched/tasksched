@@ -31,6 +31,7 @@ from tasksched.utils import (
     add_business_days,
     get_days,
     get_months,
+    string_to_date,
 )
 
 __all__ = (
@@ -137,10 +138,10 @@ def workplan_to_html(workplan, template_file='basic', css_file='dark'):
             color = next(iter_color) + 1
         task['color'] = color
         tasks_colors[task['id']] = color
-    project_start = datetime.date.fromisoformat(project['start'])
-    project_end = datetime.date.fromisoformat(project['end'])
+    project_start = string_to_date(project['start'])
+    project_end = string_to_date(project['end'])
     hdays = {
-        datetime.date.fromisoformat(hday): None
+        string_to_date(hday): None
         for hday in project['holidays']
     }
     view_start = project_start.replace(day=1)
@@ -148,8 +149,7 @@ def workplan_to_html(workplan, template_file='basic', css_file='dark'):
         day=calendar.monthrange(project_end.year, project_end.month)[1])
     view_days = get_days(view_start, view_end, hdays)
     view_months = get_months(view_days)
-    days = get_days(datetime.date.fromisoformat(project['start']),
-                    datetime.date.fromisoformat(project['end']))
+    days = get_days(project_start, project_end)
     if not template_file.endswith('.html'):
         template_file = os.path.join(DATA_DIR, 'html', f'{template_file}.html')
     if not css_file.endswith('.css'):

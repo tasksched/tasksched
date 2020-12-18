@@ -21,6 +21,7 @@
 """Tasksched utility tests."""
 
 from datetime import date
+import pytest
 
 import holidays
 
@@ -180,3 +181,26 @@ def test_get_months():
         ('February 2024', 29),
         ('March 2024', 31),
     ]
+
+
+def test_string_to_date():
+    """Test string_to_date function."""
+    from tasksched import string_to_date
+
+    # default is today
+    today = date.today()
+    assert string_to_date(None) == today
+    assert string_to_date('') == today
+
+    # test with Christmas
+    christmas = date(2020, 12, 25)
+    assert string_to_date('2020-12-25') == christmas
+    assert string_to_date(christmas) == christmas
+
+    # test errors
+    with pytest.raises(ValueError):
+        string_to_date('xxx')
+    with pytest.raises(TypeError):
+        string_to_date(True)
+    with pytest.raises(TypeError):
+        string_to_date(123)

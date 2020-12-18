@@ -25,7 +25,7 @@ from datetime import date
 import os
 import pytest
 
-from .utils import get_json_file
+from .utils import get_input_file
 
 TESTS_DIR = os.path.dirname(os.path.abspath(__file__))
 
@@ -68,14 +68,14 @@ def test_project():
 
     # missing resources
     with pytest.raises(ValueError):
-        project = Project(get_json_file('project_missing_resources.json'))
+        project = Project(get_input_file('project_missing_resources.yaml'))
 
     # missing tasks
     with pytest.raises(ValueError):
-        project = Project(get_json_file('project_missing_tasks.json'))
+        project = Project(get_input_file('project_missing_tasks.yaml'))
 
     # minimal project
-    project = Project(get_json_file('project_minimal.json'))
+    project = Project(get_input_file('project_minimal.yaml'))
     assert project.name == 'The name'
     assert project.hdays == {}
     assert project.resources[0].res_id == 'dev1'
@@ -87,11 +87,11 @@ def test_project():
     assert project.tasks[0].max_resources == 2
 
     # project starting saturday
-    project = Project(get_json_file('project_start_saturday.json'))
+    project = Project(get_input_file('project_start_saturday.yaml'))
     assert project.start_date == date(2020, 11, 30)
 
     # complete project
-    project = Project(get_json_file('project_complete.json'))
+    project = Project(get_input_file('project_complete.yaml'))
     assert project.name == 'The name'
     assert project.start_date == date(2020, 12, 21)
     assert project.holidays_iso == 'FRA'
@@ -130,7 +130,7 @@ Project: The name
     Task task3 - The third task: 10d, priority: 0, max resources: 2
 """
     # another complete project
-    project = Project(get_json_file('project_complete2.json'))
+    project = Project(get_input_file('project_complete2.yaml'))
     assert project.name == 'The name'
     # only 3 tasks (the task 4 has duration 0 and is ignored)
     assert len(project.tasks) == 3
@@ -155,17 +155,17 @@ Project: The name
 def test_project_sort_tasks():
     """Test sort of tasks in a project."""
     from tasksched import Project
-    project = Project(get_json_file('project_complete.json'))
+    project = Project(get_input_file('project_complete.yaml'))
     sorted_tasks = project.sorted_tasks(['duration'])
     assert sorted_tasks[0].task_id == 'task1'
     assert sorted_tasks[1].task_id == 'task2'
     assert sorted_tasks[2].task_id == 'task3'
-    project = Project(get_json_file('project_complete.json'))
+    project = Project(get_input_file('project_complete.yaml'))
     sorted_tasks = project.sorted_tasks(['duration'], reverse=True)
     assert sorted_tasks[0].task_id == 'task3'
     assert sorted_tasks[1].task_id == 'task2'
     assert sorted_tasks[2].task_id == 'task1'
-    project = Project(get_json_file('project_complete2.json'))
+    project = Project(get_input_file('project_complete2.yaml'))
     sorted_tasks = project.sorted_tasks(['priority', 'duration'],
                                         reverse=True)
     assert sorted_tasks[0].task_id == 'task2'

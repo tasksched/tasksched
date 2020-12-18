@@ -22,13 +22,12 @@
 from math import ceil
 from operator import attrgetter
 
-import datetime
-
 import holidays
 
 from tasksched.utils import (
     is_business_day,
     add_business_days,
+    string_to_date,
 )
 
 __all__ = (
@@ -73,9 +72,7 @@ class Project:
     def __init__(self, config):
         project = config['project']
         self.name = project['name']
-        self.start_date = datetime.date.fromisoformat(
-            project.get('start', datetime.date.today().strftime('%Y-%m-%d'))
-        )
+        self.start_date = string_to_date(project.get('start'))
         self.holidays_iso = project.get('holidays')
         if self.holidays_iso:
             self.hdays = holidays.CountryHoliday(

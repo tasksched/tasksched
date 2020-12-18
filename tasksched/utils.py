@@ -22,11 +22,15 @@
 import calendar
 import datetime
 
+import yaml
+
 __all__ = (
     'is_business_day',
     'add_business_days',
     'get_days',
     'get_months',
+    'string_to_date',
+    'yaml_dump',
 )
 
 
@@ -106,3 +110,32 @@ def get_months(days):
             months.append((name, days_in_month))
         prev_month = day.month
     return months
+
+
+def string_to_date(the_date):
+    """
+    Convert the date to a datetime.date object (except if it's already a date
+    object.
+
+    :param str,datetime.date: date
+    :rtype: datetime.date
+    :return: date as datetime.date (today if date is None or empty)
+    """
+    if not the_date:
+        return datetime.date.today()
+    if isinstance(the_date, datetime.date):
+        return the_date
+    return datetime.date.fromisoformat(the_date)
+
+
+def yaml_dump(data):
+    """
+    Dump dictionary to a YAML string.
+
+    :param dict data: data
+    :rtype: str
+    :return: YAML as string, keys are not sorted (same order as the dict),
+        no aliases in the YAML output
+    """
+    yaml.Dumper.ignore_aliases = lambda *args: True
+    return yaml.dump(data, sort_keys=False)

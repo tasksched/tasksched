@@ -169,10 +169,15 @@ Example of work plan converted to text for display:
 
 ### Work plan as HTML
 
-The generated HTML and CSS can be customized:
+The generated HTML and CSS can be customized.
 
-- template (using [jinja2](https://pypi.org/project/Jinja2/))
-- CSS: "dark" (default) and "light".
+Tasksched comes with one default template and two default CSS:
+
+- template (using [jinja2](https://pypi.org/project/Jinja2/)):
+  - `basic` (source: [basic.html](tasksched/data/html/basic.html))
+- CSS:
+  - `dark` (used by default, source: [dark.css](tasksched/data/css/dark.css))
+  - `light` (source: [light.css](tasksched/data/css/light.css)).
 
 Example of work plan converted to HTML with the default "dark" theme:
 

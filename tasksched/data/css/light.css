@@ -1,0 +1,99 @@
+:root {
+  --task-color-1: #0074d9;
+  --task-color-2: #ffdc00;
+  --task-color-3: #ff4136;
+  --task-color-4: #3d9970;
+  --task-color-5: #f012be;
+  --task-color-6: #7fdbff;
+  --task-color-7: #2ecc40;
+  --task-color-8: #ff851b;
+  --task-color-9: #b10dc9;
+  --task-color-10: #aaaaaa;
+}
+
+body {
+  background: #fff;
+  color: #222;
+  font-family: sans-serif;
+}
+
+.use-perfect {
+  color: #0a0;
+}
+
+.use-good {
+  color: #f90;
+}
+
+.use-bad {
+  color: #f00;
+}
+
+.project table th {
+  text-align: left;
+  padding-right: 2em;
+}
+
+.plan {
+  display: grid;
+  grid-template-columns: 13em 6.5em repeat(var(--plan-days), 2.2em);
+  grid-template-rows: 1.7em 1.7em repeat(var(--plan-resources), 2.2em);
+  margin: 3em 0;
+  align-items: center;
+  font-size: .9em;
+}
+
+.item-title {
+  background: #ddd;
+  border-right: 1px solid #eee;
+  line-height: 1.7em;
+  padding-left: .3em;
+}
+
+.item-month {
+  background: #ddd;
+  border-right: 1px solid #eee;
+  line-height: 1.7em;
+  text-align: center;
+}
+
+.item-day-name {
+  background: #ddd;
+  border-right: 1px solid #eee;
+  line-height: 1.7em;
+  text-align: center;
+  color: #888;
+}
+
+.item-day-number {
+  background: #ddd;
+  border-right: 1px solid #eee;
+  line-height: 1.7em;
+  text-align: center;
+}
+
+.item-day-number-holiday {
+  opacity: 0.6;
+}
+
+.item-resource {
+  line-height: 2em;
+  padding-left: .3em;
+}
+
+.item-day {
+  line-height: 2em;
+  text-align: center;
+}
+
+.item-last-day {
+  margin-right: .2em;
+}
+
+.item-day-holiday {
+  opacity: 0.75;
+}
+
+.task {
+  margin-top: .25em;
+}

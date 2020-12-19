@@ -4,7 +4,7 @@
 
 - Allow YAML files in input, return work plan in YAML by default.
 - Add workplan option `-j`/`--json`.
-- Add HTML output.
+- Add HTML output with dark (default) and light CSS.
 - Accept task duration as float in input, round it to the next largest integer.
 - Ignore tasks with null or negative duration.
 - Add missing dependency on `holidays` in setup.py.

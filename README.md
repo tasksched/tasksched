@@ -45,38 +45,28 @@ One or more files are accepted, each one overwrites any file previously loaded.
 
 The main keys in the input are:
 
-Field       | Type   | Required | Default | Description
------------ | ------ | -------- | ------- | -----------
-`project`   | object | yes      |         | project description
-`resources` | list   | yes      |         | list of resources
-`tasks`     | list   | yes      |         | list of tasks
+- `project`: project description (object, **required**)
+- `resources`: list of resources (list, **required**)
+- `tasks`: list of tasks (list, **required**)
 
 The project keys are:
 
-Field       | Type   | Required | Default | Description
------------ | ------ | -------- | ------- | -----------
-`name`      | string | yes      |         | the project name
-`start`     | date   | -        | today   | the start date, auto-adjusted to the next business day if needed (for a JSON file, it must be a string with format `YYYY-MM-DD`)
-`holidays`  | string | -        |         | the country ISO code used to skip holidays in work plan (for the list of valid country ISO codes, see: [python-holidays](https://pypi.org/project/holidays/))
-`resources` | list   | yes      |         | the list of resources (see below)
-`tasks`     | list   | yes      |         | the list of tasks (see below)
+- `name`: the project name (string, **required**)
+- `start`: the start date, auto-adjusted to the next business day if needed (for a JSON file, it must be a string with format `YYYY-MM-DD`) (default: today)
+- `holidays`: the country ISO code used to skip holidays in work plan (for the list of valid country ISO codes, see: [python-holidays](https://pypi.org/project/holidays/)) (string)
 
 For each resource, the keys are:
 
-Field       | Type   | Required | Default      | Description
------------ | ------ | -------- | ------------ | -----------
-`id`        | string | yes      |              | the resource id
-`name`      | string | -        | same as `id` | the resource name
+- `id`: the resource id (string, **required**)
+- `name`: the resource name (string, default: same as `id`)
 
 For each task, the keys are:
 
-Field           | Type    | Required | Default      | Description
---------------- | ------- | -------- | ------------ | -----------
-`id`            | string  | yes      |              | the task id
-`name`          | string  | -        | same as `id` | the task title
-`duration`      | float   | yes      |              | the task duration in days, rounded to the next largest integer (if ≤ 0, the task is ignored)
-`priority`      | integer | -        | 0            | the task priority: a higher priority uses the task first in the work plan, a negative number makes the  task less urgent than the others
-`max_resources` | integer | -        | 2            | the max number of resources to use for this task
+- `id`: the task id (string, **required**)
+- `title`: the task title (string, default: same as `id`)
+- `duration`: the task duration in days, rounded to the next largest integer (if ≤ 0, the task is ignored) (float, **required**)
+- `priority`: the task priority: a higher priority uses the task first in the work plan, a negative number makes the task less urgent than the others (integer, default: `0`)
+- `max_resources`: the max number of resources to use for this task (integer, default: `2`)
 
 Content of files can be read from standard input or filenames are allowed as
 command line arguments. Both can be used at same time.

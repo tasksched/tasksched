@@ -167,6 +167,25 @@ Example of work plan converted to text for display:
 
 ![Tasksched](examples/tasksched.png)
 
+### Work plan as HTML
+
+The generated HTML and CSS can be customized:
+
+- template (using [jinja2](https://pypi.org/project/Jinja2/))
+- CSS: "dark" (default) and "light".
+
+Example of work plan converted to HTML with the default "dark" theme:
+
+```
+$ tasksched workplan examples/project_big.yaml | tasksched html > tasksched.html
+```
+
+With "light" theme (white background):
+
+```
+$ tasksched workplan examples/project_big.yaml | tasksched html --css light > tasksched.html
+```
+
 ## Copyright
 
 Copyright © 2020 [Sébastien Helleu](https://github.com/flashcode)

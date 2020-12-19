@@ -1,6 +1,7 @@
 project:
+  # This is a small project
   name: The small project
-  start: '2020-12-03'
+  start: 2020-12-03
   holidays: FRA
 resources:
 - id: dev1

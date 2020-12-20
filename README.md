@@ -80,10 +80,7 @@ The command `tasksched` allows three actions:
 - `html`: convert output of `workplan` action to HTML for display in a web browser
   (template and CSS can be customized).
 
-Examples:
-
-- [project_big.yaml](examples/project_big.yaml) (YAML)
-- [project_big.json](examples/project_big.json) (JSON)
+See examples of input files in the [examples](examples/) directory.
 
 ## Examples
 

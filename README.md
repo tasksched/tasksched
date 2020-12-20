@@ -157,7 +157,7 @@ workplan:
 
 Example of work plan converted to text for display:
 
-![Tasksched](examples/tasksched.png)
+![Tasksched](screenshots/tasksched.png)
 
 ### Work plan as HTML
 

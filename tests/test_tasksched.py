@@ -161,7 +161,7 @@ def test_main(monkeypatch):
     with mock.patch.object(sys, 'argv', args):
         tasksched.main()
 
-    # adtion: workplan, invalid YAML on input
+    # action: workplan, invalid YAML on input
     stdin = io.StringIO('{')
     stdin.fileno = lambda: 0
     monkeypatch.setattr('sys.stdin', stdin)

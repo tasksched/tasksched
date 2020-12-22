@@ -54,7 +54,7 @@ def test_add_business_days():
 
     start = date(2020, 12, 21)  # monday
 
-    # no holdays
+    # no holidays
     assert add_business_days(start, 1) == date(2020, 12, 22)
     assert add_business_days(start, 2) == date(2020, 12, 23)
     assert add_business_days(start, 3) == date(2020, 12, 24)

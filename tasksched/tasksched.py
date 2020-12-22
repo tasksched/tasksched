@@ -140,7 +140,7 @@ def merge_configs(config, new_config):
 
 def load_config(files):
     """
-    Load YAML/JSON configuration by reading stdin (if availbale) and list of
+    Load YAML/JSON configuration by reading stdin (if available) and list of
     input files received on command line.
 
     :param list files: files/filenames to load

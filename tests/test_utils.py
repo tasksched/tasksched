@@ -31,15 +31,15 @@ def test_is_business_day():
     from tasksched import is_business_day as is_bus
 
     # business days (if no holidays given)
-    assert is_bus(date(2020, 12, 21))  # monday
-    assert is_bus(date(2020, 12, 22))  # tuesday
-    assert is_bus(date(2020, 12, 23))  # wednesday
-    assert is_bus(date(2020, 12, 24))  # thursday
-    assert is_bus(date(2020, 12, 25))  # friday
+    assert is_bus(date(2020, 12, 21))  # Monday
+    assert is_bus(date(2020, 12, 22))  # Tuesday
+    assert is_bus(date(2020, 12, 23))  # Wednesday
+    assert is_bus(date(2020, 12, 24))  # Thursday
+    assert is_bus(date(2020, 12, 25))  # Friday
 
     # week-end
-    assert is_bus(date(2020, 12, 26)) is False  # saturday
-    assert is_bus(date(2020, 12, 27)) is False  # sunday
+    assert is_bus(date(2020, 12, 26)) is False  # Saturday
+    assert is_bus(date(2020, 12, 27)) is False  # Sunday
 
     # public holidays
     hdays = holidays.CountryHoliday('FRA', years=[2020, 2021])
@@ -52,7 +52,7 @@ def test_add_business_days():
     """Test add_business_days function."""
     from tasksched import add_business_days
 
-    start = date(2020, 12, 21)  # monday
+    start = date(2020, 12, 21)  # Monday
 
     # no holidays
     assert add_business_days(start, 1) == date(2020, 12, 22)

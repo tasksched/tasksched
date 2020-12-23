@@ -86,7 +86,7 @@ def test_project():
     assert project.tasks[0].priority == 0
     assert project.tasks[0].max_resources == 2
 
-    # project starting saturday
+    # project starting Saturday
     project = Project(get_input_file('project_start_saturday.yaml'))
     assert project.start_date == date(2020, 11, 30)
 

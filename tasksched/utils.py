@@ -42,7 +42,7 @@ def is_business_day(date, hdays=None):
     :param dict hdays: list of dates with holidays
     :rtype: bool
     :return: True if the date is a business day, False otherwise (that means
-        the date is either saturday/sunday or a public holiday)
+        the date is either Saturday/Sunday or a public holiday)
     """
     return date.weekday() < 5 and date not in (hdays or {})
 

@@ -25,11 +25,17 @@ import pytest
 
 import holidays
 
+from tasksched import (
+    add_business_days,
+    get_days,
+    get_months,
+    is_business_day as is_bus,
+    string_to_date,
+)
+
 
 def test_is_business_day():
     """Test is_business_day function."""
-    from tasksched import is_business_day as is_bus
-
     # business days (if no holidays given)
     assert is_bus(date(2020, 12, 21))  # Monday
     assert is_bus(date(2020, 12, 22))  # Tuesday
@@ -50,8 +56,6 @@ def test_is_business_day():
 
 def test_add_business_days():
     """Test add_business_days function."""
-    from tasksched import add_business_days
-
     start = date(2020, 12, 21)  # Monday
 
     # no holidays
@@ -82,8 +86,6 @@ def test_add_business_days():
 
 def test_get_days():
     """Test get_days function."""
-    from tasksched import get_days
-
     hdays = holidays.CountryHoliday('FRA', years=[2020, 2021])
 
     assert get_days(date(2020, 12, 21), date(2020, 12, 21), hdays) == {
@@ -154,8 +156,6 @@ def test_get_days():
 
 def test_get_months():
     """Test get_months function."""
-    from tasksched import get_months
-
     assert get_months([date(2020, 12, 21), date(2020, 12, 22)]) == [
         ('December 2020', 31)
     ]
@@ -185,8 +185,6 @@ def test_get_months():
 
 def test_string_to_date():
     """Test string_to_date function."""
-    from tasksched import string_to_date
-
     # default is today
     today = date.today()
     assert string_to_date(None) == today

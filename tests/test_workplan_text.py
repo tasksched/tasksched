@@ -20,12 +20,12 @@
 
 """Tests on export of work plan to text."""
 
+from tasksched import workplan_to_text
 from .utils import get_input_file
 
 
 def test_workplan_to_text():
     """Test workplan_to_text function."""
-    from tasksched import workplan_to_text
     workplan = get_input_file('workplan_complete.yaml')
     text = workplan_to_text(workplan)
     assert '\x1b[0m' in text

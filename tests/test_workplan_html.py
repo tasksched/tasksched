@@ -20,12 +20,12 @@
 
 """Tests on export of work plan to HTML."""
 
+from tasksched import workplan_to_html
 from .utils import get_input_file
 
 
 def test_workplan_to_html():
     """Test workplan_to_html function."""
-    from tasksched import workplan_to_html
     workplan = get_input_file('workplan_complete.yaml')
     html = workplan_to_html(workplan)
     assert html.startswith('<!doctype html>')

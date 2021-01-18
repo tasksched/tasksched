@@ -29,6 +29,7 @@ flake8:
 
 pylint:
 	pylint tasksched
+	pylint tests
 
 test:
 	pytest -vv --cov-report term-missing --cov=tasksched tests

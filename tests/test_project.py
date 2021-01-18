@@ -25,6 +25,11 @@ from datetime import date
 import os
 import pytest
 
+from tasksched import (
+    Project,
+    Resource,
+    Task,
+)
 from .utils import get_input_file
 
 TESTS_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -32,9 +37,8 @@ TESTS_DIR = os.path.dirname(os.path.abspath(__file__))
 
 def test_resource():
     """Test Resource class."""
-    from tasksched import Resource
     with pytest.raises(TypeError):
-        Resource()
+        Resource()  # pylint: disable=no-value-for-parameter
     res = Resource('id', 'The name')
     assert res.res_id == 'id'
     assert res.name == 'The name'
@@ -43,9 +47,8 @@ def test_resource():
 
 def test_task():
     """Test Task class."""
-    from tasksched import Task
     with pytest.raises(TypeError):
-        Task()
+        Task()  # pylint: disable=no-value-for-parameter
     task = Task('id', 'the title', 30, 100, 3)
     assert task.task_id == 'id'
     assert task.title == 'the title'
@@ -56,11 +59,10 @@ def test_task():
                          'max resources: 3')
 
 
-def test_project():
+def test_project():  # pylint: disable=too-many-statements
     """Test Project class."""
-    from tasksched import Project
     with pytest.raises(TypeError):
-        Project()
+        Project()  # pylint: disable=no-value-for-parameter
     with pytest.raises(KeyError):
         project = Project({})
     with pytest.raises(KeyError):
@@ -154,7 +156,6 @@ Project: The name
 
 def test_project_sort_tasks():
     """Test sort of tasks in a project."""
-    from tasksched import Project
     project = Project(get_input_file('project_complete.yaml'))
     sorted_tasks = project.sorted_tasks(['duration'])
     assert sorted_tasks[0].task_id == 'task1'

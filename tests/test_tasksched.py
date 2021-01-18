@@ -27,94 +27,92 @@ import sys
 import mock
 import pytest
 
+import tasksched
+
 TESTS_DIR = os.path.dirname(os.path.abspath(__file__))
 
 
-def test_load_config():
+def test_load_config():  # pylint: disable=too-many-statements
     """Test load_config function."""
-    from tasksched import load_config
-
     # empty merge (no data)
     config1 = io.StringIO('')
     config2 = io.StringIO('')
-    config = load_config([config1, config2])
+    config = tasksched.load_config([config1, config2])
     assert config == {}
 
     # empty merge (empty JSON)
     config1 = io.StringIO('{}')
     config2 = io.StringIO('{}')
-    config = load_config([config1, config2])
+    config = tasksched.load_config([config1, config2])
     assert config == {}
 
     # update of string
     config1 = io.StringIO('{"test": "value"}')
     config2 = io.StringIO('{"test": "new_value"}')
-    config = load_config([config1, config2])
+    config = tasksched.load_config([config1, config2])
     assert config == {'test': 'new_value'}
 
     # new key
     config1 = io.StringIO('{"test": "value"}')
     config2 = io.StringIO('{"new_test": "new_value"}')
-    config = load_config([config1, config2])
+    config = tasksched.load_config([config1, config2])
     assert config == {'test': 'value', 'new_test': 'new_value'}
 
     # update of dict
     config1 = io.StringIO('{}')
     config2 = io.StringIO('{"test": {"key1": 1}}')
-    config = load_config([config1, config2])
+    config = tasksched.load_config([config1, config2])
     assert config == {'test': {'key1': 1}}
 
     config1 = io.StringIO('{"test": {"key1": 1}}')
     config2 = io.StringIO('{"test": {"key2": 2}}')
-    config = load_config([config1, config2])
+    config = tasksched.load_config([config1, config2])
     assert config == {'test': {'key1': 1, 'key2': 2}}
 
     config1 = io.StringIO('{"test": {"key1": 1}}')
     config2 = io.StringIO('{"test2": {"key3": 3}}')
-    config = load_config([config1, config2])
+    config = tasksched.load_config([config1, config2])
     assert config == {'test': {'key1': 1}, 'test2': {'key3': 3}}
 
     # update of list of strings
     config1 = io.StringIO('{"test": ["item1"]}')
     config2 = io.StringIO('{"test": ["item2"]}')
-    config = load_config([config1, config2])
+    config = tasksched.load_config([config1, config2])
     assert config == {'test': ['item1', 'item2']}
 
     # update of list of dicts without id
     config1 = io.StringIO('{"test": [{"name": "first"}]}')
     config2 = io.StringIO('{"test": [{"name": "second"}]}')
-    config = load_config([config1, config2])
+    config = tasksched.load_config([config1, config2])
     assert config == {'test': [{'name': 'first'}, {'name': 'second'}]}
 
     # update of list of dicts with id
     config1 = io.StringIO('{"test": [{"id": "1", "name": "first"}]}')
     config2 = io.StringIO('{"test": [{"id": "2", "name": "second"}]}')
-    config = load_config([config1, config2])
+    config = tasksched.load_config([config1, config2])
     assert config == {'test': [{'id': '1', 'name': 'first'},
                                {'id': '2', 'name': 'second'}]}
 
     config1 = io.StringIO('{"test": [{"id": "1", "name": "first"}]}')
     config2 = io.StringIO('{"test": [{"id": "1", "name": "first again"}]}')
-    config = load_config([config1, config2])
+    config = tasksched.load_config([config1, config2])
     assert config == {'test': [{'id': '1', 'name': 'first again'}]}
 
     # invalid: update of dict with a list
     config1 = io.StringIO('{"test": {"key1": 1}}')
     config2 = io.StringIO('{"test": ["key2"]}')
     with pytest.raises(ValueError):
-        config = load_config([config1, config2])
+        config = tasksched.load_config([config1, config2])
 
     # invalid: update of list with a dict
     config1 = io.StringIO('{"test": ["key1"]}')
     config2 = io.StringIO('{"test": {"key2": 2}}')
     with pytest.raises(ValueError):
-        config = load_config([config1, config2])
+        config = tasksched.load_config([config1, config2])
 
 
-def test_main(monkeypatch):
+def test_main(monkeypatch):  # pylint: disable=too-many-statements
     """Test main function."""
-    import tasksched
-
     stdin = io.StringIO('')
     stdin.fileno = lambda: 0
     monkeypatch.setattr('sys.stdin', stdin)
@@ -235,7 +233,6 @@ def test_main(monkeypatch):
 
 def test_init(monkeypatch):
     """Test init function."""
-    import tasksched
     stdin = io.StringIO('')
     stdin.fileno = lambda: 0
     monkeypatch.setattr('sys.stdin', stdin)

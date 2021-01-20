@@ -181,10 +181,13 @@ def read_workplan(args):
     :rtype: dict
     :return: work plan as dict
     """
+    workplan = None
     files = get_input_files(args)
-    if not files:
+    if files:
+        workplan = read_file(files[-1])
+    if not workplan:
         fatal('ERROR: missing input workplan')
-    return read_file(files[-1])
+    return workplan
 
 
 def action_text(args):

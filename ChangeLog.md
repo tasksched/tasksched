@@ -1,6 +1,6 @@
 # Tasksched ChangeLog
 
-## Version 0.4.0 (under dev)
+## Version 0.4.0 (2021-01-23)
 
 - Allow YAML files in input, return work plan in YAML by default.
 - Add workplan option `-j`/`--json`.

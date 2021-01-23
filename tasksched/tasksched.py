@@ -31,7 +31,7 @@ from tasksched.workplan_text import workplan_to_text
 from tasksched.workplan_html import workplan_to_html
 from tasksched.utils import yaml_dump
 
-__version__ = '0.4.0'
+__version__ = '0.5.0-dev'
 
 __all__ = (
     '__version__',

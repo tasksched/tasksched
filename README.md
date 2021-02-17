@@ -24,7 +24,7 @@ The work plan can be converted to text or HTML (see examples below).
 
 ## Dependencies
 
-Taskshed requires Python ≥ 3.7 and:
+Tasksched requires Python ≥ 3.7 and:
 
 - [jinja2](https://pypi.org/project/Jinja2/)
 - [python-holidays](https://pypi.org/project/holidays/)

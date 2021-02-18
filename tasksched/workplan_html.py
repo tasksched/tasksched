@@ -80,7 +80,7 @@ def get_css_tasks():
 
 def fill_resources(resources, project_start, tasks_colors, view_days, hdays):
     """
-    Fill resources in the workplan with extra data, used by HTML template.
+    Fill resources in the work plan with extra data, used by HTML template.
 
     :param list resources: resources
     :param datetime.date project_start: start date

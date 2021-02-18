@@ -8,7 +8,7 @@
 - Accept task duration as float in input, round it to the next largest integer.
 - Ignore tasks with null or negative duration.
 - Add missing dependency on `holidays` in setup.py.
-- Fix traceback displayed when no workplan is received in input with actions text/html.
+- Fix traceback displayed when no work plan is received in input with actions text/html.
 
 ## Version 0.3.0 (2020-11-29)
 

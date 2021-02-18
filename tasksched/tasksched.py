@@ -186,7 +186,7 @@ def read_workplan(args):
     if files:
         workplan = read_file(files[-1])
     if not workplan:
-        fatal('ERROR: missing input workplan')
+        fatal('ERROR: missing input work plan')
     return workplan
 
 

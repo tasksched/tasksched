@@ -85,6 +85,7 @@ def read_file(input_file):
             fatal(f'ERROR: unable to decode input file "{input_file}": {exc}')
         else:
             fatal(f'ERROR: unable to decode input data: {exc}')
+        return None
 
 
 def search_item(list_items, item_id):
@@ -205,6 +206,7 @@ def action_text(args):
         )
     except (KeyError, ValueError) as exc:
         fatal(f'ERROR: invalid work plan: "{exc}"')
+        return None
 
 
 def action_html(args):
@@ -222,6 +224,7 @@ def action_html(args):
         )
     except (KeyError, ValueError) as exc:
         fatal(f'ERROR: invalid work plan: "{exc}"')
+        return None
 
 
 def main():

@@ -20,6 +20,7 @@
 """Export work plan to HTML."""
 
 from itertools import cycle
+from typing import Any, Dict, List, Optional
 
 import calendar
 import datetime
@@ -44,15 +45,14 @@ ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
 DATA_DIR = os.path.join(ROOT_DIR, 'data')
 
 
-def get_use_rating(pct):
+def get_use_rating(pct: int) -> str:
     """
     Return the use rating for a percentage:
     - 100%: perfect
     - ≥ 80%: good
     - < 80%: bad
 
-    :param int pct: percentage
-    :rtype: str
+    :param pct: percentage
     :return: use rating
     """
     if pct == 100:
@@ -62,11 +62,10 @@ def get_use_rating(pct):
     return 'bad'
 
 
-def get_css_tasks():
+def get_css_tasks() -> str:
     """
     Return CSS for tasks.
 
-    :rtype: str
     :return: CSS for tasks
     """
     css_tasks = []
@@ -78,7 +77,10 @@ def get_css_tasks():
     return '\n'.join(css_tasks)
 
 
-def fill_resources(resources, project_start, tasks_colors, view_days, hdays):
+def fill_resources(resources: List[Dict], project_start: datetime.date,
+                   tasks_colors: Dict[str, int],
+                   view_days: Dict[datetime.date, Dict[str, Any]],
+                   hdays: Dict):
     """
     Fill resources in the work plan with extra data, used by HTML template.
 
@@ -96,7 +98,9 @@ def fill_resources(resources, project_start, tasks_colors, view_days, hdays):
                 'title': assigned_task['title'],
                 'color': tasks_colors[assigned_task['id']],
             }
-        view_assigned = {day: None for day in view_days}
+        view_assigned: Dict[datetime.date, Optional[Dict]] = {
+            day: None for day in view_days
+        }
         current_date = project_start
         for task in resource['assigned']:
             count = task['duration']
@@ -115,14 +119,15 @@ def fill_resources(resources, project_start, tasks_colors, view_days, hdays):
         resource['use_rating'] = get_use_rating(resource['use'])
 
 
-def workplan_to_html(workplan, template_file='basic', css_file='dark'):
+def workplan_to_html(workplan: Dict,
+                     template_file: str = 'basic',
+                     css_file: str = 'dark') -> str:
     """
     Export work plan to HTML.
 
-    :param dict workplan: work plan
-    :param str template: template name or path to HTML template file (jinja2)
-    :param str css: theme (light/dark) or path to CSS file
-    :rtype: str
+    :param workplan: work plan
+    :param template: template name or path to HTML template file (jinja2)
+    :param css: theme (light/dark) or path to CSS file
     :return: work plan as HTML
     """
     # pylint: disable=too-many-locals
@@ -131,7 +136,7 @@ def workplan_to_html(workplan, template_file='basic', css_file='dark'):
     tasks = workplan['workplan']['tasks']
     project['resources_use_rating'] = get_use_rating(project['resources_use'])
     iter_color = cycle(COLORS)
-    tasks_colors = {}
+    tasks_colors: Dict[str, int] = {}
     for task in tasks:
         color = tasks_colors.get(task['id'])
         if color is None:
@@ -157,15 +162,15 @@ def workplan_to_html(workplan, template_file='basic', css_file='dark'):
     with open(css_file) as _file:
         css = _file.read().strip()
     css_tasks = get_css_tasks()
-    css_months = []
+    css_months_list = []
     index = 3
     for i, month in enumerate(view_months):
-        css_months.append(f"""
+        css_months_list.append(f"""
 .month{i + 1} {{
   grid-column: {index} / span {month[1]};
 }}""")
         index += month[1]
-    css_months = '\n'.join(css_months)
+    css_months = '\n'.join(css_months_list)
     css = f"""
 :root {{
   --plan-days: {len(view_days)};

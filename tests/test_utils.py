@@ -23,7 +23,7 @@
 from datetime import date
 import pytest
 
-import holidays
+import holidays  # type: ignore
 
 from tasksched import (
     add_business_days,

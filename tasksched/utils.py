@@ -19,6 +19,8 @@
 
 """Utility functions for Tasksched."""
 
+from typing import Any, Dict, List, Tuple, Union
+
 import calendar
 import datetime
 
@@ -34,28 +36,27 @@ __all__ = (
 )
 
 
-def is_business_day(date, hdays=None):
+def is_business_day(date: datetime.date, hdays: Dict = None) -> bool:
     """
     Check if the date is a business day.
 
-    :param datetime.date date: date to check
-    :param dict hdays: list of dates with holidays
-    :rtype: bool
+    :param date: date to check
+    :param hdays: list of dates with holidays
     :return: True if the date is a business day, False otherwise (that means
         the date is either Saturday/Sunday or a public holiday)
     """
     return date.weekday() < 5 and date not in (hdays or {})
 
 
-def add_business_days(from_date, count, hdays=None):
+def add_business_days(from_date: datetime.date, count: int,
+                      hdays: Dict = None) -> datetime.date:
     """
     Add "count" business days to a date, skipping week-end days and public
     holidays.
 
-    :param datetime.date from_date: start date
-    :param int count: number of business days to add (≥ 0)
-    :param dict hdays: list of dates with holidays
-    :rtype: datetime.date
+    :param from_date: start date
+    :param count: number of business days to add (≥ 0)
+    :param hdays: list of dates with holidays
     :return: date with "count" business days added
     """
     to_add = count
@@ -68,15 +69,15 @@ def add_business_days(from_date, count, hdays=None):
     return current_date
 
 
-def get_days(from_date, to_date, hdays=None):
+def get_days(from_date: datetime.date, to_date: datetime.date,
+             hdays: Dict = None) -> Dict[datetime.date, Dict[str, Any]]:
     """
     Return days between two dates, for each day the value is True for a
     business day, False for the other days.
 
-    :param datetime.date from_date: start date
-    :param datetime.date to_date: end date
-    :param dict hdays: list of dates with holidays
-    :rtype: dict
+    :param from_date: start date
+    :param to_date: end date
+    :param hdays: list of dates with holidays
     :return: dictionary with days, keys are dates, values are dictionaries with
         keys: "weekday" (str) and "business_day" (bool)
     """
@@ -91,15 +92,15 @@ def get_days(from_date, to_date, hdays=None):
     return days
 
 
-def get_months(days):
+def get_months(
+        days: Dict[datetime.date, Dict[str, Any]]) -> List[Tuple[str, int]]:
     """
     Return a dictionary with month as key and the number of days in each
     months, for a list of days.
 
     :param dict days: dictionary with days: key is a datetime.date and value
         is True if it's a business day, False otherwise
-    :rtype: dict
-    :return: dictionary with key
+    :return: list of tuples (name, days_in_month)
     """
     months = []
     prev_month = -1
@@ -112,13 +113,12 @@ def get_months(days):
     return months
 
 
-def string_to_date(the_date):
+def string_to_date(the_date: Union[datetime.date, str]) -> datetime.date:
     """
     Convert the date to a datetime.date object (except if it's already a date
     object.
 
-    :param str,datetime.date: date
-    :rtype: datetime.date
+    :param the_date: date
     :return: date as datetime.date (today if date is None or empty)
     """
     if not the_date:
@@ -128,14 +128,13 @@ def string_to_date(the_date):
     return datetime.date.fromisoformat(the_date)
 
 
-def yaml_dump(data):
+def yaml_dump(data: Dict) -> str:
     """
     Dump dictionary to a YAML string.
 
-    :param dict data: data
-    :rtype: str
+    :param data: data
     :return: YAML as string, keys are not sorted (same order as the dict),
         no aliases in the YAML output
     """
-    yaml.Dumper.ignore_aliases = lambda *args: True
+    yaml.Dumper.ignore_aliases = lambda *args: True  # type: ignore
     return yaml.dump(data, sort_keys=False)

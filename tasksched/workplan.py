@@ -19,10 +19,13 @@
 
 """Task scheduler work plan."""
 
+from operator import attrgetter
+from typing import Dict, List, Optional
+
 import copy
 import datetime
 
-from tasksched.project import Task
+from tasksched.project import Project, Resource, Task
 from tasksched.utils import add_business_days
 
 __all__ = (
@@ -31,37 +34,61 @@ __all__ = (
 )
 
 
+class WorkPlanResource(Resource):  # pylint: disable=too-few-public-methods
+    """A workplan resource."""
+
+    def __init__(self, res_id: str, name: str):
+        super().__init__(res_id, name)
+        self.assigned: List[Dict] = []
+        self.assigned_tasks: List[Dict] = []
+        self.duration: int = 0
+        self.end_date: Optional[datetime.date] = None
+        self.use: int = 0
+
+
+class WorkPlanTask(Task):  # pylint: disable=too-few-public-methods
+    """A workplan task."""
+
+    # pylint: disable=too-many-arguments
+    def __init__(self, task_id: str, title: str, duration: int,
+                 priority: int = 0, max_resources: int = 2):
+        super().__init__(task_id, title, duration, priority, max_resources)
+        self.remaining: int = self.duration
+
+
 class WorkPlan:
     """A work plan built for a project."""
 
-    def __init__(self, project, tasks_to_split=None):
+    def __init__(self, project: Project,
+                 tasks_to_split: Dict[str, int] = None):
         self.project = copy.deepcopy(project)
+        self.resources = [
+            WorkPlanResource(res.res_id, res.name)
+            for res in self.project.resources
+        ]
+        self.tasks = [
+            WorkPlanTask(task.task_id, task.title, task.duration,
+                         task.priority, task.max_resources)
+            for task in self.project.tasks
+        ]
         if tasks_to_split:
             self.split_tasks(tasks_to_split)
-        for res in self.project.resources:
-            res.assigned = []
-            res.assigned_tasks = []
-            res.duration = 0
-            res.end_date = None
-            res.use = 0
-        for task in self.project.tasks:
-            task.remaining = task.duration
-        self.remaining = sum(task.duration for task in self.project.tasks)
+        self.remaining = sum(task.duration for task in self.tasks)
         self.duration = 0
         self.end_date = self.project.start_date
         self.resources_use = 0
         self.schedule()
 
-    def split_tasks(self, tasks_to_split):
+    def split_tasks(self, tasks_to_split: Dict[str, int]):
         """
         Split tasks in the project, to carry them out in parallel by several
         people.
 
-        :param dict tasks_to_split: tasks to split, keys are task ids (str),
+        :param tasks_to_split: tasks to split, keys are task ids (str),
             values are number of splits (int)
         """
         new_tasks = []
-        for task in self.project.tasks:
+        for task in self.tasks:
             number = tasks_to_split.get(task.task_id, None)
             if number is not None and 1 < number <= task.max_resources:
                 # split duration into multiple durations which are all almost
@@ -75,29 +102,32 @@ class WorkPlan:
                 ]))
                 for i, duration in enumerate(durations):
                     title = f'{task.title} ({i+1}/{len(durations)})'
-                    new_tasks.append(Task(task.task_id, title, duration,
-                                          task.priority, task.max_resources))
+                    new_tasks.append(
+                        WorkPlanTask(task.task_id, title, duration,
+                                     task.priority, task.max_resources)
+                    )
             else:
-                new_tasks.append(Task(task.task_id, task.title, task.duration,
-                                      task.priority, task.max_resources))
-        self.project.tasks = new_tasks
+                new_tasks.append(
+                    WorkPlanTask(task.task_id, task.title, task.duration,
+                                 task.priority, task.max_resources)
+                )
+        self.tasks = new_tasks
 
-    def find_best_resource(self):
+    def find_best_resource(self) -> Resource:
         """
         Find the best resource to use (the less used resource, by order).
 
-        :rtype: Resource
         :return: resource found
         """
         lowest_duration = 999999999
         best_res = None
-        for res in self.project.resources:
+        for res in self.resources:
             if res.duration == 0:
                 return res
             if res.duration < lowest_duration:
                 lowest_duration = res.duration
                 best_res = res
-        return best_res or self.project.resources[0]
+        return best_res or self.resources[0]
 
     def assign_task(self, task, resource, days):
         """
@@ -121,14 +151,29 @@ class WorkPlan:
         task.remaining -= days
         self.remaining -= days
 
+    def sorted_tasks(self, key: str, reverse: bool = False) -> List[Task]:
+        """
+        Get list of tasks sorted by priority (from higher to lower) and
+        duration (from longest to shortest).
+
+        :param tuple,list key: key(s) to sort tasks
+        :param bool reverse: reverse sort
+        :return: sorted list of tasks
+        """
+        return sorted(
+            self.tasks,
+            key=attrgetter(*key),
+            reverse=reverse,
+        )
+
     def schedule(self):
         """Automatic resource leveling in the project."""
-        sorted_tasks = self.project.sorted_tasks(['priority', 'duration'],
-                                                 reverse=True)
+        sorted_tasks = self.sorted_tasks(['priority', 'duration'],
+                                         reverse=True)
         for task in sorted_tasks:
             self.assign_task(task, self.find_best_resource(), task.remaining)
         sum_use = 0
-        for res in self.project.resources:
+        for res in self.resources:
             if res.duration > 0:
                 res.end_date = add_business_days(
                     self.project.start_date,
@@ -139,13 +184,14 @@ class WorkPlan:
                     self.end_date = res.end_date
             res.use = (res.duration * 100) / self.duration
             sum_use += res.use
-        if self.project.resources:
-            self.resources_use = sum_use / len(self.project.resources)
+        if self.resources:
+            self.resources_use = sum_use / len(self.resources)
 
-    def as_dict(self):
+    def as_dict(self) -> Dict:
         """Return the work plan as dict."""
         after_end = self.end_date + datetime.timedelta(days=1)
-        holidays = self.project.hdays[self.project.start_date:after_end]
+        holidays = self.project.hdays[
+            self.project.start_date:after_end]  # type: ignore
         return {
             'workplan': {
                 'project': {
@@ -167,7 +213,7 @@ class WorkPlan:
                         'end': res.end_date or None,
                         'use': res.use,
                     }
-                    for res in self.project.resources
+                    for res in self.resources
                 ],
                 'tasks': [
                     {
@@ -177,19 +223,18 @@ class WorkPlan:
                         'priority': task.priority,
                         'max_resources': task.max_resources,
                     }
-                    for task in self.project.tasks
+                    for task in self.tasks
                 ],
             },
         }
 
 
-def build_workplan(project):
+def build_workplan(project: Project) -> WorkPlan:
     """
     Build a work plan and tries to split tasks for the smallest possible
     project duration.
 
-    :param Project project: the project
-    :rtype: WorkPlan
+    :param project: the project
     :return: work plan
     """
     tasks_ids = [

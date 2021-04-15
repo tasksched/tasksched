@@ -1,5 +1,9 @@
 # Tasksched ChangeLog
 
+## Version 0.5.0 (under dev)
+
+- Add type hints in Python code, call mypy static type checker in CI.
+
 ## Version 0.4.0 (2021-01-23)
 
 - Allow YAML files in input, return work plan in YAML by default.

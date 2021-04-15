@@ -20,6 +20,8 @@
 
 """Tasksched utility functions for tests."""
 
+from typing import Dict, Union
+
 import os
 
 import yaml
@@ -27,13 +29,12 @@ import yaml
 TESTS_DIR = os.path.dirname(os.path.abspath(__file__))
 
 
-def get_input_file(filename, raw=False):
+def get_input_file(filename: str, raw: bool = False) -> Union[str, Dict]:
     """
     Read a YAML/JSON file.
 
-    :param str filename: filename
-    :param bool raw: if True, return the file as string
-    :rtype: dict
+    :param filename: filename
+    :param raw: if True, return the file as string
     :return: input file as dict (or as string if raw == True)
     """
     path = os.path.join(TESTS_DIR, filename)

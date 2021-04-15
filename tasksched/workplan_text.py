@@ -20,6 +20,7 @@
 """Export work plan to text."""
 
 from itertools import cycle
+from typing import Dict
 
 __all__ = (
     'workplan_to_text',
@@ -28,21 +29,20 @@ __all__ = (
 COLORS = (1, 2, 3, 4, 5, 6, 7, 11, 12, 13, 14, 15, 27, 174, 165, 75)
 
 
-def color(text, color_code):
+def color(text: str, color_code: int) -> str:
     """Return a colored text with ANSI color code."""
     return f'\033[38;5;{color_code}m{text}'
 
 
-def color_pct(text, pct):
+def color_pct(text: str, pct: int) -> str:
     """
     Return the color for a percentage display:
     - 100%: green (10)
     - ≥ 80%: orange (214)
     - < 80%: red (9)
 
-    :param str text: the text to display
-    :param int pct: percentage
-    :rtype: str
+    :param text: the text to display
+    :param pct: percentage
     :return: colored percentage with color reset after
     """
     if pct == 100:
@@ -55,15 +55,14 @@ def color_pct(text, pct):
     return f'{pct_color}\033[0m'
 
 
-def workplan_to_text(workplan,  # pylint: disable=too-many-locals
-                     use_colors=True,
-                     use_unicode=True):
+def workplan_to_text(workplan: Dict,  # pylint: disable=too-many-locals
+                     use_colors: bool = True,
+                     use_unicode: bool = True) -> str:
     """
     Export work plan to text.
 
-    :param dict workplan: work plan
-    :param bool use_colors: use ANSI colors in output
-    :rtype: str
+    :param workplan: work plan
+    :param use_colors: use ANSI colors in output
     :return: work plan as string
     """
     color_reset = '\033[0m' if use_colors else ''

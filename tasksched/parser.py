@@ -26,12 +26,11 @@ __all__ = (
 )
 
 
-def get_parser(tasksched_version):
+def get_parser(tasksched_version: str) -> argparse.ArgumentParser:
     """
     Return the parser for command line options.
 
-    :param str tasksched_version: tasksched version
-    :rtype: argparse.ArgumentParser
+    :param tasksched_version: tasksched version
     :return: argument parser
     """
     # pylint: disable=protected-access,too-few-public-methods

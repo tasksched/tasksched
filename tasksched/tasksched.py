@@ -19,6 +19,8 @@
 
 """Task scheduler with automatic resource leveling."""
 
+from typing import Any, Dict, IO, List, Optional, Union
+
 import json
 import sys
 
@@ -41,22 +43,22 @@ __all__ = (
 )
 
 
-def fatal(error):
+def fatal(error: str):
     """
     Display a fatal error and exit with return code 1.
 
-    :param str error: error to display
+    :param error: error to display
     """
     print(error, file=sys.stderr)
     print('Try with --help to get help on tasksched', file=sys.stderr)
     sys.exit(1)
 
 
-def get_input_files(args):
+def get_input_files(args) -> List[Any]:
     """
     Get list of input files (optional stdin file + filenames).
 
-    :rtype: list
+    :param argparse.Namespace args: command-line arguments
     :return: list of files/filenames
     """
     files = []
@@ -66,12 +68,11 @@ def get_input_files(args):
     return files
 
 
-def read_file(input_file):
+def read_file(input_file: Union[IO, str]) -> Optional[Dict]:
     """
     Read input file (YAML or JSON).
 
-    :param object,str input_file: input file
-    :rtype: dict
+    :param input_file: input file
     :return: input file as dict
     """
     try:
@@ -88,13 +89,12 @@ def read_file(input_file):
         return None
 
 
-def search_item(list_items, item_id):
+def search_item(list_items: List[Any], item_id: Any) -> Any:
     """
     Search an item by its id in a list.
 
-    :param list list_items: list of items
-    :param str item_id: item id to search in the list of items
-    :rtype: object
+    :param list_items: list of items
+    :param item_id: item id to search in the list of items
     :return: the item found or None
     """
     if item_id:
@@ -104,7 +104,7 @@ def search_item(list_items, item_id):
     return None
 
 
-def merge_configs(config, new_config):
+def merge_configs(config: Dict, new_config: Dict):
     """
     Merge config2 into config: each value in config is updated with value
     from config2: for dicts (like "project"), keys are updated, for lists
@@ -139,16 +139,15 @@ def merge_configs(config, new_config):
             config[key] = value
 
 
-def load_config(files):
+def load_config(files: List[Any]) -> Dict:
     """
     Load YAML/JSON configuration by reading stdin (if available) and list of
     input files received on command line.
 
     :param list files: files/filenames to load
-    :rtype: dict
     :return: configuration
     """
-    config = {}
+    config: Dict[Any, Any] = {}
     for _file in files:
         new_config = read_file(_file)
         if new_config:
@@ -174,12 +173,11 @@ def action_workplan(args):
     return yaml_dump(workplan.as_dict())
 
 
-def read_workplan(args):
+def read_workplan(args) -> Optional[Dict]:
     """
     Read work plan.
 
     :param argparse.Namespace args: command-line arguments
-    :rtype: dict
     :return: work plan as dict
     """
     workplan = None

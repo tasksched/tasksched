@@ -10,16 +10,13 @@ jobs:
 
     strategy:
       matrix:
-        os:
-          - ubuntu-20.04
-          - macos-latest
         python-version:
           - "3.7"
           - "3.8"
           - "3.9"
 
-    name: Python ${{ matrix.python-version }} on ${{ matrix.os }}
-    runs-on: ${{ matrix.os }}
+    name: Python ${{ matrix.python-version }}
+    runs-on: ubuntu-20.04
 
     steps:
 

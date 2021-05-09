@@ -26,6 +26,60 @@ __all__ = (
 )
 
 
+def add_text_options(parser: argparse.ArgumentParser, action: str,
+                     help_filename: str):
+    """
+    Add options for "text" or "workplan_text" actions.
+
+    :param parser: the parser
+    :param action: the action ("workplan_text" or "text")
+    :param help_filename: help on filename option
+    """
+    parser.add_argument(
+        '-c', '--no-colors',
+        action='store_true',
+        help='do not use colors in output',
+    )
+    parser.add_argument(
+        '-u', '--no-unicode',
+        action='store_true',
+        help='do not use unicode chars in output',
+    )
+    parser.add_argument(
+        'filename',
+        nargs='*',
+        help=help_filename,
+    )
+    parser.set_defaults(action=action)
+
+
+def add_html_options(parser: argparse.ArgumentParser, action: str,
+                     help_filename: str):
+    """
+    Add options for "html" or "workplan_html" actions.
+
+    :param parser: the parser
+    :param action: the action ("workplan_html" or "html")
+    :param help_filename: help on filename option
+    """
+    parser.add_argument(
+        '-t', '--template',
+        default='basic',
+        help='template name or path',
+    )
+    parser.add_argument(
+        '-c', '--css',
+        default='dark',
+        help='CSS name or path',
+    )
+    parser.add_argument(
+        'filename',
+        nargs='*',
+        help=help_filename,
+    )
+    parser.set_defaults(action=action)
+
+
 def get_parser(tasksched_version: str) -> argparse.ArgumentParser:
     """
     Return the parser for command line options.
@@ -104,44 +158,32 @@ def get_parser(tasksched_version: str) -> argparse.ArgumentParser:
         add_help=False,
         help='convert the work plan to text',
     )
-    parser_text.add_argument(
-        '-c', '--no-colors',
-        action='store_true',
-        help='do not use colors in output',
-    )
-    parser_text.add_argument(
-        '-u', '--no-unicode',
-        action='store_true',
-        help='do not use unicode chars in output',
-    )
-    parser_text.add_argument(
-        'filename',
-        nargs='*',
-        help=help_filename,
-    )
-    parser_text.set_defaults(action='text')
+    add_text_options(parser_text, 'text', help_filename)
 
     # action: "html"
-    parser_text = subparsers.add_parser(
+    parser_html = subparsers.add_parser(
         'html',
         add_help=False,
         help='convert the work plan to HTML',
     )
-    parser_text.add_argument(
-        '-t', '--template',
-        default='basic',
-        help='template name or path',
+    add_html_options(parser_html, 'html', help_filename)
+
+    # action: "workplan_text"
+    parser_workplan_text = subparsers.add_parser(
+        'workplan_text',
+        add_help=False,
+        help=('build the work plan and convert it to text '
+              '(shortcut of workplan + text actions)'),
     )
-    parser_text.add_argument(
-        '-c', '--css',
-        default='dark',
-        help='CSS name or path',
+    add_text_options(parser_workplan_text, 'workplan_text', help_filename)
+
+    # action: "workplan_html"
+    parser_workplan_html = subparsers.add_parser(
+        'workplan_html',
+        add_help=False,
+        help=('build the work plan and convert it to HTML '
+              '(shortcut of workplan + html actions)'),
     )
-    parser_text.add_argument(
-        'filename',
-        nargs='*',
-        help=help_filename,
-    )
-    parser_text.set_defaults(action='html')
+    add_html_options(parser_workplan_html, 'workplan_html', help_filename)
 
     return parser

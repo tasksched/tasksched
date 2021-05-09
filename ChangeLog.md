@@ -2,6 +2,7 @@
 
 ## Version 0.5.0 (under dev)
 
+- Add shortcut actions `workplan_text` and `workplan_html`.
 - Add type hints in Python code, call mypy static type checker in CI.
 
 ## Version 0.4.0 (2021-01-23)

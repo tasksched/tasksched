@@ -204,6 +204,15 @@ def test_main(monkeypatch):  # pylint: disable=too-many-statements
     with mock.patch.object(sys, 'argv', args):
         tasksched.main()
 
+    # action: workplan_text, OK
+    stdin = io.StringIO('')
+    stdin.fileno = lambda: 0
+    monkeypatch.setattr('sys.stdin', stdin)
+    filename = os.path.join(TESTS_DIR, 'project_complete.yaml')
+    args = ['tasksched', 'workplan_text', filename]
+    with mock.patch.object(sys, 'argv', args):
+        tasksched.main()
+
     # action: html, no input
     args = ['tasksched', 'html']
     with pytest.raises(SystemExit):
@@ -227,6 +236,15 @@ def test_main(monkeypatch):  # pylint: disable=too-many-statements
     monkeypatch.setattr('sys.stdin', stdin)
     filename = os.path.join(TESTS_DIR, 'workplan_complete.yaml')
     args = ['tasksched', 'html', filename]
+    with mock.patch.object(sys, 'argv', args):
+        tasksched.main()
+
+    # action: workplan_html, OK
+    stdin = io.StringIO('')
+    stdin.fileno = lambda: 0
+    monkeypatch.setattr('sys.stdin', stdin)
+    filename = os.path.join(TESTS_DIR, 'project_complete.yaml')
+    args = ['tasksched', 'workplan_html', filename]
     with mock.patch.object(sys, 'argv', args):
         tasksched.main()
 

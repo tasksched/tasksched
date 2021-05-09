@@ -71,13 +71,20 @@ For each task, the keys are:
 Content of files can be read from standard input or filenames are allowed as
 command line arguments. Both can be used at same time.
 
-The command `tasksched` allows three actions:
+The command `tasksched` allows three main actions:
 
 - `workplan`: build an optimized work plan using project/resources/tasks info
   in input; the output is YAML data (or JSON)
 - `text`: convert output of `workplan` action to text for display in the terminal
-  (colors and unicode chars are used by default but optional).
+  (colors and unicode chars are used by default but optional)
 - `html`: convert output of `workplan` action to HTML for display in a web browser
+  (template and CSS can be customized).
+
+Two extra actions are available as shortcuts (build and convert work plan in a single action):
+
+- `workplan_text`: build the work plan and convert it to text for display in the terminal
+  (colors and unicode chars are used by default but optional)
+- `workplan_html`: build the work plan and convert it to HTML for display in a web browser
   (template and CSS can be customized).
 
 See examples of input files in the [examples](examples/) directory.
@@ -100,6 +107,12 @@ So you can build the work plan and convert it to text for display with this comm
 
 ```
 $ extract-tasks | tasksched workplan project.yaml team.yaml extra_tasks.yaml | tasksched text
+```
+
+Or using the shortcut `workplan_text`:
+
+```
+$ extract-tasks | tasksched workplan_text project.yaml team.yaml extra_tasks.yaml
 ```
 
 ### Build of work plan
@@ -174,13 +187,13 @@ Tasksched comes with one default template and two default CSS:
 Example of work plan converted to HTML with the default "dark" theme:
 
 ```
-$ tasksched workplan examples/project_big.yaml | tasksched html > tasksched.html
+$ tasksched workplan_html examples/project_big.yaml > tasksched.html
 ```
 
 With "light" theme (white background):
 
 ```
-$ tasksched workplan examples/project_big.yaml | tasksched html --css light > tasksched.html
+$ tasksched workplan_html --css light examples/project_big.yaml > tasksched.html
 ```
 
 ## Copyright

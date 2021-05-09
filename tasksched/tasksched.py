@@ -19,7 +19,7 @@
 
 """Task scheduler with automatic resource leveling."""
 
-from typing import Any, Dict, IO, List, Optional, Union
+from typing import Any, Dict, IO, List, Union
 
 import json
 import sys
@@ -43,15 +43,14 @@ __all__ = (
 )
 
 
-def fatal(error: str):
+def error(message: str):
     """
-    Display a fatal error and exit with return code 1.
+    Display an error.
 
-    :param error: error to display
+    :param message: error message to display
     """
-    print(error, file=sys.stderr)
+    print(message, file=sys.stderr)
     print('Try with --help to get help on tasksched', file=sys.stderr)
-    sys.exit(1)
 
 
 def get_input_files(args) -> List[Any]:
@@ -68,7 +67,7 @@ def get_input_files(args) -> List[Any]:
     return files
 
 
-def read_file(input_file: Union[IO, str]) -> Optional[Dict]:
+def read_file(input_file: Union[IO, str]) -> Dict:
     """
     Read input file (YAML or JSON).
 
@@ -83,10 +82,10 @@ def read_file(input_file: Union[IO, str]) -> Optional[Dict]:
             return yaml.safe_load(input_file)
     except (FileNotFoundError, yaml.parser.ParserError) as exc:
         if isinstance(input_file, str):
-            fatal(f'ERROR: unable to decode input file "{input_file}": {exc}')
+            error(f'ERROR: unable to decode input file "{input_file}": {exc}')
         else:
-            fatal(f'ERROR: unable to decode input data: {exc}')
-        return None
+            error(f'ERROR: unable to decode input data: {exc}')
+        raise
 
 
 def search_item(list_items: List[Any], item_id: Any) -> Any:
@@ -155,25 +154,23 @@ def load_config(files: List[Any]) -> Dict:
     return config
 
 
-def action_workplan(args):
+def load_project(args) -> Project:
     """
-    Return the work plan using the project configuration.
+    Load project.
 
     :param argparse.Namespace args: command-line arguments
+    :return: project
     """
     files = get_input_files(args)
     config = load_config(files)
     try:
-        project = Project(config)
+        return Project(config)
     except (KeyError, ValueError) as exc:
-        fatal(f'ERROR: invalid project: "{exc.args[0]}"')
-    workplan = build_workplan(project)
-    if args.json:
-        return json.dumps(workplan.as_dict(), default=str)
-    return yaml_dump(workplan.as_dict())
+        error(f'ERROR: invalid project: "{exc.args[0]}"')
+        raise
 
 
-def read_workplan(args) -> Optional[Dict]:
+def read_workplan(args) -> Dict:
     """
     Read work plan.
 
@@ -185,8 +182,58 @@ def read_workplan(args) -> Optional[Dict]:
     if files:
         workplan = read_file(files[-1])
     if not workplan:
-        fatal('ERROR: missing input work plan')
+        error('ERROR: missing input work plan')
+        raise OSError('missing input work plan')
     return workplan
+
+
+def convert_workplan_to_text(workplan: Dict, args) -> str:
+    """
+    Convert workplan to text.
+
+    :param workplan: work plan
+    :param argparse.Namespace args: command-line arguments
+    """
+    try:
+        return workplan_to_text(
+            workplan,
+            use_colors=not args.no_colors,
+            use_unicode=not args.no_unicode,
+        )
+    except (KeyError, ValueError) as exc:
+        error(f'ERROR: invalid work plan: "{exc}"')
+        raise
+
+
+def convert_workplan_to_html(workplan: Dict, args) -> str:
+    """
+    Convert workplan to HTML.
+
+    :param workplan: work plan
+    :param argparse.Namespace args: command-line arguments
+    """
+    try:
+        return workplan_to_html(
+            workplan,
+            template_file=args.template,
+            css_file=args.css,
+        )
+    except (KeyError, ValueError) as exc:
+        error(f'ERROR: invalid work plan: "{exc}"')
+        raise
+
+
+def action_workplan(args):
+    """
+    Return the work plan using the project configuration.
+
+    :param argparse.Namespace args: command-line arguments
+    """
+    project = load_project(args)
+    workplan = build_workplan(project)
+    if args.json:
+        return json.dumps(workplan.as_dict(), default=str)
+    return yaml_dump(workplan.as_dict())
 
 
 def action_text(args):
@@ -195,16 +242,8 @@ def action_text(args):
 
     :param argparse.Namespace args: command-line arguments
     """
-    config = read_workplan(args)
-    try:
-        return workplan_to_text(
-            config,
-            use_colors=not args.no_colors,
-            use_unicode=not args.no_unicode,
-        )
-    except (KeyError, ValueError) as exc:
-        fatal(f'ERROR: invalid work plan: "{exc}"')
-        return None
+    workplan = read_workplan(args)
+    return convert_workplan_to_text(workplan, args)
 
 
 def action_html(args):
@@ -213,23 +252,40 @@ def action_html(args):
 
     :param argparse.Namespace args: command-line arguments
     """
-    config = read_workplan(args)
-    try:
-        return workplan_to_html(
-            config,
-            template_file=args.template,
-            css_file=args.css,
-        )
-    except (KeyError, ValueError) as exc:
-        fatal(f'ERROR: invalid work plan: "{exc}"')
-        return None
+    workplan = read_workplan(args)
+    return convert_workplan_to_html(workplan, args)
+
+
+def action_workplan_text(args):
+    """
+    Build the work plan and return it as text to display in the terminal.
+
+    :param argparse.Namespace args: command-line arguments
+    """
+    project = load_project(args)
+    workplan = build_workplan(project)
+    return convert_workplan_to_text(workplan.as_dict(), args)
+
+
+def action_workplan_html(args):
+    """
+    Build the work plan and return it as HTML.
+
+    :param argparse.Namespace args: command-line arguments
+    """
+    project = load_project(args)
+    workplan = build_workplan(project)
+    return convert_workplan_to_html(workplan.as_dict(), args)
 
 
 def main():
     """Main function, entry point."""
     args = get_parser(__version__).parse_args()
     func = getattr(sys.modules[__name__], f'action_{args.action}')
-    result = func(args)
+    try:
+        result = func(args)
+    except Exception:  # pylint: disable=broad-except
+        sys.exit(1)
     print(result)
 
 

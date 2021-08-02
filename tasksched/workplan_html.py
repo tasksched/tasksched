@@ -184,7 +184,7 @@ def workplan_to_html(workplan: Dict,
 
     # build HTML
     template_dir, filename = os.path.split(os.path.abspath(template_file))
-    env = Environment(loader=FileSystemLoader(template_dir))
+    env = Environment(loader=FileSystemLoader(template_dir), autoescape=True)
     template = env.get_template(filename)
     result = template.render(workplan['workplan'], css=css, days=days,
                              view_start=view_start, view_end=view_end,

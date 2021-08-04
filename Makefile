@@ -21,7 +21,7 @@ all: check
 
 check: lint test
 
-lint: flake8 pylint mypy
+lint: flake8 pylint mypy bandit
 
 flake8:
 	flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
@@ -34,6 +34,9 @@ pylint:
 mypy:
 	mypy tasksched
 	mypy tests
+
+bandit:
+	bandit -r tasksched
 
 test:
 	pytest -vv --cov-report term-missing --cov=tasksched tests

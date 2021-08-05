@@ -2,6 +2,8 @@
 
 ## Version 0.5.0 (under dev)
 
+- Add lint with bandit.
+- Enable autoescape in Jinja2.
 - Add shortcut actions `workplan_text` and `workplan_html`.
 - Add type hints in Python code, call mypy static type checker in CI.
 

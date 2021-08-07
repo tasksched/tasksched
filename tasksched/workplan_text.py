@@ -86,7 +86,7 @@ def workplan_to_text(workplan: Dict,  # pylint: disable=too-many-locals
     text = f'{project["resources_use"]:.2f}%'
     res_use = (color_pct(text, project['resources_use'])
                if use_colors else text)
-    info = (f'Work plan: {project["start"]} to {project["end"]} '
+    info = (f'{project["name"]}: {project["start"]} to {project["end"]} '
             f'({project["duration"]}d), {res_use} resources used')
     rows = ['']
     max_len_res = (max(len(res['name']) for res in resources) + 2

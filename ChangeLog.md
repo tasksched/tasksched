@@ -2,6 +2,7 @@
 
 ## Version 0.5.0 (under dev)
 
+- Display project name in text workplan output.
 - Add text workplan option `-q`/`--quiet`.
 - Add lint with bandit.
 - Enable autoescape in Jinja2.

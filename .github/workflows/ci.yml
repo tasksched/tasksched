@@ -30,7 +30,7 @@ jobs:
       - name: Install dependencies
         run: |
           pip install -r requirements.txt
-          pip install bandit coverage flake8 mock mypy pylint pytest pytest-cov
+          pip install bandit coverage flake8 mock mypy pylint pytest pytest-cov types-PyYAML
 
       - name: Lint with flake8
         run: make flake8

@@ -56,13 +56,16 @@ def color_pct(text: str, pct: int) -> str:
 
 
 def workplan_to_text(workplan: Dict,  # pylint: disable=too-many-locals
+                     quiet: bool = False,
                      use_colors: bool = True,
                      use_unicode: bool = True) -> str:
     """
     Export work plan to text.
 
     :param workplan: work plan
+    :param quiet: display work plan summary (no legend/tasks)
     :param use_colors: use ANSI colors in output
+    :param use_unicode: use unciode chars in output
     :return: work plan as string
     """
     color_reset = '\033[0m' if use_colors else ''
@@ -85,7 +88,7 @@ def workplan_to_text(workplan: Dict,  # pylint: disable=too-many-locals
                if use_colors else text)
     info = (f'Work plan: {project["start"]} to {project["end"]} '
             f'({project["duration"]}d), {res_use} resources used')
-    rows = [info, '']
+    rows = ['']
     max_len_res = (max(len(res['name']) for res in resources) + 2
                    if resources else 0)
     if use_unicode:
@@ -111,8 +114,11 @@ def workplan_to_text(workplan: Dict,  # pylint: disable=too-many-locals
             f'{res["duration"]:>3}d {use} '
             f'{bar_resource}{color_reset}{filler}{tasks}'
         )
+    if quiet:
+        return info
     return '\n'.join([
         '\n'.join(legend),
         '',
+        info,
         '\n'.join(rows),
     ])

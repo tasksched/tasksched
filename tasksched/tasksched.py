@@ -197,6 +197,7 @@ def convert_workplan_to_text(workplan: Dict, args) -> str:
     try:
         return workplan_to_text(
             workplan,
+            quiet=args.quiet,
             use_colors=not args.no_colors,
             use_unicode=not args.no_unicode,
         )

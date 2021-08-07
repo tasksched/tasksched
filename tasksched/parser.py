@@ -41,6 +41,11 @@ def add_text_options(parser: argparse.ArgumentParser, action: str,
         help='do not use colors in output',
     )
     parser.add_argument(
+        '-q', '--quiet',
+        action='store_true',
+        help='display only work plan summary info (no legend/tasks)',
+    )
+    parser.add_argument(
         '-u', '--no-unicode',
         action='store_true',
         help='do not use unicode chars in output',

@@ -43,12 +43,12 @@ def test_workplan_to_text():
     workplan = get_input_file('workplan_complete.yaml')
     text = workplan_to_text(workplan, quiet=True)
     assert text == ('The name: 2020-12-21 to 2021-01-04 (9d), '
-                    '\x1b[38;5;214m94.44%\x1b[0m resources used')
+                    '\x1b[38;5;214m94.44%\x1b[0m of 2 resources used')
 
     workplan = get_input_file('workplan_complete.yaml')
     text = workplan_to_text(workplan, quiet=True, use_colors=False)
     assert text == ('The name: 2020-12-21 to 2021-01-04 (9d), '
-                    '94.44% resources used')
+                    '94.44% of 2 resources used')
 
     workplan = get_input_file('workplan_complete2.yaml')
     text = workplan_to_text(workplan)

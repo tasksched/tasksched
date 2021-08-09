@@ -71,6 +71,7 @@ def workplan_to_text(workplan: Dict,  # pylint: disable=too-many-locals
     color_reset = '\033[0m' if use_colors else ''
     project = workplan['workplan']['project']
     resources = workplan['workplan']['resources']
+    resources_count = len(resources)
     tasks = workplan['workplan']['tasks']
     legend = ['Legend:']
     iter_color = cycle(COLORS)
@@ -87,7 +88,8 @@ def workplan_to_text(workplan: Dict,  # pylint: disable=too-many-locals
     res_use = (color_pct(text, project['resources_use'])
                if use_colors else text)
     info = (f'{project["name"]}: {project["start"]} to {project["end"]} '
-            f'({project["duration"]}d), {res_use} resources used')
+            f'({project["duration"]}d), {res_use} of {resources_count} '
+            f'resources used')
     rows = ['']
     max_len_res = (max(len(res['name']) for res in resources) + 2
                    if resources else 0)

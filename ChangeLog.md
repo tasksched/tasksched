@@ -2,6 +2,7 @@
 
 ## Version 0.5.0 (under dev)
 
+- Add information on tasks in HTML output.
 - Display project name and number of resources in text workplan output.
 - Add text workplan option `-q`/`--quiet`.
 - Add lint with bandit.

@@ -84,7 +84,7 @@
       {% for task in tasks %}
       <div class="task">
         <span class="square task_color_{{ task.color }}">&nbsp;</span>
-        {{ task["id"] }}: {{ task["title"] }}
+        {{ task["id"] }}: {{ task["title"] }} <span class="task-info">({{ task["duration"] }}d, prio: {{ task["priority"] }}, max res: {{ task["max_resources"] }})</span>
       </div>
       {% endfor %}
     </div>

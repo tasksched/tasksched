@@ -98,6 +98,10 @@ body {
   margin-top: .25em;
 }
 
+.task-info {
+  color: #666;
+}
+
 .square {
   display: inline-block;
   width: 1.3em;

@@ -159,7 +159,7 @@ def workplan_to_html(workplan: Dict,
         template_file = os.path.join(DATA_DIR, 'html', f'{template_file}.html')
     if not css_file.endswith('.css'):
         css_file = os.path.join(DATA_DIR, 'css', f'{css_file}.css')
-    with open(css_file) as _file:
+    with open(css_file, encoding='utf-8') as _file:
         css = _file.read().strip()
     css_tasks = get_css_tasks()
     css_months_list = []

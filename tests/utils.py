@@ -38,7 +38,7 @@ def get_input_file(filename: str, raw: bool = False) -> Union[str, Dict]:
     :return: input file as dict (or as string if raw == True)
     """
     path = os.path.join(TESTS_DIR, filename)
-    with open(path) as _file:
+    with open(path, encoding='utf-8') as _file:
         if raw:
             return _file.read()
         return yaml.safe_load(_file)

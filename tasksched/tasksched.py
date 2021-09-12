@@ -76,7 +76,7 @@ def read_file(input_file: Union[IO, str]) -> Dict:
     """
     try:
         if isinstance(input_file, str):
-            with open(input_file) as _file:
+            with open(input_file, encoding='utf-8') as _file:
                 return yaml.safe_load(_file)
         else:
             return yaml.safe_load(input_file)

@@ -33,7 +33,7 @@ from tasksched.workplan_text import workplan_to_text
 from tasksched.workplan_html import workplan_to_html
 from tasksched.utils import yaml_dump
 
-__version__ = '0.5.0-dev'
+__version__ = '0.5.0'
 
 __all__ = (
     '__version__',

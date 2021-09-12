@@ -1,6 +1,6 @@
 # Tasksched ChangeLog
 
-## Version 0.5.0 (under dev)
+## Version 0.5.0 (2021-09-12)
 
 - Add information on tasks in HTML output.
 - Display project name and number of resources in text workplan output.

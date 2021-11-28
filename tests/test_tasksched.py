@@ -32,6 +32,7 @@ import tasksched
 TESTS_DIR = os.path.dirname(os.path.abspath(__file__))
 
 
+# pylint: disable=use-implicit-booleaness-not-comparison
 def test_load_config():  # pylint: disable=too-many-statements
     """Test load_config function."""
     # empty merge (no data)

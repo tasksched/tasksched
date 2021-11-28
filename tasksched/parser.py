@@ -110,7 +110,7 @@ def get_parser(tasksched_version: str) -> argparse.ArgumentParser:
                     print(f'  ----- tasksched {choice} -----')
                     print('  |')
                     print('\n'.join([
-                        '  |  %s' % line
+                        f'  |  {line}'
                         for line in subparser.format_help().split('\n')
                     ]))
             parser.exit()

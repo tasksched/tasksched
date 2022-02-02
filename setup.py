@@ -18,13 +18,12 @@
 # along with Tasksched.  If not, see <https://www.gnu.org/licenses/>.
 #
 
-from codecs import open
 from setuptools import setup, find_packages
 from tasksched import __version__ as tasksched_version
 
 DESCRIPTION = 'Task scheduler with automatic resource leveling.'
 
-with open('README.md', 'r', 'utf-8') as f:
+with open('README.md', 'r', encoding='utf-8') as f:
     readme = f.read()
 
 setup(

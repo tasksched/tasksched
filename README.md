@@ -2,6 +2,7 @@
 
 [![PyPI](https://img.shields.io/pypi/v/tasksched.svg)](https://pypi.org/project/tasksched/)
 [![Build Status](https://github.com/tasksched/tasksched/workflows/CI/badge.svg)](https://github.com/tasksched/tasksched/actions?query=workflow%3A%22CI%22)
+[![Build Status](https://github.com/tasksched/tasksched/workflows/CodeQL/badge.svg)](https://github.com/tasksched/tasksched/actions?query=workflow%3A%22CodeQL%22)
 
 The task scheduler reads one or more [YAML](https://yaml.org/spec/) or [JSON](https://tools.ietf.org/html/rfc8259)
 configuration files, that includes:

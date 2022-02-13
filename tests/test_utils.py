@@ -48,7 +48,7 @@ def test_is_business_day():
     assert is_bus(date(2020, 12, 27)) is False  # Sunday
 
     # public holidays
-    hdays = holidays.CountryHoliday('FRA', years=[2020, 2021])
+    hdays = holidays.CountryHoliday("FRA", years=[2020, 2021])
     assert is_bus(date(2020, 12, 25), hdays) is False  # Christmas
     assert is_bus(date(2021, 1, 1), hdays) is False  # New Year's Day
     assert is_bus(date(2021, 5, 1), hdays) is False  # Labour Day
@@ -71,7 +71,7 @@ def test_add_business_days():
     assert add_business_days(start, 10) == date(2021, 1, 4)
 
     # French holidays
-    hdays = holidays.CountryHoliday('FRA', years=[2020, 2021])
+    hdays = holidays.CountryHoliday("FRA", years=[2020, 2021])
     assert add_business_days(start, 1, hdays) == date(2020, 12, 22)
     assert add_business_days(start, 2, hdays) == date(2020, 12, 23)
     assert add_business_days(start, 3, hdays) == date(2020, 12, 24)
@@ -86,100 +86,96 @@ def test_add_business_days():
 
 def test_get_days():
     """Test get_days function."""
-    hdays = holidays.CountryHoliday('FRA', years=[2020, 2021])
+    hdays = holidays.CountryHoliday("FRA", years=[2020, 2021])
 
     assert get_days(date(2020, 12, 21), date(2020, 12, 21), hdays) == {
-        date(2020, 12, 21): {'business_day': True, 'weekday': 'Monday'},
+        date(2020, 12, 21): {"business_day": True, "weekday": "Monday"},
     }
     assert get_days(date(2020, 12, 21), date(2020, 12, 22), hdays) == {
-        date(2020, 12, 21): {'business_day': True, 'weekday': 'Monday'},
-        date(2020, 12, 22): {'business_day': True, 'weekday': 'Tuesday'},
+        date(2020, 12, 21): {"business_day": True, "weekday": "Monday"},
+        date(2020, 12, 22): {"business_day": True, "weekday": "Tuesday"},
     }
     assert get_days(date(2020, 12, 21), date(2020, 12, 23), hdays) == {
-        date(2020, 12, 21): {'business_day': True, 'weekday': 'Monday'},
-        date(2020, 12, 22): {'business_day': True, 'weekday': 'Tuesday'},
-        date(2020, 12, 23): {'business_day': True, 'weekday': 'Wednesday'},
+        date(2020, 12, 21): {"business_day": True, "weekday": "Monday"},
+        date(2020, 12, 22): {"business_day": True, "weekday": "Tuesday"},
+        date(2020, 12, 23): {"business_day": True, "weekday": "Wednesday"},
     }
     assert get_days(date(2020, 12, 21), date(2020, 12, 24), hdays) == {
-        date(2020, 12, 21): {'business_day': True, 'weekday': 'Monday'},
-        date(2020, 12, 22): {'business_day': True, 'weekday': 'Tuesday'},
-        date(2020, 12, 23): {'business_day': True, 'weekday': 'Wednesday'},
-        date(2020, 12, 24): {'business_day': True, 'weekday': 'Thursday'},
+        date(2020, 12, 21): {"business_day": True, "weekday": "Monday"},
+        date(2020, 12, 22): {"business_day": True, "weekday": "Tuesday"},
+        date(2020, 12, 23): {"business_day": True, "weekday": "Wednesday"},
+        date(2020, 12, 24): {"business_day": True, "weekday": "Thursday"},
     }
     assert get_days(date(2020, 12, 21), date(2020, 12, 25), hdays) == {
-        date(2020, 12, 21): {'business_day': True, 'weekday': 'Monday'},
-        date(2020, 12, 22): {'business_day': True, 'weekday': 'Tuesday'},
-        date(2020, 12, 23): {'business_day': True, 'weekday': 'Wednesday'},
-        date(2020, 12, 24): {'business_day': True, 'weekday': 'Thursday'},
-        date(2020, 12, 25): {'business_day': False, 'weekday': 'Friday'},
+        date(2020, 12, 21): {"business_day": True, "weekday": "Monday"},
+        date(2020, 12, 22): {"business_day": True, "weekday": "Tuesday"},
+        date(2020, 12, 23): {"business_day": True, "weekday": "Wednesday"},
+        date(2020, 12, 24): {"business_day": True, "weekday": "Thursday"},
+        date(2020, 12, 25): {"business_day": False, "weekday": "Friday"},
     }
     assert get_days(date(2020, 12, 21), date(2020, 12, 26), hdays) == {
-        date(2020, 12, 21): {'business_day': True, 'weekday': 'Monday'},
-        date(2020, 12, 22): {'business_day': True, 'weekday': 'Tuesday'},
-        date(2020, 12, 23): {'business_day': True, 'weekday': 'Wednesday'},
-        date(2020, 12, 24): {'business_day': True, 'weekday': 'Thursday'},
-        date(2020, 12, 25): {'business_day': False, 'weekday': 'Friday'},
-        date(2020, 12, 26): {'business_day': False, 'weekday': 'Saturday'},
+        date(2020, 12, 21): {"business_day": True, "weekday": "Monday"},
+        date(2020, 12, 22): {"business_day": True, "weekday": "Tuesday"},
+        date(2020, 12, 23): {"business_day": True, "weekday": "Wednesday"},
+        date(2020, 12, 24): {"business_day": True, "weekday": "Thursday"},
+        date(2020, 12, 25): {"business_day": False, "weekday": "Friday"},
+        date(2020, 12, 26): {"business_day": False, "weekday": "Saturday"},
     }
     assert get_days(date(2020, 12, 21), date(2020, 12, 27), hdays) == {
-        date(2020, 12, 21): {'business_day': True, 'weekday': 'Monday'},
-        date(2020, 12, 22): {'business_day': True, 'weekday': 'Tuesday'},
-        date(2020, 12, 23): {'business_day': True, 'weekday': 'Wednesday'},
-        date(2020, 12, 24): {'business_day': True, 'weekday': 'Thursday'},
-        date(2020, 12, 25): {'business_day': False, 'weekday': 'Friday'},
-        date(2020, 12, 26): {'business_day': False, 'weekday': 'Saturday'},
-        date(2020, 12, 27): {'business_day': False, 'weekday': 'Sunday'},
+        date(2020, 12, 21): {"business_day": True, "weekday": "Monday"},
+        date(2020, 12, 22): {"business_day": True, "weekday": "Tuesday"},
+        date(2020, 12, 23): {"business_day": True, "weekday": "Wednesday"},
+        date(2020, 12, 24): {"business_day": True, "weekday": "Thursday"},
+        date(2020, 12, 25): {"business_day": False, "weekday": "Friday"},
+        date(2020, 12, 26): {"business_day": False, "weekday": "Saturday"},
+        date(2020, 12, 27): {"business_day": False, "weekday": "Sunday"},
     }
     assert get_days(date(2020, 12, 21), date(2020, 12, 28), hdays) == {
-        date(2020, 12, 21): {'business_day': True, 'weekday': 'Monday'},
-        date(2020, 12, 22): {'business_day': True, 'weekday': 'Tuesday'},
-        date(2020, 12, 23): {'business_day': True, 'weekday': 'Wednesday'},
-        date(2020, 12, 24): {'business_day': True, 'weekday': 'Thursday'},
-        date(2020, 12, 25): {'business_day': False, 'weekday': 'Friday'},
-        date(2020, 12, 26): {'business_day': False, 'weekday': 'Saturday'},
-        date(2020, 12, 27): {'business_day': False, 'weekday': 'Sunday'},
-        date(2020, 12, 28): {'business_day': True, 'weekday': 'Monday'},
+        date(2020, 12, 21): {"business_day": True, "weekday": "Monday"},
+        date(2020, 12, 22): {"business_day": True, "weekday": "Tuesday"},
+        date(2020, 12, 23): {"business_day": True, "weekday": "Wednesday"},
+        date(2020, 12, 24): {"business_day": True, "weekday": "Thursday"},
+        date(2020, 12, 25): {"business_day": False, "weekday": "Friday"},
+        date(2020, 12, 26): {"business_day": False, "weekday": "Saturday"},
+        date(2020, 12, 27): {"business_day": False, "weekday": "Sunday"},
+        date(2020, 12, 28): {"business_day": True, "weekday": "Monday"},
     }
 
     # no holidays
     assert get_days(date(2020, 12, 21), date(2020, 12, 28)) == {
-        date(2020, 12, 21): {'business_day': True, 'weekday': 'Monday'},
-        date(2020, 12, 22): {'business_day': True, 'weekday': 'Tuesday'},
-        date(2020, 12, 23): {'business_day': True, 'weekday': 'Wednesday'},
-        date(2020, 12, 24): {'business_day': True, 'weekday': 'Thursday'},
-        date(2020, 12, 25): {'business_day': True, 'weekday': 'Friday'},
-        date(2020, 12, 26): {'business_day': False, 'weekday': 'Saturday'},
-        date(2020, 12, 27): {'business_day': False, 'weekday': 'Sunday'},
-        date(2020, 12, 28): {'business_day': True, 'weekday': 'Monday'},
+        date(2020, 12, 21): {"business_day": True, "weekday": "Monday"},
+        date(2020, 12, 22): {"business_day": True, "weekday": "Tuesday"},
+        date(2020, 12, 23): {"business_day": True, "weekday": "Wednesday"},
+        date(2020, 12, 24): {"business_day": True, "weekday": "Thursday"},
+        date(2020, 12, 25): {"business_day": True, "weekday": "Friday"},
+        date(2020, 12, 26): {"business_day": False, "weekday": "Saturday"},
+        date(2020, 12, 27): {"business_day": False, "weekday": "Sunday"},
+        date(2020, 12, 28): {"business_day": True, "weekday": "Monday"},
     }
 
 
 def test_get_months():
     """Test get_months function."""
     assert get_months([date(2020, 12, 21), date(2020, 12, 22)]) == [
-        ('December 2020', 31)
+        ("December 2020", 31)
     ]
-    assert get_months([
-        date(2020, 12, 30),
-        date(2020, 12, 31),
-        date(2021, 1, 1),
-    ]) == [
-        ('December 2020', 31),
-        ('January 2021', 31),
+    assert get_months(
+        [
+            date(2020, 12, 30),
+            date(2020, 12, 31),
+            date(2021, 1, 1),
+        ]
+    ) == [
+        ("December 2020", 31),
+        ("January 2021", 31),
     ]
-    assert get_months([
-        date(2021, 2, 28),
-        date(2021, 3, 1),
-    ]) == [
-        ('February 2021', 28),
-        ('March 2021', 31),
+    assert get_months([date(2021, 2, 28), date(2021, 3, 1)]) == [
+        ("February 2021", 28),
+        ("March 2021", 31),
     ]
-    assert get_months([
-        date(2024, 2, 29),
-        date(2024, 3, 1),
-    ]) == [
-        ('February 2024', 29),
-        ('March 2024', 31),
+    assert get_months([date(2024, 2, 29), date(2024, 3, 1)]) == [
+        ("February 2024", 29),
+        ("March 2024", 31),
     ]
 
 
@@ -188,16 +184,16 @@ def test_string_to_date():
     # default is today
     today = date.today()
     assert string_to_date(None) == today
-    assert string_to_date('') == today
+    assert string_to_date("") == today
 
     # test with Christmas
     christmas = date(2020, 12, 25)
-    assert string_to_date('2020-12-25') == christmas
+    assert string_to_date("2020-12-25") == christmas
     assert string_to_date(christmas) == christmas
 
     # test errors
     with pytest.raises(ValueError):
-        string_to_date('xxx')
+        string_to_date("xxx")
     with pytest.raises(TypeError):
         string_to_date(True)
     with pytest.raises(TypeError):

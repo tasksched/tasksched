@@ -33,9 +33,9 @@ from tasksched.utils import (
 )
 
 __all__ = (
-    'Resource',
-    'Task',
-    'Project',
+    "Resource",
+    "Task",
+    "Project",
 )
 
 
@@ -47,15 +47,21 @@ class Resource:  # pylint: disable=too-few-public-methods
         self.name: str = name
 
     def __str__(self) -> str:
-        return f'Resource {self.res_id} - {self.name}'
+        return f"Resource {self.res_id} - {self.name}"
 
 
 class Task:  # pylint: disable=too-few-public-methods
     """A task."""
 
     # pylint: disable=too-many-arguments
-    def __init__(self, task_id: str, title: str, duration: int,
-                 priority: int = 0, max_resources: int = 2):
+    def __init__(
+        self,
+        task_id: str,
+        title: str,
+        duration: int,
+        priority: int = 0,
+        max_resources: int = 2,
+    ):
         self.task_id: str = str(task_id)
         self.title: str = title
         self.duration: int = ceil(duration)
@@ -63,56 +69,60 @@ class Task:  # pylint: disable=too-few-public-methods
         self.max_resources: int = max_resources
 
     def __str__(self) -> str:
-        return (f'Task {self.task_id} - {self.title}: '
-                f'{self.duration}d, '
-                f'priority: {self.priority}, '
-                f'max resources: {self.max_resources}')
+        return (
+            f"Task {self.task_id} - {self.title}: "
+            f"{self.duration}d, "
+            f"priority: {self.priority}, "
+            f"max resources: {self.max_resources}"
+        )
 
 
 class Project:
     """A project."""
 
     def __init__(self, config: Dict[str, Any]):
-        project = config['project']
-        self.name: str = project['name']
-        self.start_date: datetime.date = string_to_date(project.get('start'))
-        self.holidays_iso: str = project.get('holidays')
+        project = config["project"]
+        self.name: str = project["name"]
+        self.start_date: datetime.date = string_to_date(project.get("start"))
+        self.holidays_iso: str = project.get("holidays")
         if self.holidays_iso:
             self.hdays: Dict = holidays.CountryHoliday(
                 self.holidays_iso,
-                years=range(self.start_date.year,
-                            self.start_date.year + 10),
+                years=range(self.start_date.year, self.start_date.year + 10),
             )
         else:
             self.hdays = {}
         # adjust the start date to the next business if needed
         if not is_business_day(self.start_date, self.hdays):
-            self.start_date = add_business_days(self.start_date, 1, self.hdays)
+            self.start_date = add_business_days(
+                self.start_date, 1, self.hdays
+            )
         self.resources: List[Resource] = [
             Resource(
-                res['id'],
-                res.get('name', res['id']),
+                res["id"],
+                res.get("name", res["id"]),
             )
-            for res in config['resources']
+            for res in config["resources"]
         ]
         if not self.resources:
-            raise ValueError('At least one resource is required')
+            raise ValueError("At least one resource is required")
         self.tasks: List[Task] = [
             Task(
-                task['id'],
-                task.get('title', task['id']),
-                task['duration'],
-                task.get('priority', 0),
-                task.get('max_resources', 2),
+                task["id"],
+                task.get("title", task["id"]),
+                task["duration"],
+                task.get("priority", 0),
+                task.get("max_resources", 2),
             )
-            for task in config['tasks']
-            if task['duration'] > 0
+            for task in config["tasks"]
+            if task["duration"] > 0
         ]
         if not self.tasks:
-            raise ValueError('At least one task is required')
+            raise ValueError("At least one task is required")
 
-    def sorted_tasks(self, key: List[str],
-                     reverse: bool = False) -> List[Task]:
+    def sorted_tasks(
+        self, key: List[str], reverse: bool = False
+    ) -> List[Task]:
         """
         Get list of tasks sorted by priority (from higher to lower) and
         duration (from longest to shortest).
@@ -128,8 +138,8 @@ class Project:
         )
 
     def __str__(self) -> str:
-        str_res = '\n'.join([f'    {str(res)}' for res in self.resources])
-        str_tasks = '\n'.join([f'    {str(task)}' for task in self.tasks])
+        str_res = "\n".join([f"    {str(res)}" for res in self.resources])
+        str_tasks = "\n".join([f"    {str(task)}" for task in self.tasks])
         return f"""\
 Project: {self.name}
   Resources:

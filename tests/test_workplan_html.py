@@ -26,10 +26,10 @@ from .utils import get_input_file
 
 def test_workplan_to_html():
     """Test workplan_to_html function."""
-    workplan = get_input_file('workplan_complete.yaml')
+    workplan = get_input_file("workplan_complete.yaml")
     html = workplan_to_html(workplan)
-    assert html.startswith('<!doctype html>')
+    assert html.startswith("<!doctype html>")
 
-    workplan = get_input_file('workplan_complete2.yaml')
+    workplan = get_input_file("workplan_complete2.yaml")
     html = workplan_to_html(workplan)
-    assert html.startswith('<!doctype html>')
+    assert html.startswith("<!doctype html>")

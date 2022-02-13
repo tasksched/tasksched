@@ -26,34 +26,42 @@ from .utils import get_input_file
 
 def test_workplan_to_text():
     """Test workplan_to_text function."""
-    workplan = get_input_file('workplan_complete.yaml')
+    workplan = get_input_file("workplan_complete.yaml")
     text = workplan_to_text(workplan)
-    assert '\x1b[0m' in text
+    assert "\x1b[0m" in text
     text = workplan_to_text(workplan, use_colors=False)
-    assert ('Developer 1 > 2020-12-31   8d  89% ████▊██▊   '
-            'task3, task2') in text
-    assert ('Developer 2 > 2021-01-04   9d 100% ████▊█▊█▊  '
-            'task3, task1, task2') in text
+    assert (
+        "Developer 1 > 2020-12-31   8d  89% ████▊██▊   " "task3, task2"
+    ) in text
+    assert (
+        "Developer 2 > 2021-01-04   9d 100% ████▊█▊█▊  " "task3, task1, task2"
+    ) in text
     text = workplan_to_text(workplan, use_colors=False, use_unicode=False)
-    assert ('Developer 1 > 2020-12-31   8d  89% [xxx][x]   '
-            'task3, task2') in text
-    assert ('Developer 2 > 2021-01-04   9d 100% [xxx][][]  '
-            'task3, task1, task2') in text
+    assert (
+        "Developer 1 > 2020-12-31   8d  89% [xxx][x]   " "task3, task2"
+    ) in text
+    assert (
+        "Developer 2 > 2021-01-04   9d 100% [xxx][][]  " "task3, task1, task2"
+    ) in text
 
-    workplan = get_input_file('workplan_complete.yaml')
+    workplan = get_input_file("workplan_complete.yaml")
     text = workplan_to_text(workplan, quiet=True)
-    assert text == ('The name: 2020-12-21 to 2021-01-04 (9d), '
-                    '\x1b[38;5;214m94.44%\x1b[0m of 2 resources used')
+    assert text == (
+        "The name: 2020-12-21 to 2021-01-04 (9d), "
+        "\x1b[38;5;214m94.44%\x1b[0m of 2 resources used"
+    )
 
-    workplan = get_input_file('workplan_complete.yaml')
+    workplan = get_input_file("workplan_complete.yaml")
     text = workplan_to_text(workplan, quiet=True, use_colors=False)
-    assert text == ('The name: 2020-12-21 to 2021-01-04 (9d), '
-                    '94.44% of 2 resources used')
+    assert text == (
+        "The name: 2020-12-21 to 2021-01-04 (9d), "
+        "94.44% of 2 resources used"
+    )
 
-    workplan = get_input_file('workplan_complete2.yaml')
+    workplan = get_input_file("workplan_complete2.yaml")
     text = workplan_to_text(workplan)
-    assert '\x1b[0m' in text
+    assert "\x1b[0m" in text
     text = workplan_to_text(workplan, use_colors=False)
-    assert 'Developer 1 > 2020-12-30   7d 100% ████▊█▊  task2, task1' in text
-    assert 'Developer 2 > 2020-12-28   5d  71% ████▊    task3' in text
-    assert 'Developer 3 > 2020-12-28   5d  71% ████▊    task3' in text
+    assert "Developer 1 > 2020-12-30   7d 100% ████▊█▊  task2, task1" in text
+    assert "Developer 2 > 2020-12-28   5d  71% ████▊    task3" in text
+    assert "Developer 3 > 2020-12-28   5d  71% ████▊    task3" in text

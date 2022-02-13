@@ -29,8 +29,8 @@ from tasksched.project import Project, Resource, Task
 from tasksched.utils import add_business_days
 
 __all__ = (
-    'WorkPlan',
-    'build_workplan',
+    "WorkPlan",
+    "build_workplan",
 )
 
 
@@ -50,25 +50,30 @@ class WorkPlanTask(Task):  # pylint: disable=too-few-public-methods
     """A workplan task."""
 
     # pylint: disable=too-many-arguments
-    def __init__(self, task_id: str, title: str, duration: int,
-                 priority: int = 0, max_resources: int = 2):
-        super().__init__(task_id, title, duration, priority, max_resources)
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
         self.remaining: int = self.duration
 
 
 class WorkPlan:
     """A work plan built for a project."""
 
-    def __init__(self, project: Project,
-                 tasks_to_split: Dict[str, int] = None):
+    def __init__(
+        self, project: Project, tasks_to_split: Dict[str, int] = None
+    ):
         self.project = copy.deepcopy(project)
         self.resources = [
             WorkPlanResource(res.res_id, res.name)
             for res in self.project.resources
         ]
         self.tasks = [
-            WorkPlanTask(task.task_id, task.title, task.duration,
-                         task.priority, task.max_resources)
+            WorkPlanTask(
+                task.task_id,
+                task.title,
+                task.duration,
+                task.priority,
+                task.max_resources,
+            )
             for task in self.project.tasks
         ]
         if tasks_to_split:
@@ -95,21 +100,36 @@ class WorkPlan:
                 # the same, and sum == duration (and remove all null values);
                 # for example if task.duration == 10 and number == 3,
                 # durations == [4, 3, 3]
-                durations = list(filter(None, [
-                    task.duration // number + (1 if x < task.duration % number
-                                               else 0)
-                    for x in range(number)
-                ]))
+                durations = list(
+                    filter(
+                        None,
+                        [
+                            task.duration // number
+                            + (1 if x < task.duration % number else 0)
+                            for x in range(number)
+                        ],
+                    )
+                )
                 for i, duration in enumerate(durations):
-                    title = f'{task.title} ({i+1}/{len(durations)})'
+                    title = f"{task.title} ({i+1}/{len(durations)})"
                     new_tasks.append(
-                        WorkPlanTask(task.task_id, title, duration,
-                                     task.priority, task.max_resources)
+                        WorkPlanTask(
+                            task.task_id,
+                            title,
+                            duration,
+                            task.priority,
+                            task.max_resources,
+                        )
                     )
             else:
                 new_tasks.append(
-                    WorkPlanTask(task.task_id, task.title, task.duration,
-                                 task.priority, task.max_resources)
+                    WorkPlanTask(
+                        task.task_id,
+                        task.title,
+                        task.duration,
+                        task.priority,
+                        task.max_resources,
+                    )
                 )
         self.tasks = new_tasks
 
@@ -137,14 +157,18 @@ class WorkPlan:
         :param Resource resource: resource
         :param int days: number of days in task to assign
         """
-        resource.assigned.append({
-            'task': task.task_id,
-            'duration': days,
-        })
-        resource.assigned_tasks.append({
-            'id': task.task_id,
-            'title': task.title,
-        })
+        resource.assigned.append(
+            {
+                "task": task.task_id,
+                "duration": days,
+            }
+        )
+        resource.assigned_tasks.append(
+            {
+                "id": task.task_id,
+                "title": task.title,
+            }
+        )
         resource.duration += days
         if resource.duration > self.duration:
             self.duration = resource.duration
@@ -168,8 +192,9 @@ class WorkPlan:
 
     def schedule(self):
         """Automatic resource leveling in the project."""
-        sorted_tasks = self.sorted_tasks(['priority', 'duration'],
-                                         reverse=True)
+        sorted_tasks = self.sorted_tasks(
+            ["priority", "duration"], reverse=True
+        )
         for task in sorted_tasks:
             self.assign_task(task, self.find_best_resource(), task.remaining)
         sum_use = 0
@@ -191,37 +216,38 @@ class WorkPlan:
         """Return the work plan as dict."""
         after_end = self.end_date + datetime.timedelta(days=1)
         holidays = self.project.hdays[
-            self.project.start_date:after_end]  # type: ignore
+            self.project.start_date : after_end  # type: ignore
+        ]
         return {
-            'workplan': {
-                'project': {
-                    'name': self.project.name,
-                    'start': self.project.start_date,
-                    'end': self.end_date,
-                    'duration': self.duration,
-                    'holidays_iso': self.project.holidays_iso,
-                    'holidays': holidays,
-                    'resources_use': self.resources_use,
+            "workplan": {
+                "project": {
+                    "name": self.project.name,
+                    "start": self.project.start_date,
+                    "end": self.end_date,
+                    "duration": self.duration,
+                    "holidays_iso": self.project.holidays_iso,
+                    "holidays": holidays,
+                    "resources_use": self.resources_use,
                 },
-                'resources': [
+                "resources": [
                     {
-                        'id': res.res_id,
-                        'name': res.name,
-                        'assigned': res.assigned,
-                        'assigned_tasks': res.assigned_tasks,
-                        'duration': res.duration,
-                        'end': res.end_date or None,
-                        'use': res.use,
+                        "id": res.res_id,
+                        "name": res.name,
+                        "assigned": res.assigned,
+                        "assigned_tasks": res.assigned_tasks,
+                        "duration": res.duration,
+                        "end": res.end_date or None,
+                        "use": res.use,
                     }
                     for res in self.resources
                 ],
-                'tasks': [
+                "tasks": [
                     {
-                        'id': task.task_id,
-                        'title': task.title,
-                        'duration': task.duration,
-                        'priority': task.priority,
-                        'max_resources': task.max_resources,
+                        "id": task.task_id,
+                        "title": task.title,
+                        "duration": task.duration,
+                        "priority": task.priority,
+                        "max_resources": task.max_resources,
                     }
                     for task in self.tasks
                 ],
@@ -239,15 +265,12 @@ def build_workplan(project: Project) -> WorkPlan:
     """
     tasks_ids = [
         task.task_id
-        for task in project.sorted_tasks(['duration'], reverse=True)
+        for task in project.sorted_tasks(["duration"], reverse=True)
         if task.duration > 1
     ]
     best_workplan = WorkPlan(project)
     for i in range(0, len(tasks_ids)):
-        tasks_to_split = {
-            task_id: 2
-            for task_id in tasks_ids[:i+1]
-        }
+        tasks_to_split = {task_id: 2 for task_id in tasks_ids[: i + 1]}
         workplan = WorkPlan(project, tasks_to_split=tasks_to_split)
         if workplan.duration < best_workplan.duration:
             best_workplan = workplan

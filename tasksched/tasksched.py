@@ -33,13 +33,13 @@ from tasksched.workplan_text import workplan_to_text
 from tasksched.workplan_html import workplan_to_html
 from tasksched.utils import yaml_dump
 
-__version__ = '0.6.0-dev'
+__version__ = "0.6.0-dev"
 
 __all__ = (
-    '__version__',
-    'load_config',
-    'main',
-    'init',
+    "__version__",
+    "load_config",
+    "main",
+    "init",
 )
 
 
@@ -50,7 +50,7 @@ def error(message: str):
     :param message: error message to display
     """
     print(message, file=sys.stderr)
-    print('Try with --help to get help on tasksched', file=sys.stderr)
+    print("Try with --help to get help on tasksched", file=sys.stderr)
 
 
 def get_input_files(args) -> List[Any]:
@@ -76,7 +76,7 @@ def read_file(input_file: Union[IO, str]) -> Dict:
     """
     try:
         if isinstance(input_file, str):
-            with open(input_file, encoding='utf-8') as _file:
+            with open(input_file, encoding="utf-8") as _file:
                 return yaml.safe_load(_file)
         else:
             return yaml.safe_load(input_file)
@@ -84,7 +84,7 @@ def read_file(input_file: Union[IO, str]) -> Dict:
         if isinstance(input_file, str):
             error(f'ERROR: unable to decode input file "{input_file}": {exc}')
         else:
-            error(f'ERROR: unable to decode input data: {exc}')
+            error(f"ERROR: unable to decode input data: {exc}")
         raise
 
 
@@ -98,7 +98,7 @@ def search_item(list_items: List[Any], item_id: Any) -> Any:
     """
     if item_id:
         for item in list_items:
-            if item['id'] == item_id:
+            if item["id"] == item_id:
                 return item
     return None
 
@@ -118,16 +118,18 @@ def merge_configs(config: Dict, new_config: Dict):
             continue
         if isinstance(config[key], dict):
             if not isinstance(value, dict):
-                raise ValueError(f'merge config error: '
-                                 f'cannot update dict "{key}"')
+                raise ValueError(
+                    f"merge config error: " f'cannot update dict "{key}"'
+                )
             config[key].update(value)
         elif isinstance(config[key], list):
             if not isinstance(value, list):
-                raise ValueError(f'merge config error: '
-                                 f'cannot update list "{key}"')
+                raise ValueError(
+                    f"merge config error: " f'cannot update list "{key}"'
+                )
             for item in value:
                 if isinstance(item, dict):
-                    config_item = search_item(config[key], item.get('id'))
+                    config_item = search_item(config[key], item.get("id"))
                     if config_item is None:
                         config[key].append(item)
                     else:
@@ -182,8 +184,8 @@ def read_workplan(args) -> Dict:
     if files:
         workplan = read_file(files[-1])
     if not workplan:
-        error('ERROR: missing input work plan')
-        raise OSError('missing input work plan')
+        error("ERROR: missing input work plan")
+        raise OSError("missing input work plan")
     return workplan
 
 
@@ -282,7 +284,7 @@ def action_workplan_html(args):
 def main():
     """Main function, entry point."""
     args = get_parser(__version__).parse_args()
-    func = getattr(sys.modules[__name__], f'action_{args.action}')
+    func = getattr(sys.modules[__name__], f"action_{args.action}")
     try:
         result = func(args)
     except Exception:  # pylint: disable=broad-except
@@ -292,7 +294,7 @@ def main():
 
 def init(force=False):
     """Init function."""
-    if __name__ == '__main__' or force:
+    if __name__ == "__main__" or force:
         main()
 
 

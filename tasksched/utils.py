@@ -27,12 +27,12 @@ import datetime
 import yaml
 
 __all__ = (
-    'is_business_day',
-    'add_business_days',
-    'get_days',
-    'get_months',
-    'string_to_date',
-    'yaml_dump',
+    "is_business_day",
+    "add_business_days",
+    "get_days",
+    "get_months",
+    "string_to_date",
+    "yaml_dump",
 )
 
 
@@ -48,8 +48,9 @@ def is_business_day(date: datetime.date, hdays: Dict = None) -> bool:
     return date.weekday() < 5 and date not in (hdays or {})
 
 
-def add_business_days(from_date: datetime.date, count: int,
-                      hdays: Dict = None) -> datetime.date:
+def add_business_days(
+    from_date: datetime.date, count: int, hdays: Dict = None
+) -> datetime.date:
     """
     Add "count" business days to a date, skipping week-end days and public
     holidays.
@@ -69,8 +70,9 @@ def add_business_days(from_date: datetime.date, count: int,
     return current_date
 
 
-def get_days(from_date: datetime.date, to_date: datetime.date,
-             hdays: Dict = None) -> Dict[datetime.date, Dict[str, Any]]:
+def get_days(
+    from_date: datetime.date, to_date: datetime.date, hdays: Dict = None
+) -> Dict[datetime.date, Dict[str, Any]]:
     """
     Return days between two dates, for each day the value is True for a
     business day, False for the other days.
@@ -85,15 +87,16 @@ def get_days(from_date: datetime.date, to_date: datetime.date,
     current_date = from_date
     while current_date <= to_date:
         days[current_date] = {
-            'weekday': current_date.strftime('%A'),
-            'business_day': is_business_day(current_date, hdays),
+            "weekday": current_date.strftime("%A"),
+            "business_day": is_business_day(current_date, hdays),
         }
         current_date += datetime.timedelta(days=1)
     return days
 
 
 def get_months(
-        days: Dict[datetime.date, Dict[str, Any]]) -> List[Tuple[str, int]]:
+    days: Dict[datetime.date, Dict[str, Any]]
+) -> List[Tuple[str, int]]:
     """
     Return a dictionary with month as key and the number of days in each
     months, for a list of days.
@@ -106,7 +109,7 @@ def get_months(
     prev_month = -1
     for day in days:
         if day.month != prev_month:
-            name = f'{calendar.month_name[day.month]} {day.year}'
+            name = f"{calendar.month_name[day.month]} {day.year}"
             days_in_month = calendar.monthrange(day.year, day.month)[1]
             months.append((name, days_in_month))
         prev_month = day.month

@@ -175,7 +175,9 @@ class WorkPlan:
         task.remaining -= days
         self.remaining -= days
 
-    def sorted_tasks(self, key: str, reverse: bool = False) -> List[Task]:
+    def sorted_tasks(
+        self, key: List[str], reverse: bool = False
+    ) -> List[Task]:
         """
         Get list of tasks sorted by priority (from higher to lower) and
         duration (from longest to shortest).

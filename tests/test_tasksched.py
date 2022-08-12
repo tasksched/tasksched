@@ -104,13 +104,13 @@ def test_load_config():  # pylint: disable=too-many-statements
     config1 = io.StringIO('{"test": {"key1": 1}}')
     config2 = io.StringIO('{"test": ["key2"]}')
     with pytest.raises(ValueError):
-        config = tasksched.load_config([config1, config2])
+        tasksched.load_config([config1, config2])
 
     # invalid: update of list with a dict
     config1 = io.StringIO('{"test": ["key1"]}')
     config2 = io.StringIO('{"test": {"key2": 2}}')
     with pytest.raises(ValueError):
-        config = tasksched.load_config([config1, config2])
+        tasksched.load_config([config1, config2])
 
 
 def test_main(monkeypatch):  # pylint: disable=too-many-statements

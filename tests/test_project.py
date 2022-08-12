@@ -56,7 +56,7 @@ def test_task():
     assert task.priority == 100
     assert task.max_resources == 3
     assert str(task) == (
-        "Task id - the title: 30d, priority: 100, " "max resources: 3"
+        "Task id - the title: 30d, priority: 100, max resources: 3"
     )
 
 

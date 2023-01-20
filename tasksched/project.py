@@ -24,7 +24,8 @@ from operator import attrgetter
 from typing import Any, Dict, List
 
 import datetime
-import holidays  # type: ignore
+
+from holidays import country_holidays
 
 from tasksched.utils import (
     is_business_day,
@@ -42,7 +43,7 @@ __all__ = (
 class Resource:  # pylint: disable=too-few-public-methods
     """A resource."""
 
-    def __init__(self, res_id: str, name: str):
+    def __init__(self, res_id: str, name: str) -> None:
         self.res_id: str = str(res_id)
         self.name: str = name
 
@@ -61,7 +62,7 @@ class Task:  # pylint: disable=too-few-public-methods
         duration: int,
         priority: int = 0,
         max_resources: int = 2,
-    ):
+    ) -> None:
         self.task_id: str = str(task_id)
         self.title: str = title
         self.duration: int = ceil(duration)
@@ -80,13 +81,13 @@ class Task:  # pylint: disable=too-few-public-methods
 class Project:
     """A project."""
 
-    def __init__(self, config: Dict[str, Any]):
+    def __init__(self, config: Dict[str, Any]) -> None:
         project = config["project"]
         self.name: str = project["name"]
         self.start_date: datetime.date = string_to_date(project.get("start"))
         self.holidays_iso: str = project.get("holidays")
         if self.holidays_iso:
-            self.hdays: Dict = holidays.CountryHoliday(
+            self.hdays: Dict[datetime.date, str] = country_holidays(
                 self.holidays_iso,
                 years=range(self.start_date.year, self.start_date.year + 10),
             )

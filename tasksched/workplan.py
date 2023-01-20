@@ -37,7 +37,7 @@ __all__ = (
 class WorkPlanResource(Resource):  # pylint: disable=too-few-public-methods
     """A workplan resource."""
 
-    def __init__(self, res_id: str, name: str):
+    def __init__(self, res_id: str, name: str) -> None:
         super().__init__(res_id, name)
         self.assigned: List[Dict] = []
         self.assigned_tasks: List[Dict] = []
@@ -50,7 +50,7 @@ class WorkPlanTask(Task):  # pylint: disable=too-few-public-methods
     """A workplan task."""
 
     # pylint: disable=too-many-arguments
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
         self.remaining: int = self.duration
 
@@ -59,8 +59,10 @@ class WorkPlan:
     """A work plan built for a project."""
 
     def __init__(
-        self, project: Project, tasks_to_split: Dict[str, int] = None
-    ):
+        self,
+        project: Project,
+        tasks_to_split: Optional[Dict[str, int]] = None,
+    ) -> None:
         self.project = copy.deepcopy(project)
         self.resources = [
             WorkPlanResource(res.res_id, res.name)
@@ -217,7 +219,7 @@ class WorkPlan:
     def as_dict(self) -> Dict:
         """Return the work plan as dict."""
         after_end = self.end_date + datetime.timedelta(days=1)
-        holidays = self.project.hdays[
+        holidays: Dict = self.project.hdays[  # type: ignore
             self.project.start_date : after_end  # type: ignore
         ]
         return {

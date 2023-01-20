@@ -19,7 +19,7 @@
 
 """Utility functions for Tasksched."""
 
-from typing import Any, Dict, List, Tuple, Union
+from typing import Any, Dict, List, Optional, Tuple, Union
 
 import calendar
 import datetime
@@ -36,7 +36,9 @@ __all__ = (
 )
 
 
-def is_business_day(date: datetime.date, hdays: Dict = None) -> bool:
+def is_business_day(
+    date: datetime.date, hdays: Optional[Dict[datetime.date, str]] = None
+) -> bool:
     """
     Check if the date is a business day.
 
@@ -49,7 +51,9 @@ def is_business_day(date: datetime.date, hdays: Dict = None) -> bool:
 
 
 def add_business_days(
-    from_date: datetime.date, count: int, hdays: Dict = None
+    from_date: datetime.date,
+    count: int,
+    hdays: Optional[Dict[datetime.date, str]] = None,
 ) -> datetime.date:
     """
     Add "count" business days to a date, skipping week-end days and public
@@ -71,7 +75,9 @@ def add_business_days(
 
 
 def get_days(
-    from_date: datetime.date, to_date: datetime.date, hdays: Dict = None
+    from_date: datetime.date,
+    to_date: datetime.date,
+    hdays: Optional[Dict[datetime.date, str]] = None,
 ) -> Dict[datetime.date, Dict[str, Any]]:
     """
     Return days between two dates, for each day the value is True for a

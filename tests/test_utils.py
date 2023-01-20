@@ -23,7 +23,7 @@
 from datetime import date
 import pytest
 
-import holidays  # type: ignore
+from holidays import country_holidays
 
 from tasksched import (
     add_business_days,
@@ -48,7 +48,7 @@ def test_is_business_day():
     assert is_bus(date(2020, 12, 27)) is False  # Sunday
 
     # public holidays
-    hdays = holidays.CountryHoliday("FRA", years=[2020, 2021])
+    hdays = country_holidays("FRA", years=[2020, 2021])
     assert is_bus(date(2020, 12, 25), hdays) is False  # Christmas
     assert is_bus(date(2021, 1, 1), hdays) is False  # New Year's Day
     assert is_bus(date(2021, 5, 1), hdays) is False  # Labour Day
@@ -71,7 +71,7 @@ def test_add_business_days():
     assert add_business_days(start, 10) == date(2021, 1, 4)
 
     # French holidays
-    hdays = holidays.CountryHoliday("FRA", years=[2020, 2021])
+    hdays = country_holidays("FRA", years=[2020, 2021])
     assert add_business_days(start, 1, hdays) == date(2020, 12, 22)
     assert add_business_days(start, 2, hdays) == date(2020, 12, 23)
     assert add_business_days(start, 3, hdays) == date(2020, 12, 24)
@@ -86,7 +86,7 @@ def test_add_business_days():
 
 def test_get_days():
     """Test get_days function."""
-    hdays = holidays.CountryHoliday("FRA", years=[2020, 2021])
+    hdays = country_holidays("FRA", years=[2020, 2021])
 
     assert get_days(date(2020, 12, 21), date(2020, 12, 21), hdays) == {
         date(2020, 12, 21): {"business_day": True, "weekday": "Monday"},

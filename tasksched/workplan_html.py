@@ -150,7 +150,7 @@ def workplan_to_html(
         tasks_colors[task["id"]] = color
     project_start = string_to_date(project["start"])
     project_end = string_to_date(project["end"])
-    hdays = {string_to_date(hday): None for hday in project["holidays"]}
+    hdays = {string_to_date(hday): "" for hday in project["holidays"]}
     view_start = project_start.replace(day=1)
     view_end = project_end.replace(
         day=calendar.monthrange(project_end.year, project_end.month)[1]

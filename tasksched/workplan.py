@@ -172,8 +172,7 @@ class WorkPlan:
             }
         )
         resource.duration += days
-        if resource.duration > self.duration:
-            self.duration = resource.duration
+        self.duration = max(self.duration, resource.duration)
         task.remaining -= days
         self.remaining -= days
 
@@ -209,8 +208,7 @@ class WorkPlan:
                     res.duration - 1,
                     self.project.hdays,
                 )
-                if res.end_date > self.end_date:
-                    self.end_date = res.end_date
+                self.end_date = max(self.end_date, res.end_date)
             res.use = (res.duration * 100) / self.duration
             sum_use += res.use
         if self.resources:

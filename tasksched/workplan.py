@@ -49,7 +49,7 @@ class WorkPlanResource(Resource):  # pylint: disable=too-few-public-methods
 class WorkPlanTask(Task):  # pylint: disable=too-few-public-methods
     """A workplan task."""
 
-    # pylint: disable=too-many-arguments
+    # pylint: disable=too-many-arguments, too-many-positional-arguments
     def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
         self.remaining: int = self.duration

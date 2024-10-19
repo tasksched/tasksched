@@ -54,7 +54,7 @@ class Resource:  # pylint: disable=too-few-public-methods
 class Task:  # pylint: disable=too-few-public-methods
     """A task."""
 
-    # pylint: disable=too-many-arguments
+    # pylint: disable=too-many-arguments, too-many-positional-arguments
     def __init__(
         self,
         task_id: str,

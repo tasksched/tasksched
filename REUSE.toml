@@ -1,0 +1,21 @@
+# SPDX-FileCopyrightText: 2025 Sébastien Helleu <flashcode@flashtux.org>
+#
+# SPDX-License-Identifier: GPL-3.0-or-later
+
+version = 1
+
+[[annotations]]
+path = [
+    ".gitignore",
+    "CHANGELOG.md",
+    "README.md",
+    "examples/*.json",
+    "examples/*.yaml",
+    "requirements.txt",
+    "screenshots/*.png",
+    "tasksched/data/html/basic.html",
+    "tests/*.json",
+    "tests/*.yaml",
+]
+SPDX-FileCopyrightText = "2020-2025 Sébastien Helleu <flashcode@flashtux.org>"
+SPDX-License-Identifier = "GPL-3.0-or-later"

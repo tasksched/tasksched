@@ -1,8 +1,9 @@
 # Task scheduler with automatic resource leveling
 
 [![PyPI](https://img.shields.io/pypi/v/tasksched.svg)](https://pypi.org/project/tasksched/)
-[![Build Status](https://github.com/tasksched/tasksched/workflows/CI/badge.svg)](https://github.com/tasksched/tasksched/actions?query=workflow%3A%22CI%22)
-[![Build Status](https://github.com/tasksched/tasksched/workflows/CodeQL/badge.svg)](https://github.com/tasksched/tasksched/actions?query=workflow%3A%22CodeQL%22)
+[![Build status](https://github.com/tasksched/tasksched/workflows/CI/badge.svg)](https://github.com/tasksched/tasksched/actions?query=workflow%3A%22CI%22)
+[![Build status](https://github.com/tasksched/tasksched/workflows/CodeQL/badge.svg)](https://github.com/tasksched/tasksched/actions?query=workflow%3A%22CodeQL%22)
+[![REUSE status](https://api.reuse.software/badge/github.com/tasksched/tasksched)](https://api.reuse.software/info/github.com/tasksched/tasksched)
 
 The task scheduler reads one or more [YAML](https://yaml.org/spec/) or [JSON](https://tools.ietf.org/html/rfc8259)
 configuration files, that includes:

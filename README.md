@@ -200,7 +200,7 @@ $ tasksched workplan_html --css light examples/project_big.yaml > tasksched.html
 
 ## Copyright
 
-Copyright © 2020-2024 [Sébastien Helleu](https://github.com/flashcode)
+Copyright © 2020-2025 [Sébastien Helleu](https://github.com/flashcode)
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

@@ -1,3 +1,9 @@
+<!--
+SPDX-FileCopyrightText: 2020-2025 Sébastien Helleu <flashcode@flashtux.org>
+
+SPDX-License-Identifier: GPL-3.0-or-later
+-->
+
 # Tasksched ChangeLog
 
 ## Version 0.5.0 (2021-09-12)

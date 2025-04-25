@@ -6,12 +6,7 @@ version = 1
 
 [[annotations]]
 path = [
-    ".gitignore",
-    "CHANGELOG.md",
-    "README.md",
     "examples/*.json",
-    "examples/*.yaml",
-    "requirements.txt",
     "screenshots/*.png",
     "tasksched/data/html/basic.html",
     "tests/*.json",

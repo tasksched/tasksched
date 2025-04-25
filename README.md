@@ -1,3 +1,9 @@
+<!--
+SPDX-FileCopyrightText: 2020-2025 Sébastien Helleu <flashcode@flashtux.org>
+
+SPDX-License-Identifier: GPL-3.0-or-later
+-->
+
 # Task scheduler with automatic resource leveling
 
 [![PyPI](https://img.shields.io/pypi/v/tasksched.svg)](https://pypi.org/project/tasksched/)
@@ -200,6 +206,7 @@ $ tasksched workplan_html --css light examples/project_big.yaml > tasksched.html
 
 ## Copyright
 
+<!-- REUSE-IgnoreStart -->
 Copyright © 2020-2025 [Sébastien Helleu](https://github.com/flashcode)
 
 This program is free software; you can redistribute it and/or modify
@@ -214,3 +221,4 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
+<!-- REUSE-IgnoreEnd -->
